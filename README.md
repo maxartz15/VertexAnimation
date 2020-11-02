@@ -1,4 +1,4 @@
-# TECH ART OUTSOURCE - VertexAnimation
+# TECH ART OUTSOURCE - Vertex Animation
 
 Description.
 
