@@ -1,0 +1,30 @@
+{
+  "name": "com.COMPANYNAME.PACKAGENAME",
+  "displayName": "Template Unity Package",
+  "version": "0.1.0",
+  "unity": "2019.3",
+  "unityRelease": "7f1",
+  "description": "This is a template package, used as a basis to build a bigger one.",
+  "category": "Tool",
+  "type": "tool",
+  "license": "MIT",
+  "author": {
+    "name": "Max Kruf",
+    "email": "info@maxartz15.com",
+    "url": "https://www.maxartz15.com"
+  },
+  "dependencies": {
+    "com.maxartz15.package1": "0.1.0"
+  },
+  "keywords": [
+    "COMPANYNAME",
+    "PACKAGENAME"
+  ],
+  "samples": [
+    {
+      "displayName": "Example 1",
+      "description": "This sample is just an example",
+      "path": "Samples~/Example1"
+    }
+  ]
+}

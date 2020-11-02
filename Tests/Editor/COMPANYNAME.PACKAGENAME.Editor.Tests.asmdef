@@ -1,0 +1,20 @@
+{
+    "name": "COMPANYNAME.PACKAGENAME.Editor.Tests",
+    "references": [
+        "COMPANYNAME.PACKAGENAME",
+        "COMPANYNAME.PACKAGENAME.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ]
+}

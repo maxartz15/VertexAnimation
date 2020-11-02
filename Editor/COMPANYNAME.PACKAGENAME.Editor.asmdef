@@ -1,0 +1,16 @@
+{
+    "name": "COMPANYNAME.PACKAGENAME.Editor",
+    "references": [
+        "COMPANYNAME.PACKAGENAME"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

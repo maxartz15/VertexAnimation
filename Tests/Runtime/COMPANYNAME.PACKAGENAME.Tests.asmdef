@@ -1,0 +1,17 @@
+{
+    "name": "COMPANYNAME.PACKAGENAME.Tests",
+    "references": [
+        "COMPANYNAME.PACKAGENAME"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ]
+}
