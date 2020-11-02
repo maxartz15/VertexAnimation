@@ -1,7 +1,7 @@
 {
-    "name": "COMPANYNAME.PACKAGENAME.Editor",
+    "name": "tech_art_outsource.vertex_animation.Editor",
     "references": [
-        "COMPANYNAME.PACKAGENAME"
+        "tech_art_outsource.vertex_animation"
     ],
     "includePlatforms": [
         "Editor"

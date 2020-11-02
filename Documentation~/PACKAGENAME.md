@@ -1,3 +1,0 @@
-# PACKAGENAME
-
-Documentation.

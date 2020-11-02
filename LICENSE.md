@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2020 COMPANYNAME
+Copyright (c) 2020 Tech Art Outsource
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

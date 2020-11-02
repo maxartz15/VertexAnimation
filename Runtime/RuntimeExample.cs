@@ -1,5 +1,5 @@
 using UnityEngine;
 
-namespace COMPANYNAME.PACKAGENAME
+namespace tech_art_outsource.vertex_animation
 {
 }

@@ -1,10 +1,10 @@
 {
-  "name": "com.COMPANYNAME.PACKAGENAME",
-  "displayName": "Template Unity Package",
+  "name": "com.tech_art_outsource.vertex_animation",
+  "displayName": "TAO Vertex Animation",
   "version": "0.1.0",
-  "unity": "2019.3",
-  "unityRelease": "7f1",
-  "description": "This is a template package, used as a basis to build a bigger one.",
+  "unity": "2019.4",
+  "unityRelease": "10f1",
+  "description": "Vertex animation shaders and tools.",
   "category": "Tool",
   "type": "tool",
   "license": "MIT",
@@ -17,8 +17,8 @@
     "com.maxartz15.package1": "0.1.0"
   },
   "keywords": [
-    "COMPANYNAME",
-    "PACKAGENAME"
+    "tech art outsource",
+    "vertex animation"
   ],
   "samples": [
     {

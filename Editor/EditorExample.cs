@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace COMPANYNAME.PACKAGENAME.Editor
+namespace tech_art_outsource.vertex_animation.Editor
 {
 }
