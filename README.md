@@ -1,6 +1,6 @@
 # TECH ART OUTSOURCE - Vertex Animation
 
-Description.
+A base for next block to continue working on.
 
 ## Install
 
