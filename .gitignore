@@ -1,3 +1,7 @@
+# P4 ignore
+*.p4ignore
+
+# Unity ignore
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/

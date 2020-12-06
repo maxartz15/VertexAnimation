@@ -1,5 +1,5 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace tech_art_outsource.vertex_animation
+namespace TAO.VertexAnimation
 {
 }
