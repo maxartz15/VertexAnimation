@@ -21,30 +21,32 @@ float2 VA_UV_float(float2 uv, int maxFrames, float time)
 }
 
 void VA_float(float2 uv, SamplerState texSampler, Texture2D positionMap, float time, int maxFrames,
-	out float3 outPosition, out float3 outNormal)
+	out float3 position, out float3 alpha)
 {
 	float2 uvPosition = VA_UV_float(uv, maxFrames, time);
 
 	// Position.
 	float4 texturePos = positionMap.SampleLevel(texSampler, uvPosition, 0);
-	outPosition = texturePos.xyz;
+	position = texturePos.xyz;
 
 	// Normal.
-	DecodeFloat1ToFloat3_float(texturePos.w, outNormal);
+	//FloatToFloat3_float(texturePos.w, outNormal);
+	alpha = texturePos.w;
 }
 
 void VA_ARRAY_float(float2 uv, SamplerState texSampler, Texture2DArray positionMap, float positionMapIndex, float time, int maxFrames,
-	out float3 outPosition, out float3 outNormal)
+	out float3 position, out float3 alpha)
 {
 	float2 uvPosition = VA_UV_float(uv, maxFrames, time);
 
 	// Position.
 	float4 texturePos;
 	SampleTexture2DArrayLOD_float(positionMap, uvPosition, texSampler, positionMapIndex, 0, texturePos);
-	outPosition = texturePos.xyz;
+	position = texturePos.xyz;
 
 	// Normal.
-	DecodeFloat1ToFloat3_float(texturePos.w, outNormal);
+	//FloatToFloat3_float(texturePos.w, outNormal);
+	alpha = texturePos.w;
 }
 
 #endif

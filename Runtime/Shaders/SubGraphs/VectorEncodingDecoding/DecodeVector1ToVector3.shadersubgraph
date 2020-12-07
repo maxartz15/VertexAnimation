@@ -131,13 +131,13 @@
 {
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector3MaterialSlot",
-    "m_ObjectId": "206320e6a1984736b1513c9eed70af22",
+    "m_ObjectId": "848145a6436e4e8aba88f8ef1a124b78",
     "m_Id": 1,
-    "m_DisplayName": "vector3",
+    "m_DisplayName": "f3",
     "m_SlotType": 1,
     "m_Priority": 2147483647,
     "m_Hidden": false,
-    "m_ShaderOutputName": "vector3",
+    "m_ShaderOutputName": "f3",
     "m_StageCapability": 3,
     "m_Value": {
         "x": 0.0,
@@ -153,24 +153,6 @@
         "X",
         "Y",
         "Z"
-    ]
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
-    "m_ObjectId": "2f0e331f581747c9baca83433ff3a875",
-    "m_Id": 0,
-    "m_DisplayName": "vector1",
-    "m_SlotType": 0,
-    "m_Priority": 2147483647,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "vector1",
-    "m_StageCapability": 3,
-    "m_Value": 0.0,
-    "m_DefaultValue": 0.0,
-    "m_Labels": [
-        "X"
     ]
 }
 
@@ -270,17 +252,17 @@
         "m_Position": {
             "serializedVersion": "2",
             "x": -669.0,
-            "y": -2.0,
-            "width": 181.0,
+            "y": -1.0,
+            "width": 142.0,
             "height": 94.0
         }
     },
     "m_Slots": [
         {
-            "m_Id": "2f0e331f581747c9baca83433ff3a875"
+            "m_Id": "f44972630e70452686fb82e2cd3a9e44"
         },
         {
-            "m_Id": "206320e6a1984736b1513c9eed70af22"
+            "m_Id": "848145a6436e4e8aba88f8ef1a124b78"
         }
     ],
     "m_Precision": 0,
@@ -292,5 +274,23 @@
     "m_FunctionName": "DecodeFloat1ToFloat3",
     "m_FunctionSource": "02eb5540183369645883b2c6b33144dc",
     "m_FunctionBody": "Enter function body here..."
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "f44972630e70452686fb82e2cd3a9e44",
+    "m_Id": 0,
+    "m_DisplayName": "f1",
+    "m_SlotType": 0,
+    "m_Priority": 2147483647,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "f1",
+    "m_StageCapability": 3,
+    "m_Value": 0.0,
+    "m_DefaultValue": 0.0,
+    "m_Labels": [
+        "X"
+    ]
 }
 

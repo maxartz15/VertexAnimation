@@ -2,16 +2,27 @@
 #ifndef VECTOR_ENCODING_DECODING_INCLUDED
 #define VECTOR_ENCODING_DECODING_INCLUDED
 
-// Ref: SideFX.
-void DecodeFloat1ToFloat3_float(float f1, out float3 f3)
+#define V_PI		3.14159265359f
+#define V_TWO_PI	6.28318530718f
+#define V_HALF_PI   1.57079632679f
+
+void EncodeFloat3ToFloat1_float(float3 f3, out float f1)
 {
-	//decode float to float2
+	float z = sqrt(f3.z * 8 + 8);
+	float y = (f3.y / z + 0.5f) * 31;
+	float x = floor((f3.x / z + 0.5f) * 31) * 32;
+	f1 = (x + y) / 1023;
+}
+
+void DecodeFloat1ToFloat2_float(float f1, out float2 f2)
+{
 	f1 *= 1024;
-	float2 f2;
 	f2.x = floor(f1 / 32.0) / 31.5;
 	f2.y = (f1 - (floor(f1 / 32.0) * 32.0)) / 31.5;
+}
 
-	//decode float2 to float3
+void DecodeFloat2ToFloat3_float(float f2, out float3 f3)
+{
 	f2 *= 4;
 	f2 -= 2;
 	float f2dot = dot(f2, f2);
@@ -20,73 +31,11 @@ void DecodeFloat1ToFloat3_float(float f1, out float3 f3)
 	f3 = clamp(f3, -1.0, 1.0);
 }
 
-void EncodeFloat3ToFloat1_float(float3 f3, out float f1)
+void DecodeFloat1ToFloat3_float(float f1, out float3 f3)
 {
-	float z = sqrt(f3.z * 8 + 8);
-	float y = (f3.y / z + 0.5f) * 31;
-	float x = floor((f3.x / z + 0.5f) * 31) * 32;
-	
-	float o = (x + y) / 1023;
-	
-	f1 = o;
-	
-    //float       fval1 = f3.x;
-    //float       fval2 = f3.y;
-    //float       fval3 = f3.z;
-    //float       scaled0;
-    //float       added0;
-    //float       sqrt0;
-    //float       div0;
-    //float       added1;
-    //float       scaled1;
-    //float       floor0;
-    //float       scaled2;
-    //float       div1;
-    //float       added2;
-    //float       scaled3;
-    //float       sum0;
-    //float       scaled4;
-
-	//// Code produced by: mulconst1
-    //scaled0 = fval3 * 8;
-    
-    //// Code produced by: addconst1
-    //added0 = scaled0 + 8;
-    
-    //// Code produced by: sqrt1
-    //sqrt0 = sqrt(added0);
-    
-    //// Code produced by: divide1
-    //div0 = fval1 / sqrt0;
-    
-    //// Code produced by: addconst2
-    //added1 = div0 + 0.5;
-    
-    //// Code produced by: mulconst2
-    //scaled1 = added1 * 31;
-    
-    //// Code produced by: floor1
-    //floor0 = floor(scaled1);
-    
-    //// Code produced by: mulconst3
-    //scaled2 = floor0 * 32;
-    
-    //// Code produced by: divide2
-    //div1 = fval2 / sqrt0;
-    
-    //// Code produced by: addconst3
-    //added2 = div1 + 0.5;
-    
-    //// Code produced by: mulconst4
-    //scaled3 = added2 * 31;
-    
-    //// Code produced by: add1
-    //sum0 = scaled2 + scaled3;
-    
-    //// Code produced by: divconst1
-    //scaled4 = sum0 * (1.0 / 1023);
-    
-    //f1 = scaled4;
+	float2 f2;
+	DecodeFloat1ToFloat2_float(f1, f2);
+	DecodeFloat2ToFloat3_float(f2, f3);
 }
 
 // Ref:
@@ -100,6 +49,37 @@ void Encode2Float3ToFloat1_float(float3 f3, out float f1)
 void Decode2Float1ToFloat3_float(float f1, out float3 f3)
 {
 	f3 = (frac((f1) / float3(16777216, 65536, 256)));
+}
+
+// Custom
+// Decode 0..1 float.
+void FloatToFloat2_float(float f1, out float2 f2)
+{
+	f1 *= 256;
+
+	f2.x = (f1 % 16) / 15;
+	f2.y = ((f1 / 256) * 16);
+	f2.y = floor(f2.y) / 15;
+}
+
+void Float2ToFloat3_float(float2 f2, out float3 f3)
+{
+	float dist = 1 - abs((f2.y - 0.5f) * 2);
+	float temp = (f2.x * V_TWO_PI) - V_PI;
+	
+	f3.x = sin(temp + V_TWO_PI) * dist;
+	f3.z = cos((temp - V_PI) + V_TWO_PI) * dist;
+
+	f3.y = (f2.y - 0.5f) * -2;
+	
+	f3 = normalize(f3);
+}
+
+void FloatToFloat3_float(float f1, out float3 f3)
+{
+	float2 f2;
+	FloatToFloat2_float(f1, f2);
+	Float2ToFloat3_float(f2, f3);
 }
 
 #endif
