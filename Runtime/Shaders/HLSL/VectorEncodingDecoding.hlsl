@@ -52,6 +52,34 @@ void Decode2Float1ToFloat3_float(float f1, out float3 f3)
 }
 
 // Custom
+// Encode float3 to 0..1 float.
+void Float3ToFloat2_float(float3 f3, out float2 f2)
+{
+	//float3 rotation = normalize(float3(f3.x, 0, f3.y));
+	float3 rotation = normalize(float3(f3.x, 0, f3.z));
+
+    f2.x = acos (dot(rotation, float3(1, 0, 0))) * sign(f3.z);
+    f2.x = ((f2.x / V_PI) + 1) * 0.5f;
+    
+    f2.y =  acos(f3.y) / V_PI;
+
+	f2 *= 15;
+	f2.x = round(f2.x);
+	f2.y = round(f2.y);
+}
+
+void Float2ToFloat_float(float2 f2, out float f1)
+{
+	f1 = (f2.x + (16 * f2.y)) / 255;
+}
+
+void Float3ToFloat_float(float3 f3, out float f1)
+{
+	float2 f2;
+	Float3ToFloat2_float(f3, f2);
+	Float2ToFloat_float(f2, f1);
+}
+
 // Decode 0..1 float.
 void FloatToFloat2_float(float f1, out float2 f2)
 {
