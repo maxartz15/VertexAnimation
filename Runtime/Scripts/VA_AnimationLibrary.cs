@@ -6,46 +6,33 @@ namespace TAO.VertexAnimation
 	[System.Serializable]
 	public struct VA_AnimationData
 	{
+		public FixedString32 name;
 		public int frames;
 		public int maxFrames;
+		// 1.0f / maxFrames.
+		public float frameTime;
+		// frameTime * frames.
+		public float duration;
 	}
 	
-	public struct VA_AnimationDataBlobAsset
+	public struct VA_AnimationLibrary
 	{
 		public BlobArray<VA_AnimationData> animations;
 	}
 
-	public class VA_AnimationDataBlobAssetConversionSystem : GameObjectConversionSystem
+    public static class VA_AnimationLibraryUtils
 	{
-		protected override void OnUpdate()
+		public static int GetAnimation(ref VA_AnimationLibrary animationsRef, FixedString32 animationName)
 		{
-			BlobAssetReference<VA_AnimationDataBlobAsset> animationDataBlobAssetRef;
+            for (int i = 0; i < animationsRef.animations.Length; i++)
+            {
+                if (animationsRef.animations[i].name == animationName)
+                {
+                    return i;
+                }
+            }
 
-			// Blob builder to build.
-			using (BlobBuilder blobBuilder = new BlobBuilder(Allocator.Temp))
-			{
-				// Construct the root.
-				ref VA_AnimationDataBlobAsset animationDataBlobAsset = ref blobBuilder.ConstructRoot<VA_AnimationDataBlobAsset>();
-
-				// Set all the data.
-				BlobBuilderArray<VA_AnimationData> animationDataArray = blobBuilder.Allocate(ref animationDataBlobAsset.animations, 2);
-				for (int i = 0; i < animationDataArray.Length; i++)
-				{
-					animationDataArray[i] = new VA_AnimationData
-					{ 
-						frames = 36,
-						maxFrames = 43
-					};
-				}
-
-				// Construct blob asset reference.
-				animationDataBlobAssetRef = blobBuilder.CreateBlobAssetReference<VA_AnimationDataBlobAsset>(Allocator.Persistent);
-
-				UnityEngine.Debug.Log("Created: " + animationDataBlobAssetRef.Value.animations.Length.ToString());
-			}
-
-			// TODO: Generate Hash based on Guid.
-			BlobAssetStore.TryAdd(new Hash128("AnimationLib"), animationDataBlobAssetRef);
-		}
+			return -1;
+        }
 	}
 }
