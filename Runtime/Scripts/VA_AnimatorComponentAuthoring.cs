@@ -17,7 +17,7 @@ namespace TAO.VertexAnimation
 		public int animationIndex;
 		public int animationIndexSchedule;
 		public float animationTime;
-		public BlobAssetReference<VA_AnimationLibrary> animationLibrary;
+		public BlobAssetReference<VA_AnimationLibraryData> animationLibrary;
 	}
 
 	[UpdateAfter(typeof(VA_AnimationLibraryConversionSystem))]
@@ -25,7 +25,7 @@ namespace TAO.VertexAnimation
 	{
 		protected override void OnUpdate()
 		{
-			BlobAssetStore.TryGet(new Unity.Entities.Hash128("AnimationLib"), out BlobAssetReference<VA_AnimationLibrary> animLib);
+			BlobAssetStore.TryGet(new Unity.Entities.Hash128("AnimationLib"), out BlobAssetReference<VA_AnimationLibraryData> animLib);
 
 			Entities.ForEach((VA_AnimatorComponentAuthoring animator) =>
 			{

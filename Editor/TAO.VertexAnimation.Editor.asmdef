@@ -1,7 +1,7 @@
 {
     "name": "TAO.VertexAnimation.Editor",
     "references": [
-        "tech_art_outsource.vertex_animation"
+        "TAO.VertexAnimation"
     ],
     "includePlatforms": [
         "Editor"

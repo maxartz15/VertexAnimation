@@ -53,7 +53,7 @@ namespace TAO.VertexAnimation
 			Entities.ForEach((ref VA_AnimatorComponent ac) =>
 			{
 				// Get the animation lib data.
-				ref VA_AnimationLibrary animationsRef = ref ac.animationLibrary.Value;
+				ref VA_AnimationLibraryData animationsRef = ref ac.animationLibrary.Value;
 
 				ac.animationTime += deltaTime;
 
@@ -74,7 +74,7 @@ namespace TAO.VertexAnimation
 			Entities.ForEach((Entity entity, ref VA_AnimatorComponent ac) =>
 			{
                 // Get the animation lib data.
-                ref VA_AnimationLibrary animationLib = ref ac.animationLibrary.Value;
+                ref VA_AnimationLibraryData animationLib = ref ac.animationLibrary.Value;
 
 				int animationIndex = VA_AnimationLibraryUtils.GetAnimation(ref animationLib, "Shoot");
 

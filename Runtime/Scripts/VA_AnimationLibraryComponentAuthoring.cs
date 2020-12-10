@@ -7,7 +7,7 @@ namespace TAO.VertexAnimation
 	[UnityEngine.DisallowMultipleComponent]
 	public class VA_AnimationLibraryComponentAuthoring : UnityEngine.MonoBehaviour
 	{
-		public VA_AnimationLibrarySO animationLibrary;
+		public VA_AnimationLibrary animationLibrary;
 	}
 	
 	public class VA_AnimationLibraryConversionSystem : GameObjectConversionSystem
@@ -16,11 +16,14 @@ namespace TAO.VertexAnimation
 		{
 			Entities.ForEach((VA_AnimationLibraryComponentAuthoring animationLib) =>
 			{
+				animationLib.animationLibrary.Create();
+
+
 				// Blob builder to build.
 				using (BlobBuilder blobBuilder = new BlobBuilder(Allocator.Temp))
 				{
 					// Construct the root.
-					ref VA_AnimationLibrary animationDataBlobAsset = ref blobBuilder.ConstructRoot<VA_AnimationLibrary>();
+					ref VA_AnimationLibraryData animationDataBlobAsset = ref blobBuilder.ConstructRoot<VA_AnimationLibraryData>();
 
 					// Set all the data.
 					BlobBuilderArray<VA_AnimationData> animationDataArray = blobBuilder.Allocate(ref animationDataBlobAsset.animations, animationLib.animationLibrary.animations.Count);
@@ -32,7 +35,7 @@ namespace TAO.VertexAnimation
 					}
 
 					// Construct blob asset reference.
-					BlobAssetReference<VA_AnimationLibrary> animLibAssetRef = blobBuilder.CreateBlobAssetReference<VA_AnimationLibrary>(Allocator.Persistent);
+					BlobAssetReference<VA_AnimationLibraryData> animLibAssetRef = blobBuilder.CreateBlobAssetReference<VA_AnimationLibraryData>(Allocator.Persistent);
 
 					// Add it to the asset store.
 					// TODO: Generate Hash based on Guid.
