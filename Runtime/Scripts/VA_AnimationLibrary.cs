@@ -33,22 +33,9 @@ namespace TAO.VertexAnimation
 
 			if (animationBooks != null)
 			{
-				for (int b = 0; b < animationBooks.Length; b++)
+				foreach (var ab in animationBooks)
 				{
-					if(animationBooks[b].animationPages != null)
-					{
-                        for (int p = 0; p < animationBooks[b].animationPages.Count; p++)
-                        {
-							animations.Add(new VA_AnimationData
-							{
-								name = new Unity.Collections.FixedString32(animationBooks[b].animationPages[p].name),
-								maxFrames = animationBooks[b].maxFrames,
-								frames = animationBooks[b].animationPages[p].frames,
-								frameTime = 1.0f / animationBooks[b].maxFrames,
-								duration = 1.0f / animationBooks[b].maxFrames * animationBooks[b].animationPages[p].frames
-							});
-                        }
-                    }
+					animations.AddRange(ab.GetAnimationData());
 				}
 			}
 		}

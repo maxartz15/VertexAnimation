@@ -8,7 +8,7 @@ namespace TAO.VertexAnimation
     public class VA_AnimationBook : ScriptableObject
     {
         public int maxFrames;
-        public List<TextureGroup> textureGroups = new List<TextureGroup>() { new TextureGroup { shaderParamName = "_PositionMap", isLinear = false } };
+        public List<TextureGroup> textureGroups = new List<TextureGroup>() { new TextureGroup { shaderParamName = "_PositionMap", textureType = TextureType.AnimationMap, wrapMode = TextureWrapMode.Repeat, filterMode = FilterMode.Point, isLinear = false } };
         public List<VA_AnimationPage> animationPages = new List<VA_AnimationPage>();
 
         public Material[] materials;
@@ -16,56 +16,138 @@ namespace TAO.VertexAnimation
 
         public void Create()
         {
-            // Create textures.
-            texture2DArray.Clear();
-            foreach (var item in GetTextures())
+            GenerateTextures();
+            SetMaterials();
+        }
+
+        private void OnValidate()
+        {
+            // TODO: Check for naming conflicts and textures.
+            // TODO: Debug message box instead of debug logs.
+        }
+
+        private void ReferenceDuplicates()
+        {
+            for (int i = 0; i < textureGroups.Count; i++)
             {
-                if(VA_Texture2DArrayUtils.IsValidForTextureArray(item.Value.ToArray()))
+                List<Texture2D> t = new List<Texture2D>();
+
+                for (int j = 0; j < animationPages.Count; j++)
                 {
-                    texture2DArray.Add(VA_Texture2DArrayUtils.CreateTextureArray(item.Value.ToArray(), false, textureGroups[item.Key].isLinear, TextureWrapMode.Repeat, FilterMode.Point, 1, name + "-" + item.Key.ToString()));
+                    // Check if exist.
+                    if (!t.Contains(animationPages[j].textures[i].texture2D))
+                    {
+                        t.Add(animationPages[j].textures[i].texture2D);
+                    }
+
+                    // Add index reference.
+                    animationPages[j].textures[i].textureArrayIndex = t.IndexOf(animationPages[j].textures[i].texture2D);
+                }
+            }
+        }
+
+        private void GenerateTextures()
+        {
+            ReferenceDuplicates();
+
+            texture2DArray.Clear();
+
+            for (int i = 0; i < textureGroups.Count; i++)
+            {
+                var t = GetTextures(i).ToArray();
+                if (VA_Texture2DArrayUtils.IsValidForTextureArray(t))
+                {
+                    texture2DArray.Add(VA_Texture2DArrayUtils.CreateTextureArray(t, false, textureGroups[i].isLinear, textureGroups[i].wrapMode, textureGroups[i].filterMode, 1, name + textureGroups[i].shaderParamName));
+                }
+            }
+        }
+
+        private List<Texture2D> GetTextures(int textureIndex)
+        {
+            List<Texture2D> textures = new List<Texture2D>();
+
+            foreach (var ap in animationPages)
+            {
+                // Check if exist.
+                if (!textures.Contains(ap.textures[textureIndex].texture2D))
+                {
+                    textures.Add(ap.textures[textureIndex].texture2D);
                 }
             }
 
-            // Assign material parameters.
-            if(materials != null)
+            return textures;
+        }
+
+        private void SetMaterials()
+        {
+            if (materials != null)
             {
                 foreach (Material mat in materials)
                 {
-                    if(mat != null)
+                    if (mat != null)
                     {
+                        if (mat.HasProperty("_MaxFrames"))
+                        {
+                            mat.SetFloat("_MaxFrames", maxFrames);
+                        }
+
                         for (int i = 0; i < texture2DArray.Count; i++)
                         {
-                            mat.SetTexture(textureGroups[i].shaderParamName, texture2DArray[i]);
+                            if (mat.HasProperty(textureGroups[i].shaderParamName))
+                            {
+                                mat.SetTexture(textureGroups[i].shaderParamName, texture2DArray[i]);
+                            }
                         }
                     }
                 }
             }
         }
 
-        private void OnValidate()
+        public List<VA_AnimationData> GetAnimationData()
         {
-            foreach (var item in GetTextures())
-            {
-                VA_Texture2DArrayUtils.IsValidForTextureArray(item.Value.ToArray());
+            List<VA_AnimationData> data = new List<VA_AnimationData>();
+
+            foreach (var ap in animationPages)
+            {               
+                data.Add(new VA_AnimationData
+                {
+                    name = ap.name,
+                    frames = ap.frames,
+                    maxFrames = maxFrames,
+                    frameTime = 1.0f / maxFrames,
+                    duration = 1.0f / maxFrames * ap.frames,
+                    animationMapIndex = GetFirstAnimationMapIndex(in ap.textures),
+                    colorMapIndex = GetFirstColorMapIndex(in ap.textures)
+                });
             }
+
+            return data;
         }
 
-        private Dictionary<int, List<Texture2D>> GetTextures()
+        private int GetFirstAnimationMapIndex(in List<TextureEntry> textures)
         {
-            Dictionary<int, List<Texture2D>> dict = new Dictionary<int, List<Texture2D>>();
-
-            // Group and collect the textures.
             for (int i = 0; i < textureGroups.Count; i++)
             {
-                dict.Add(i, new List<Texture2D>());
-
-                for (int j = 0; j < animationPages.Count; j++)
+                if(textureGroups[i].textureType == TextureType.AnimationMap)
                 {
-                    dict[i].Add(animationPages[j].textures[i]);
+                    return textures[i].textureArrayIndex;
                 }
             }
 
-            return dict;
+            return -1;
+        }
+
+        private int GetFirstColorMapIndex(in List<TextureEntry> textures)
+        {
+            for (int i = 0; i < textureGroups.Count; i++)
+            {
+                if (textureGroups[i].textureType == TextureType.ColorMap)
+                {
+                    return textures[i].textureArrayIndex;
+                }
+            }
+
+            return -1;
         }
     }
 
@@ -74,13 +156,29 @@ namespace TAO.VertexAnimation
     {
         public string name;
         public int frames;
-        public List<Texture2D> textures;
+        public List<TextureEntry> textures;
     }
 
     [System.Serializable]
     public struct TextureGroup
     {
         public string shaderParamName;
+        public TextureType textureType;
+        public TextureWrapMode wrapMode;
+        public FilterMode filterMode;
         public bool isLinear;
+    }
+
+    [System.Serializable]
+    public class TextureEntry
+    {
+        public Texture2D texture2D = null;
+        public int textureArrayIndex = -1;
+    }
+
+    public enum TextureType
+    {
+        AnimationMap,
+        ColorMap
     }
 }

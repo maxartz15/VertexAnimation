@@ -1,10 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
-using System.Runtime.CompilerServices;
-using UnityEngine.Rendering.VirtualTexturing;
-using System;
 
 namespace TAO.VertexAnimation.Editor
 {
@@ -12,11 +7,12 @@ namespace TAO.VertexAnimation.Editor
     public class VA_AnimationBookEditor : UnityEditor.Editor
     {
         private VA_AnimationBook animationBook = null;
-        private Vector2 textireGroupScollPos;
+        private Vector2 textureGroupScollPos;
         private Vector2 animationPagesScollPos;
 
         private UnityEditor.Editor previewEditor = null;
         private int previewIndex = 0;
+        private int curviewIndex = 0;
 
         void OnEnable()
         {
@@ -77,21 +73,26 @@ namespace TAO.VertexAnimation.Editor
             SerializedProperty textureGroups = serializedObject.FindProperty("textureGroups");
             int removeWidth = 16;
             int nameWidth = 152;
+            int optionWidth = 110;
             int linearWidth = 50;
 
             using (new EditorGUILayout.VerticalScope())
             {
                 EditorGUILayout.LabelField("TextureGroups", EditorStyles.centeredGreyMiniLabel);
 
-                textireGroupScollPos = EditorGUILayout.BeginScrollView(textireGroupScollPos, false, false);
+                textureGroupScollPos = EditorGUILayout.BeginScrollView(textureGroupScollPos, false, false);
                 using (new EditorGUILayout.HorizontalScope(EditorStyles.toolbar))
                 {
                     EditorGUILayout.LabelField("", GUILayout.Width(removeWidth));
                     EditorGUILayout.LabelField("material parameter name", GUILayout.Width(nameWidth));
+                    EditorGUILayout.LabelField("texture type", GUILayout.Width(optionWidth));
+                    EditorGUILayout.LabelField("wrap mode", GUILayout.Width(optionWidth));
+                    EditorGUILayout.LabelField("filter mode", GUILayout.Width(optionWidth));
                     EditorGUILayout.LabelField("is linear", GUILayout.MinWidth(linearWidth));
                 }
                 EditorGUILayout.EndScrollView();
 
+                textureGroupScollPos = EditorGUILayout.BeginScrollView(textureGroupScollPos, false, false);
                 for (int i = 0; i < textureGroups.arraySize; i++)
                 {
                     using (new EditorGUILayout.HorizontalScope())
@@ -103,9 +104,13 @@ namespace TAO.VertexAnimation.Editor
                         }
 
                         EditorGUILayout.PropertyField(textureGroups.GetArrayElementAtIndex(i).FindPropertyRelative("shaderParamName"), GUIContent.none, GUILayout.Width(nameWidth));
+                        EditorGUILayout.PropertyField(textureGroups.GetArrayElementAtIndex(i).FindPropertyRelative("textureType"), GUIContent.none, GUILayout.Width(optionWidth));
+                        EditorGUILayout.PropertyField(textureGroups.GetArrayElementAtIndex(i).FindPropertyRelative("wrapMode"), GUIContent.none, GUILayout.Width(optionWidth));
+                        EditorGUILayout.PropertyField(textureGroups.GetArrayElementAtIndex(i).FindPropertyRelative("filterMode"), GUIContent.none, GUILayout.Width(optionWidth));
                         EditorGUILayout.PropertyField(textureGroups.GetArrayElementAtIndex(i).FindPropertyRelative("isLinear"), GUIContent.none, GUILayout.MinWidth(linearWidth));
                     }
                 }
+                EditorGUILayout.EndScrollView();
 
                 if (GUILayout.Button("+", EditorStyles.miniButton))
                 {
@@ -161,7 +166,7 @@ namespace TAO.VertexAnimation.Editor
                         SerializedProperty textures = animationPages.GetArrayElementAtIndex(i).FindPropertyRelative("textures");
                         for (int t = 0; t < textures.arraySize; t++)
                         {
-                            EditorGUILayout.PropertyField(textures.GetArrayElementAtIndex(t), GUIContent.none, GUILayout.MinWidth(textureWidth));
+                            EditorGUILayout.PropertyField(textures.GetArrayElementAtIndex(t).FindPropertyRelative("texture2D"), GUIContent.none, GUILayout.MinWidth(textureWidth));
                         }
                     }
                 }
@@ -192,7 +197,16 @@ namespace TAO.VertexAnimation.Editor
                     SerializedProperty texture2DArray = serializedObject.FindProperty("texture2DArray");
 
                     EditorGUILayout.LabelField("Texture2DArray", EditorStyles.centeredGreyMiniLabel);
-                    previewIndex = EditorGUILayout.IntSlider(previewIndex, 0, texture2DArray.arraySize - 1);
+
+                    using (new EditorGUI.DisabledScope(true))
+                    {
+                        for (int t = 0; t < texture2DArray.arraySize; t++)
+                        {
+                            EditorGUILayout.PropertyField(texture2DArray.GetArrayElementAtIndex(t), GUIContent.none);
+                        }
+                    }
+
+                    previewIndex = EditorGUILayout.IntSlider("Preview" ,previewIndex, 0, texture2DArray.arraySize - 1);
                 }
             }
         }
@@ -211,9 +225,10 @@ namespace TAO.VertexAnimation.Editor
 
         public override void OnPreviewGUI(Rect r, GUIStyle background)
         {
-            if (previewEditor == null)
+            if (previewEditor == null || curviewIndex != previewIndex)
             {
-                previewEditor = UnityEditor.Editor.CreateEditor(animationBook.texture2DArray[previewIndex]);
+                curviewIndex = previewIndex;
+                previewEditor = CreateEditor(animationBook.texture2DArray[previewIndex]);
             }
 
             previewEditor.OnInteractivePreviewGUI(r, background);

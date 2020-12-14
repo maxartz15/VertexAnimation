@@ -1,17 +1,13 @@
 ﻿using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Rendering;
 
 namespace TAO.VertexAnimation
 {
-	[MaterialProperty("_AnimationIndex", MaterialPropertyFormat.Float)]
-	public struct VA_AnimationIndexComponent : IComponentData
+	[MaterialProperty("_AnimationData", MaterialPropertyFormat.Float4)]
+	public struct VA_AnimationDataComponent : IComponentData
 	{
-		public float Value;
-	}
-	
-	[MaterialProperty("_AnimationTime", MaterialPropertyFormat.Float)]
-	public struct VA_AnimationTimeComponent : IComponentData
-	{
-		public float Value;
+		// animationTime, animationIndex, colorIndex, nan.
+		public float4 Value;
 	}
 }

@@ -12,10 +12,10 @@ float2 VA_UV_float(float2 uv, int maxFrames, float time)
 	float timeInFrames = frac(time);
 	timeInFrames = ceil(timeInFrames * maxFrames);
 	timeInFrames /= maxFrames;
-	timeInFrames += (1 / maxFrames);
+	timeInFrames += round(1.0f / maxFrames);
 
 	uvPosition.x = uv.x;
-	uvPosition.y = (1 - (timeInFrames)) + (1 - (1 - uv.y));
+	uvPosition.y = (1.0f - (timeInFrames)) + (1.0f - (1.0f - uv.y));
 
 	return uvPosition;
 }
