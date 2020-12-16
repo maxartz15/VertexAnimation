@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97cdf8b194bcb83459d952b3cb008113, type: 3}
+  m_Name: BaseMeshBook
+  m_EditorClassIdentifier: 
+  maxFrames: 43
+  textureGroups:
+  - shaderParamName: _PositionMap
+    textureType: 0
+    wrapMode: 0
+    filterMode: 0
+    isLinear: 0
+  - shaderParamName: _Albedo
+    textureType: 1
+    wrapMode: 0
+    filterMode: 1
+    isLinear: 0
+  animationPages:
+  - name: C1Run
+    frames: 22
+    textures:
+    - texture2D: {fileID: 2800000, guid: e1cf093cfd680f7469c1a379a8ccd813, type: 3}
+      textureArrayIndex: 0
+    - texture2D: {fileID: 2800000, guid: e96b2d6ae6f1bcd4bbcf185aa11cf684, type: 3}
+      textureArrayIndex: 0
+  - name: C1Shoot
+    frames: 36
+    textures:
+    - texture2D: {fileID: 2800000, guid: 4b4399657fc72b343b75adcf40f1c3a4, type: 3}
+      textureArrayIndex: 1
+    - texture2D: {fileID: 2800000, guid: e96b2d6ae6f1bcd4bbcf185aa11cf684, type: 3}
+      textureArrayIndex: 0
+  - name: C1Walk
+    frames: 22
+    textures:
+    - texture2D: {fileID: 2800000, guid: 2dd510f65903ddf4e93918181d2e4990, type: 3}
+      textureArrayIndex: 2
+    - texture2D: {fileID: 2800000, guid: e96b2d6ae6f1bcd4bbcf185aa11cf684, type: 3}
+      textureArrayIndex: 0
+  - name: C2Run
+    frames: 22
+    textures:
+    - texture2D: {fileID: 2800000, guid: c9ba2a68544b5af4ab057d61c5321051, type: 3}
+      textureArrayIndex: 3
+    - texture2D: {fileID: 2800000, guid: 848c31021c4a9a3448eb4604fac5c63a, type: 3}
+      textureArrayIndex: 1
+  - name: C2Run2
+    frames: 36
+    textures:
+    - texture2D: {fileID: 2800000, guid: 479116cbaa3717f49b2f56b50e68fb77, type: 3}
+      textureArrayIndex: 4
+    - texture2D: {fileID: 2800000, guid: 848c31021c4a9a3448eb4604fac5c63a, type: 3}
+      textureArrayIndex: 1
+  - name: C2Walk
+    frames: 22
+    textures:
+    - texture2D: {fileID: 2800000, guid: 2a3cbb5e3a9defa44919c1a706f11b3d, type: 3}
+      textureArrayIndex: 5
+    - texture2D: {fileID: 2800000, guid: 848c31021c4a9a3448eb4604fac5c63a, type: 3}
+      textureArrayIndex: 1
+  - name: C3Run
+    frames: 22
+    textures:
+    - texture2D: {fileID: 2800000, guid: 55362ebf36c379845b1914b46a30d543, type: 3}
+      textureArrayIndex: 6
+    - texture2D: {fileID: 2800000, guid: a54c0b59a9ad0ac4390703fcc93ddda6, type: 3}
+      textureArrayIndex: 2
+  - name: C3Walk
+    frames: 22
+    textures:
+    - texture2D: {fileID: 2800000, guid: e223695e377801e4491c2d740a877783, type: 3}
+      textureArrayIndex: 7
+    - texture2D: {fileID: 2800000, guid: a54c0b59a9ad0ac4390703fcc93ddda6, type: 3}
+      textureArrayIndex: 2
+  materials:
+  - {fileID: 2100000, guid: 04f511d576d5e534a947d3f10915578a, type: 2}
+  texture2DArray:
+  - {fileID: 0}
+  - {fileID: 0}
