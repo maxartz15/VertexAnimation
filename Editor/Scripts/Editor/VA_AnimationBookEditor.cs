@@ -176,6 +176,11 @@ namespace TAO.VertexAnimation.Editor
                 {
                     animationPages.InsertArrayElementAtIndex(animationPages.arraySize);
                 }
+
+                if (GUILayout.Button("auto fill", EditorStyles.miniButton))
+                {
+                    animationBook.AutoFill();
+                }
             }
         }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace TAO.VertexAnimation
 {
-    [CreateAssetMenu(fileName = "new AnimationBook", menuName = "AnimationBook", order = 0)]
+    [CreateAssetMenu(fileName = "new AnimationBook", menuName = "VA_Animation/AnimationBook", order = 400)]
     public class VA_AnimationBook : ScriptableObject
     {
         public int maxFrames;
@@ -148,6 +148,40 @@ namespace TAO.VertexAnimation
             }
 
             return -1;
+        }
+
+        // Auto fill names and frames.
+        public void AutoFill()
+        {
+            if (animationPages != null)
+            {
+                for (int i = 0; i < animationPages.Count; i++)
+                {
+                    VA_AnimationPage ap = animationPages[i];
+                    if (ap.textures != null && ap.textures.Count > 0)
+                    {
+                        string textureName = ap.textures[0].texture2D.name;
+
+                        string[] parts = textureName.Split('_');
+
+                        foreach (var p in parts)
+                        {
+                            if (p.StartsWith("N-"))
+                            {
+                                ap.name = p.Remove(0, 2);
+                            }
+                            else if (p.StartsWith("F-"))
+                            {
+                                if(int.TryParse(p.Remove(0, 2), out int frames))
+                                {
+                                    ap.frames = frames;
+                                }
+                            }
+                        }
+                    }
+                    animationPages[i] = ap;
+                }
+            }
         }
     }
 

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace TAO.VertexAnimation
 {
-	[CreateAssetMenu(fileName = "new AnimationLibrary", menuName = "AnimationLibrary", order = 0)]
+	[CreateAssetMenu(fileName = "new AnimationLibrary", menuName = "VA_Animation/AnimationLibrary", order = 400)]
 	public class VA_AnimationLibrary : ScriptableObject
 	{
 		[SerializeField]

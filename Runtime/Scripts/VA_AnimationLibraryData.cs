@@ -29,6 +29,8 @@ namespace TAO.VertexAnimation
 
     public static class VA_AnimationLibraryUtils
 	{
+		public const string AnimationLibraryAssetStoreName = "VA_AnimationLibrary";
+
         public static int GetAnimation(ref VA_AnimationLibraryData animationsRef, FixedString32 animationName)
         {
             for (int i = 0; i < animationsRef.animations.Length; i++)

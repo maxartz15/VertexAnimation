@@ -38,8 +38,7 @@ namespace TAO.VertexAnimation
 					BlobAssetReference<VA_AnimationLibraryData> animLibAssetRef = blobBuilder.CreateBlobAssetReference<VA_AnimationLibraryData>(Allocator.Persistent);
 
 					// Add it to the asset store.
-					// TODO: Generate Hash based on Guid.
-					BlobAssetStore.TryAdd(new Hash128("AnimationLib"), animLibAssetRef);
+					BlobAssetStore.TryAdd(new Hash128(VA_AnimationLibraryUtils.AnimationLibraryAssetStoreName), animLibAssetRef);
 
 					UnityEngine.Debug.Log("VA_AnimationLibrary has " + animLibAssetRef.Value.animations.Length.ToString() + " animations.");
 				}
