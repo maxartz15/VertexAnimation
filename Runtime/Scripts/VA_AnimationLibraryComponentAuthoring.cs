@@ -18,7 +18,6 @@ namespace TAO.VertexAnimation
 			{
 				animationLib.animationLibrary.Create();
 
-
 				// Blob builder to build.
 				using (BlobBuilder blobBuilder = new BlobBuilder(Allocator.Temp))
 				{

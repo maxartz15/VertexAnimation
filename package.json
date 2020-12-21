@@ -2,8 +2,8 @@
   "name": "com.tech_art_outsource.vertex_animation",
   "displayName": "TAO Vertex Animation",
   "version": "0.1.0",
-  "unity": "2020.1",
-  "unityRelease": "6f1",
+  "unity": "2020.2",
+  "unityRelease": "0f1",
   "description": "Vertex animation shaders and tools.",
   "category": "Tool",
   "type": "tool",
@@ -23,5 +23,12 @@
       "description": "This sample is just an example",
       "path": "Samples~/Example1"
     }
-  ]
+  ],
+  "dependencies": {
+    "com.unity.entities": "0.16.0-preview.21",
+    "com.unity.render-pipelines.universal": "10.2.2",
+    "com.unity.shadergraph": "10.2.2",
+    "com.unity.rendering.hybrid": "0.10.0-preview.21"
+  },
+  "hideInEditor": false
 }

@@ -55,6 +55,7 @@ namespace TAO.VertexAnimation
             for (int i = 0; i < textureGroups.Count; i++)
             {
                 var t = GetTextures(i).ToArray();
+
                 if (VA_Texture2DArrayUtils.IsValidForTextureArray(t))
                 {
                     texture2DArray.Add(VA_Texture2DArrayUtils.CreateTextureArray(t, false, textureGroups[i].isLinear, textureGroups[i].wrapMode, textureGroups[i].filterMode, 1, name + textureGroups[i].shaderParamName));

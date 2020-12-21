@@ -102,6 +102,7 @@
             "m_Id": "da67a8cccc5e47829fbfcf50aead1f3e"
         }
     ],
+    "synonyms": [],
     "m_Precision": 0,
     "m_PreviewExpanded": true,
     "m_CustomColors": {
@@ -119,7 +120,6 @@
     "m_Id": 1,
     "m_DisplayName": "Vector1",
     "m_SlotType": 0,
-    "m_Priority": 2147483647,
     "m_Hidden": false,
     "m_ShaderOutputName": "Vector1",
     "m_StageCapability": 3,
@@ -137,7 +137,6 @@
     "m_Id": 1,
     "m_DisplayName": "vector3",
     "m_SlotType": 0,
-    "m_Priority": 2147483647,
     "m_Hidden": false,
     "m_ShaderOutputName": "vector3",
     "m_StageCapability": 3,
@@ -184,6 +183,7 @@
             "m_Id": "af9842cba20446ec90d8a3d622f30915"
         }
     ],
+    "synonyms": [],
     "m_Precision": 0,
     "m_PreviewExpanded": false,
     "m_CustomColors": {
@@ -202,7 +202,6 @@
     "m_Id": 0,
     "m_DisplayName": "vector1",
     "m_SlotType": 1,
-    "m_Priority": 2147483647,
     "m_Hidden": false,
     "m_ShaderOutputName": "vector1",
     "m_StageCapability": 3,
@@ -220,7 +219,6 @@
     "m_Id": 0,
     "m_DisplayName": "Vector3",
     "m_SlotType": 1,
-    "m_Priority": 2147483647,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
     "m_StageCapability": 3,
@@ -264,6 +262,7 @@
             "m_Id": "285ef83ab3394450b82148d63dacc74d"
         }
     ],
+    "synonyms": [],
     "m_Precision": 0,
     "m_PreviewExpanded": true,
     "m_CustomColors": {
@@ -273,7 +272,7 @@
 }
 
 {
-    "m_SGVersion": 0,
+    "m_SGVersion": 1,
     "m_Type": "UnityEditor.ShaderGraph.Internal.Vector3ShaderProperty",
     "m_ObjectId": "f4f17c3262704090a48f16ca7b479fe2",
     "m_Guid": {
@@ -284,7 +283,8 @@
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_Precision": 0,
-    "m_GPUInstanced": false,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
         "x": 1.0,

@@ -179,7 +179,9 @@ namespace TAO.VertexAnimation.Editor
 
                 if (GUILayout.Button("auto fill", EditorStyles.miniButton))
                 {
+                    Undo.RecordObject(animationBook, "AutoFill");
                     animationBook.AutoFill();
+                    EditorUtility.SetDirty(animationBook);
                 }
             }
         }
@@ -205,10 +207,7 @@ namespace TAO.VertexAnimation.Editor
 
                     using (new EditorGUI.DisabledScope(true))
                     {
-                        for (int t = 0; t < texture2DArray.arraySize; t++)
-                        {
-                            EditorGUILayout.PropertyField(texture2DArray.GetArrayElementAtIndex(t), GUIContent.none);
-                        }
+                        EditorGUILayout.PropertyField(texture2DArray);
                     }
 
                     previewIndex = EditorGUILayout.IntSlider("Preview" ,previewIndex, 0, texture2DArray.arraySize - 1);
