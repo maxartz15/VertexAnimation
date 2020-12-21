@@ -10,9 +10,9 @@ namespace TAO.VertexAnimation.Editor
         private Vector2 textureGroupScollPos;
         private Vector2 animationPagesScollPos;
 
-        private UnityEditor.Editor previewEditor = null;
-        private int previewIndex = 0;
-        private int curviewIndex = 0;
+        //private UnityEditor.Editor previewEditor = null;
+        //private int previewIndex = 0;
+        //private int curviewIndex = 0;
 
         void OnEnable()
         {
@@ -29,6 +29,7 @@ namespace TAO.VertexAnimation.Editor
             SyncListSize();
             AnimationPagesGUI();
             MaterialGUI();
+            AssetBuilderGUI();
             Texture2DGUI();
 
             serializedObject.ApplyModifiedProperties();
@@ -36,20 +37,20 @@ namespace TAO.VertexAnimation.Editor
 
         private void SyncListSize()
         {
-            foreach (var page in animationBook.animationPages)
+            foreach (var page in animationBook.editorData.animationPages)
             {
-                if(page.textures.Count < animationBook.textureGroups.Count)
+                if(page.textures.Count < animationBook.editorData.textureGroups.Count)
                 {
-                    int diff = animationBook.textureGroups.Count - page.textures.Count;
+                    int diff = animationBook.editorData.textureGroups.Count - page.textures.Count;
 
                     for (int i = 0; i < diff; i++)
                     {
                         page.textures.Add(null);
                     }
                 }
-                else if(page.textures.Count > animationBook.textureGroups.Count)
+                else if(page.textures.Count > animationBook.editorData.textureGroups.Count)
                 {
-                    int diff = page.textures.Count - animationBook.textureGroups.Count;
+                    int diff = page.textures.Count - animationBook.editorData.textureGroups.Count;
 
                     for (int i = 0; i < diff; i++)
                     {
@@ -61,16 +62,19 @@ namespace TAO.VertexAnimation.Editor
 
         private void GeneralGUI()
         {
+            SerializedProperty editorData = serializedObject.FindProperty("editorData");
+
             using (new EditorGUILayout.VerticalScope())
             {
                 EditorGUILayout.LabelField("General", EditorStyles.centeredGreyMiniLabel);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("maxFrames"));
+                EditorGUILayout.PropertyField(editorData.FindPropertyRelative("maxFrames"));
             }
         }
 
         private void TextureGroupsGUI()
         {
-            SerializedProperty textureGroups = serializedObject.FindProperty("textureGroups");
+            SerializedProperty editorData = serializedObject.FindProperty("editorData");
+            SerializedProperty textureGroups = editorData.FindPropertyRelative("textureGroups");
             int removeWidth = 16;
             int nameWidth = 152;
             int optionWidth = 110;
@@ -114,7 +118,7 @@ namespace TAO.VertexAnimation.Editor
 
                 if (GUILayout.Button("+", EditorStyles.miniButton))
                 {
-                    animationBook.textureGroups.Add(new TextureGroup
+                    animationBook.editorData.textureGroups.Add(new VA_AnimationBook.EditorTextureGroup
                     {
                         shaderParamName = "_ShaderPropertyName",
                         isLinear = false
@@ -125,7 +129,8 @@ namespace TAO.VertexAnimation.Editor
 
         private void AnimationPagesGUI()
         {
-            SerializedProperty animationPages = serializedObject.FindProperty("animationPages");
+            SerializedProperty editorData = serializedObject.FindProperty("editorData");
+            SerializedProperty animationPages = editorData.FindPropertyRelative("animationPages");
             int removeWidth = 16;
             int nameWidth = 100;
             int frameWidth = 50;
@@ -141,7 +146,7 @@ namespace TAO.VertexAnimation.Editor
                     EditorGUILayout.LabelField("", GUILayout.Width(removeWidth));
                     EditorGUILayout.LabelField("name", GUILayout.Width(nameWidth));
                     EditorGUILayout.LabelField("frames", GUILayout.Width(frameWidth));
-                    foreach (var t in animationBook.textureGroups)
+                    foreach (var t in animationBook.editorData.textureGroups)
                     {
                         EditorGUILayout.LabelField(t.shaderParamName, GUILayout.MinWidth(textureWidth));
                     }
@@ -180,7 +185,7 @@ namespace TAO.VertexAnimation.Editor
                 if (GUILayout.Button("auto fill", EditorStyles.miniButton))
                 {
                     Undo.RecordObject(animationBook, "AutoFill");
-                    animationBook.AutoFill();
+                    VA_AssetBuilder.AutoFill(ref animationBook);
                     EditorUtility.SetDirty(animationBook);
                 }
             }
@@ -188,20 +193,40 @@ namespace TAO.VertexAnimation.Editor
 
         private void MaterialGUI()
         {
+            SerializedProperty editorData = serializedObject.FindProperty("editorData");
+
             using (new EditorGUILayout.VerticalScope())
             {
                 EditorGUILayout.LabelField("Materials", EditorStyles.centeredGreyMiniLabel);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("materials"));
+                EditorGUILayout.PropertyField(editorData.FindPropertyRelative("materials"));
+            }
+        }
+
+        private void AssetBuilderGUI()
+        {
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                if (GUILayout.Button("build assets", EditorStyles.miniButtonLeft))
+                {
+                    VA_AssetBuilder.GeneratePlayData();
+                }
+
+                if (GUILayout.Button("clear assets", EditorStyles.miniButtonRight))
+                {
+                    VA_AssetBuilder.ClearBuildData();
+                }
             }
         }
 
         private void Texture2DGUI()
         {
+            SerializedProperty editorData = serializedObject.FindProperty("editorData");
+
             if (HasPreviewGUI())
             {
                 using (new EditorGUILayout.VerticalScope())
                 {
-                    SerializedProperty texture2DArray = serializedObject.FindProperty("texture2DArray");
+                    SerializedProperty texture2DArray = editorData.FindPropertyRelative("texture2DArray");
 
                     EditorGUILayout.LabelField("Texture2DArray", EditorStyles.centeredGreyMiniLabel);
 
@@ -210,32 +235,32 @@ namespace TAO.VertexAnimation.Editor
                         EditorGUILayout.PropertyField(texture2DArray);
                     }
 
-                    previewIndex = EditorGUILayout.IntSlider("Preview" ,previewIndex, 0, texture2DArray.arraySize - 1);
+                    //previewIndex = EditorGUILayout.IntSlider("Preview" ,previewIndex, 0, texture2DArray.arraySize - 1);
                 }
             }
         }
 
-        public override bool HasPreviewGUI()
-        {
-            bool hasPreview = false;
+        //public override bool HasPreviewGUI()
+        //{
+        //    bool hasPreview = false;
 
-            if(animationBook.texture2DArray != null && animationBook.texture2DArray.Count > 0 && animationBook.texture2DArray[previewIndex] != null)
-            {
-                hasPreview = true;
-            }
+        //    if(animationBook.editorData.texture2DArray != null && animationBook.editorData.texture2DArray.Count > 0 && animationBook.editorData.texture2DArray[previewIndex] != null)
+        //    {
+        //        hasPreview = true;
+        //    }
 
-            return hasPreview;
-        }
+        //    return hasPreview;
+        //}
 
-        public override void OnPreviewGUI(Rect r, GUIStyle background)
-        {
-            if (previewEditor == null || curviewIndex != previewIndex)
-            {
-                curviewIndex = previewIndex;
-                previewEditor = CreateEditor(animationBook.texture2DArray[previewIndex]);
-            }
+        //public override void OnPreviewGUI(Rect r, GUIStyle background)
+        //{
+        //    if (previewEditor == null || curviewIndex != previewIndex)
+        //    {
+        //        curviewIndex = previewIndex;
+        //        previewEditor = CreateEditor(animationBook.editorData.texture2DArray[previewIndex]);
+        //    }
 
-            previewEditor.OnInteractivePreviewGUI(r, background);
-        }
+        //    previewEditor.OnInteractivePreviewGUI(r, background);
+        //}
     }
 }

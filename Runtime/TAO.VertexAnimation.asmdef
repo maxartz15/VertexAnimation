@@ -1,5 +1,6 @@
 {
     "name": "TAO.VertexAnimation",
+    "rootNamespace": "TAO.VertexAnimation",
     "references": [
         "GUID:2665a8d13d1b3f18800f46e256720795",
         "GUID:734d92eba21c94caba915361bd5ac177",

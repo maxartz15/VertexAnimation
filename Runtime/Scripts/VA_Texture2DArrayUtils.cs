@@ -63,7 +63,7 @@ namespace TAO.VertexAnimation
                 if (!a_textures[0].isReadable)
                 {
 #if UNITY_EDITOR
-                    Debug.LogWarning("Texture " + a_textures[i].name + " is not readable!");
+                    //Debug.LogWarning("Texture " + a_textures[i].name + " is not readable!");
                     return true;
 #else
                     Debug.LogError("Texture " + a_textures[i].name + " is not readable!");

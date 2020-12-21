@@ -16,7 +16,7 @@ namespace TAO.VertexAnimation
 		{
 			Entities.ForEach((VA_AnimationLibraryComponentAuthoring animationLib) =>
 			{
-				animationLib.animationLibrary.Create();
+				animationLib.animationLibrary.Init();
 
 				// Blob builder to build.
 				using (BlobBuilder blobBuilder = new BlobBuilder(Allocator.Temp))

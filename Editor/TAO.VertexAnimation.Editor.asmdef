@@ -1,7 +1,9 @@
 {
     "name": "TAO.VertexAnimation.Editor",
+    "rootNamespace": "TAO.VertexAnimation.Editor",
     "references": [
-        "TAO.VertexAnimation"
+        "TAO.VertexAnimation",
+        "Unity.Collections"
     ],
     "includePlatforms": [
         "Editor"

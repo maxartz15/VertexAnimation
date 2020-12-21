@@ -7,37 +7,25 @@ namespace TAO.VertexAnimation
 	public class VA_AnimationLibrary : ScriptableObject
 	{
 		[SerializeField]
-		private VA_AnimationBook[] animationBooks;
+		private List<VA_AnimationBook> animationBooks = new List<VA_AnimationBook>();
 
 		[HideInInspector]
 		public List<VA_AnimationData> animations = null;
 
-		public void Create()
+		public void Init()
 		{
-			foreach (VA_AnimationBook book in animationBooks)
-			{
-				book.Create();
-			}
+			animations = new List<VA_AnimationData>();
 
-			ConvertAnimations();
+			foreach (VA_AnimationBook ab in animationBooks)
+			{
+				ab.SetMaterials();
+				animations.AddRange(ab.playData.GetAnimations);
+			}
 		}
 
 		private void OnValidate()
 		{
 			// TODO: Check for naming conflicts in AnimationBooks.
-		}
-
-		private void ConvertAnimations()
-		{
-			animations = new List<VA_AnimationData>();
-
-			if (animationBooks != null)
-			{
-				foreach (var ab in animationBooks)
-				{
-					animations.AddRange(ab.GetAnimationData());
-				}
-			}
 		}
 	}
 }
