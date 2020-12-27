@@ -3,6 +3,7 @@
 ## 0.1.1
 
 - Runtime fixes.
+  - Split editor and play data.
 - Asset Builder.
 - Unity Version.
   - Shader upgrades.
