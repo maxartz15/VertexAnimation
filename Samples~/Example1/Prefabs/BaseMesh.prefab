@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 454067150296777415}
   - component: {fileID: 4902348880141478088}
-  - component: {fileID: 1683868614667261777}
   - component: {fileID: 7322754236601803274}
+  - component: {fileID: 1683868614667261777}
   m_Layer: 0
-  m_Name: BaseMesh_LOD_Single
+  m_Name: BaseMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -68,6 +68,18 @@ LODGroup:
     renderers:
     - renderer: {fileID: 8600995544659564579}
   m_Enabled: 1
+--- !u!114 &7322754236601803274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 938713576735856765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29deecb09ead9e74aa32f9d265f1e7ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1683868614667261777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,18 +93,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ConversionMode: 0
---- !u!114 &7322754236601803274
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 938713576735856765}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29deecb09ead9e74aa32f9d265f1e7ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4305454405175524092
 GameObject:
   m_ObjectHideFlags: 0
