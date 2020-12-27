@@ -208,7 +208,7 @@ namespace TAO.VertexAnimation.Editor
             {
                 if (GUILayout.Button("build assets", EditorStyles.miniButtonLeft))
                 {
-                    VA_AssetBuilder.GeneratePlayData();
+                    VA_AssetBuilder.GenerateBuildData();
                 }
 
                 if (GUILayout.Button("clear assets", EditorStyles.miniButtonRight))

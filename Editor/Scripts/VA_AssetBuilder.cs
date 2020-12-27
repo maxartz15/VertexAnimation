@@ -10,33 +10,82 @@ namespace TAO.VertexAnimation.Editor
     [InitializeOnLoad]
     public class VA_AssetBuilder : IPreprocessBuildWithReport, IPostprocessBuildWithReport
     {
+        private const string parentFolder = "Assets";
+        private const string childFolder = "VA_AssetBuilder";
+        private const string folderPath = parentFolder + "/" + childFolder;
+
+        #region EditorMenus
+        private const string buildClearKey = "VA_AssetsBuilderClearBuildAssets";
+        private const string editorGenerateKey = "VA_AssetsBuilderGenerateEditorAssets";
+        private const string editorClearKey = "VA_AssetsBuilderClearEditorAssets";
+
+        private const string editorMenuFolder = "TAO/Vertex Animation";
+        private const string buildClearMenuName = editorMenuFolder + "/ClearBuildAssets";
+        private const string editorGeneratePlayMenuName = editorMenuFolder + "/GenerateEditorAssetsOnStartPlay";
+        private const string editorClearPlayMenuName = editorMenuFolder + "/ClearEditorAssetsOnEndPlay";
+
+        public static bool ClearBuildAssets
+        {
+            get { return EditorPrefs.GetBool(buildClearKey, true); }
+            set { EditorPrefs.SetBool(buildClearKey, value); }
+        }
+
+        [MenuItem(buildClearMenuName)]
+        private static void ToggleClearBuildAssetsAction()
+        {
+            ClearBuildAssets = !ClearBuildAssets;
+        }
+
+        [MenuItem(buildClearMenuName, true)]
+        private static bool ToggleClearBuildAssetsValidate()
+        {
+            Menu.SetChecked(buildClearMenuName, ClearBuildAssets);
+            return true;
+        }
+
+        public static bool GenerateEditorPlayModeAssets
+        {
+            get { return EditorPrefs.GetBool(editorGenerateKey, true); }
+            set { EditorPrefs.SetBool(editorGenerateKey, value); }
+        }
+
+        [MenuItem(editorGeneratePlayMenuName)]
+        private static void ToggleGenerateEditorPlayModeAssetsAction()
+        {
+            GenerateEditorPlayModeAssets = !GenerateEditorPlayModeAssets;
+        }
+
+        [MenuItem(editorGeneratePlayMenuName, true)]
+        private static bool ToggleGenerateEditorPlayModeAssetsValidate()
+        {
+            Menu.SetChecked(editorGeneratePlayMenuName, GenerateEditorPlayModeAssets);
+            return true;
+        }
+
+        public static bool ClearEditorPlayModeAssets
+        {
+            get { return EditorPrefs.GetBool(editorClearKey, true); }
+            set { EditorPrefs.SetBool(editorClearKey, value); }
+        }
+
+        [MenuItem(editorClearPlayMenuName)]
+        private static void ToggleClearEditorPlayModeAssetsAction()
+        {
+            ClearEditorPlayModeAssets = !ClearEditorPlayModeAssets;
+        }
+
+        [MenuItem(editorClearPlayMenuName, true)]
+        private static bool ToggleClearEditorPlayModeAssetsValidate()
+        {
+            Menu.SetChecked(editorClearPlayMenuName, ClearEditorPlayModeAssets);
+            return true;
+        }
+        #endregion
+
+        #region EditorPlayMode
         static VA_AssetBuilder()
         {
             EditorApplication.playModeStateChanged += OnPlayModeEnter;
-        }
-
-        public int callbackOrder => 0;
-        private static bool deleteGeneratedAssets = true;
-
-        private const string parentFolder = "Assets";
-        private const string childFolder = "VA_AssetBuilder";
-        private static string FolderPath => string.Format("{0}/{1}", parentFolder, childFolder);
-
-        public void OnPreprocessBuild(BuildReport report)
-        {
-            GeneratePlayData();
-            Debug.Log("VA_AssetBuilder generated play data.");
-        }
-
-        public void OnPostprocessBuild(BuildReport report)
-        {
-            if(!deleteGeneratedAssets)
-            {
-                return;
-            }
-
-            ClearBuildData();
-            Debug.Log("VA_AssetBuilder cleared play data.");
         }
 
         private static void OnPlayModeEnter(PlayModeStateChange state)
@@ -44,12 +93,16 @@ namespace TAO.VertexAnimation.Editor
             switch (state)
             {
                 case PlayModeStateChange.EnteredEditMode:
-                    //ClearBuildData();
-                    //Debug.Log("VA_AssetBuilder cleared editor data.");
+                    if (ClearEditorPlayModeAssets)
+                    {
+                        ClearBuildData();
+                    }
                     break;
                 case PlayModeStateChange.ExitingEditMode:
-                    //GeneratePlayData();
-                    GenerateEditorData();
+                    if (GenerateEditorPlayModeAssets)
+                    {
+                        GenerateBuildData();
+                    }
                     Debug.Log("VA_AssetBuilder generated editor data.");
                     break;
                 case PlayModeStateChange.EnteredPlayMode:
@@ -60,26 +113,32 @@ namespace TAO.VertexAnimation.Editor
                     break;
             }
         }
+        #endregion
 
-        public static void GenerateEditorData()
+        #region BuildProcess
+        public int callbackOrder => 0;
+
+        public void OnPreprocessBuild(BuildReport report)
         {
-            string filter = string.Format("t:{0}", typeof(VA_AnimationBook).Name);
-            string[] guids = AssetDatabase.FindAssets(filter);
-
-            foreach (var guid in guids)
-            {
-                VA_AnimationBook book = AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(guid), typeof(VA_AnimationBook)) as VA_AnimationBook;
-                            
-                // Generate run time data.
-                //GenerateTextures(ref book);
-
-                // Assign run time data.
-                ConvertEditorDataToPlayData(ref book);
-            }
+            GenerateBuildData();
+            Debug.Log("VA_AssetBuilder generated play data.");
         }
 
-        [MenuItem("Assets/TAO Vertex Animation/Generate Build Data", false, 65)]
-        public static void GeneratePlayData()
+        public void OnPostprocessBuild(BuildReport report)
+        {
+            if(!ClearBuildAssets)
+            {
+                return;
+            }
+
+            ClearBuildData();
+            Debug.Log("VA_AssetBuilder cleared play data.");
+        }
+        #endregion
+
+        #region MainFunctions
+        [MenuItem(editorMenuFolder + "/Generate Build Data", false, 65)]
+        public static void GenerateBuildData()
         {
             string filter = string.Format("t:{0}", typeof(VA_AnimationBook).Name);
             string[] guids = AssetDatabase.FindAssets(filter);
@@ -95,21 +154,16 @@ namespace TAO.VertexAnimation.Editor
                 ConvertEditorDataToPlayData(ref book);
 
                 // Save them to disk.
-                if (!AssetDatabase.IsValidFolder(FolderPath))
+                if (!AssetDatabase.IsValidFolder(folderPath))
                 {
-                    deleteGeneratedAssets = true;
                     AssetDatabase.CreateFolder(parentFolder, childFolder);
-                }
-                else
-                {
-                    deleteGeneratedAssets = false;
                 }
 
                 // Generate run time data.
                 List<string> savedAssets = new List<string>();
                 foreach (var t in book.editorData.texture2DArray)
                 {
-                    string assetPath = string.Format("{0}/{1}.asset", FolderPath, t.name);
+                    string assetPath = string.Format("{0}/{1}.asset", folderPath, t.name);
 
                     // Delete existing asset.
                     if (!string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(assetPath)))
@@ -132,7 +186,7 @@ namespace TAO.VertexAnimation.Editor
             }
         }
 
-        [MenuItem("Assets/TAO Vertex Animation/Clear Build Data", false, 66)]
+        [MenuItem(editorMenuFolder + "/Clear Build Data", false, 66)]
         public static void ClearBuildData()
         {
             string filter = string.Format("t:{0}", typeof(VA_AnimationBook).Name);
@@ -146,14 +200,16 @@ namespace TAO.VertexAnimation.Editor
             }
 
             // Remove generated assets from disk.
-            if (AssetDatabase.IsValidFolder(FolderPath))
+            if (AssetDatabase.IsValidFolder(folderPath))
             {
-                AssetDatabase.DeleteAsset(FolderPath);
+                AssetDatabase.DeleteAsset(folderPath);
             }
 
             AssetDatabase.SaveAssets();
         }
+        #endregion
 
+        #region GenerationHelperFunctions
         // Assign the texture ID's to the texture entries.
         private static void ReferenceDuplicates(ref VA_AnimationBook book)
         {
@@ -323,6 +379,7 @@ namespace TAO.VertexAnimation.Editor
             }
 
             book.playData.texture2DArray = book.editorData.texture2DArray;
-        }
+        }   
+        #endregion
     }
 }
