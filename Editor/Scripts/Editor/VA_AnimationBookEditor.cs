@@ -10,10 +10,6 @@ namespace TAO.VertexAnimation.Editor
         private Vector2 textureGroupScollPos;
         private Vector2 animationPagesScollPos;
 
-        //private UnityEditor.Editor previewEditor = null;
-        //private int previewIndex = 0;
-        //private int curviewIndex = 0;
-
         void OnEnable()
         {
             animationBook = target as VA_AnimationBook;
@@ -25,11 +21,16 @@ namespace TAO.VertexAnimation.Editor
 
             // Texture Groups.
             GeneralGUI();
+            EditorGUILayoutUtils.HorizontalLine(color: Color.gray);
             TextureGroupsGUI();
+            EditorGUILayoutUtils.HorizontalLine(color: Color.gray);
             SyncListSize();
             AnimationPagesGUI();
+            EditorGUILayoutUtils.HorizontalLine(color: Color.gray);
             MaterialGUI();
+            EditorGUILayoutUtils.HorizontalLine(color: Color.gray);
             AssetBuilderGUI();
+            EditorGUILayoutUtils.HorizontalLine(color: Color.gray);
             Texture2DGUI();
 
             serializedObject.ApplyModifiedProperties();

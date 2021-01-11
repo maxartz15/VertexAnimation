@@ -293,6 +293,13 @@ namespace TAO.VertexAnimation.Editor
                                     ap.frames = frames;
                                 }
                             }
+                            else if (p.StartsWith("MF-"))
+                            {
+                                if (int.TryParse(p.Remove(0, 3), out int maxFrames))
+                                {
+                                    book.editorData.maxFrames = maxFrames;
+                                }
+                            }
                         }
                     }
                     book.editorData.animationPages[i] = ap;

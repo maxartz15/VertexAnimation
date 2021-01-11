@@ -1,16 +1,4 @@
-﻿// References:
-// https://forum.unity.com/threads/help-combining-and-manipulating-skinned-mesh-renderers-imported-from-blender.505078/
-// http://wiki.unity3d.com/index.php/CombineSkinnedMeshes
-// http://wiki.unity3d.com/index.php/SkinnedMeshCombiner
-
-// TODO:
-// ---Bake ALL the MeshRenderers/SkinnedMeshRenderers and merge them together.---
-// ---Bake multiple animations.---
-// ---Get the longest animation to calculate the texture height, so all the textures have the same height for the 3D texture.---
-// Add options and previews for texture size, animation phasing/fps.
-// Either merge with the animation books or generate them from this and maybe store them as child (and then don't destroy them on re-bake to keep the reference but replace it).
-
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
