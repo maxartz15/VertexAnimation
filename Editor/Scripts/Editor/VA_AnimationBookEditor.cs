@@ -68,6 +68,7 @@ namespace TAO.VertexAnimation.Editor
             using (new EditorGUILayout.VerticalScope())
             {
                 EditorGUILayout.LabelField("General", EditorStyles.centeredGreyMiniLabel);
+                EditorGUILayout.PropertyField(editorData.FindPropertyRelative("fps"));
                 EditorGUILayout.PropertyField(editorData.FindPropertyRelative("maxFrames"));
             }
         }

@@ -30,7 +30,7 @@ namespace TAO.VertexAnimation
 					// Set all the data.
 					BlobBuilderArray<VA_AnimationData> animationDataArray = blobBuilder.Allocate(ref animationDataBlobAsset.animations, animationLib.animationLibrary.animations.Count);
 
-                    for (int i = 0; i < animationDataArray.Length; i++)
+					for (int i = 0; i < animationDataArray.Length; i++)
 					{
 						// Copy data.
 						animationDataArray[i] = animationLib.animationLibrary.animations[i];

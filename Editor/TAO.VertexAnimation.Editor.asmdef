@@ -3,7 +3,9 @@
     "rootNamespace": "TAO.VertexAnimation.Editor",
     "references": [
         "TAO.VertexAnimation",
-        "Unity.Collections"
+        "Unity.Collections",
+        "Unity.Entities",
+        "Unity.Entities.Hybrid"
     ],
     "includePlatforms": [
         "Editor"

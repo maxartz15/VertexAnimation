@@ -12,7 +12,7 @@ namespace TAO.VertexAnimation
 		public int frames;
 		// The maximum of frames the texture holds.
 		public int maxFrames;
-		// 1.0f / maxFrames.
+		// 1.0f / fps.
 		public float frameTime;
 		// FrameTime * frames.
 		public float duration;
@@ -27,27 +27,27 @@ namespace TAO.VertexAnimation
 		public BlobArray<VA_AnimationData> animations;
 	}
 
-    public static class VA_AnimationLibraryUtils
+	public static class VA_AnimationLibraryUtils
 	{
 		public const string AnimationLibraryAssetStoreName = "VA_AnimationLibrary";
 
-        public static int GetAnimation(ref VA_AnimationLibraryData animationsRef, FixedString32 animationName)
-        {
-            for (int i = 0; i < animationsRef.animations.Length; i++)
-            {
-                if (animationsRef.animations[i].name == animationName)
-                {
-                    return i;
-                }
-            }
-
-            return -1;
-        }
-
-        public static int GetAnimationMapIndex(ref VA_AnimationLibraryData animationsRef, int animation)
+		public static int GetAnimation(ref VA_AnimationLibraryData animationsRef, FixedString32 animationName)
 		{
-            return animationsRef.animations[animation].animationMapIndex;
-        }
+			for (int i = 0; i < animationsRef.animations.Length; i++)
+			{
+				if (animationsRef.animations[i].name == animationName)
+				{
+					return i;
+				}
+			}
+
+			return -1;
+		}
+
+		public static int GetAnimationMapIndex(ref VA_AnimationLibraryData animationsRef, int animation)
+		{
+			return animationsRef.animations[animation].animationMapIndex;
+		}
 
 		public static int GetColorMapIndex(ref VA_AnimationLibraryData animationsRef, int animation)
 		{

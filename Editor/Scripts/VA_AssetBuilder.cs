@@ -300,6 +300,13 @@ namespace TAO.VertexAnimation.Editor
                                     book.editorData.maxFrames = maxFrames;
                                 }
                             }
+                            else if (p.StartsWith("FPS-"))
+                            {
+                                if (int.TryParse(p.Remove(0, 4), out int fps))
+                                {
+                                    book.editorData.fps = fps;
+                                }
+                            }
                         }
                     }
                     book.editorData.animationPages[i] = ap;
@@ -339,6 +346,7 @@ namespace TAO.VertexAnimation.Editor
         {
             book.playData = new VA_AnimationBook.PlayData
             {
+                fps = book.editorData.fps,
                 maxFrames = book.editorData.maxFrames,
                 materials = book.editorData.materials
             };

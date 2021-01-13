@@ -51,9 +51,9 @@ namespace TAO.VertexAnimation
 					Entity ent = GetPrimaryEntity(children[i]);
 				
 					VA_AnimationDataComponent animationData = new VA_AnimationDataComponent();
-                    DstEntityManager.AddComponentData(ent, animationData);
-                }
-            });
+					DstEntityManager.AddComponentData(ent, animationData);
+				}
+			});
 		}
 	}
 }

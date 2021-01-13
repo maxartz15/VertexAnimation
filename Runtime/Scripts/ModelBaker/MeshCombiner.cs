@@ -1,242 +1,247 @@
-﻿using UnityEngine;
+﻿// References:
+// https://forum.unity.com/threads/help-combining-and-manipulating-skinned-mesh-renderers-imported-from-blender.505078/
+// http://wiki.unity3d.com/index.php/CombineSkinnedMeshes
+// http://wiki.unity3d.com/index.php/SkinnedMeshCombiner
+
+using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace TAO.VertexAnimation
 {
-    public static class MeshCombiner
-    {
-        private struct MaterialMeshGroup
-        {
-            public List<SkinnedMeshRenderer> skinnedMeshes;
-            public List<(MeshFilter mf, MeshRenderer mr)> meshes;
-            public Material material;
-        }
+	public static class MeshCombiner
+	{
+		private struct MaterialMeshGroup
+		{
+			public List<SkinnedMeshRenderer> skinnedMeshes;
+			public List<(MeshFilter mf, MeshRenderer mr)> meshes;
+			public Material material;
+		}
 
-        public static SkinnedMeshRenderer Combine(this SkinnedMeshRenderer target, List<SkinnedMeshRenderer> skinnedMeshes, List<(MeshFilter mf, MeshRenderer mr)> meshes)
-        {
-            List<MaterialMeshGroup> groups = new List<MaterialMeshGroup>();
+		public static SkinnedMeshRenderer Combine(this SkinnedMeshRenderer target, List<SkinnedMeshRenderer> skinnedMeshes, List<(MeshFilter mf, MeshRenderer mr)> meshes)
+		{
+			List<MaterialMeshGroup> groups = new List<MaterialMeshGroup>();
 
-            // Group skinnedMeshes.
-            foreach (var sm in skinnedMeshes)
-            {
-                bool hasGroup = false;
-                foreach (var g in groups)
-                {
-                    if (sm.sharedMaterial == g.material)
-                    {
-                        hasGroup = true;
-                        g.skinnedMeshes.Add(sm);
-                    }
-                }
+			// Group skinnedMeshes.
+			foreach (var sm in skinnedMeshes)
+			{
+				bool hasGroup = false;
+				foreach (var g in groups)
+				{
+					if (sm.sharedMaterial == g.material)
+					{
+						hasGroup = true;
+						g.skinnedMeshes.Add(sm);
+					}
+				}
 
-                if (!hasGroup)
-                {
-                    groups.Add(new MaterialMeshGroup()
-                    { 
-                        skinnedMeshes = new List<SkinnedMeshRenderer>()
-                        {
-                            sm
-                        },
-                        meshes = new List<(MeshFilter mf, MeshRenderer mr)>(),
-                        material = sm.sharedMaterial
-                    });
-                }
-            }
+				if (!hasGroup)
+				{
+					groups.Add(new MaterialMeshGroup()
+					{ 
+						skinnedMeshes = new List<SkinnedMeshRenderer>()
+						{
+							sm
+						},
+						meshes = new List<(MeshFilter mf, MeshRenderer mr)>(),
+						material = sm.sharedMaterial
+					});
+				}
+			}
 
-            // Group Meshes.
-            foreach (var m in meshes)
-            {
-                bool hasGroup = false;
-                foreach (var g in groups)
-                {
-                    if (m.mr.sharedMaterial == g.material)
-                    {
-                        hasGroup = true;
-                        g.meshes.Add(m);
-                    }
-                }
+			// Group Meshes.
+			foreach (var m in meshes)
+			{
+				bool hasGroup = false;
+				foreach (var g in groups)
+				{
+					if (m.mr.sharedMaterial == g.material)
+					{
+						hasGroup = true;
+						g.meshes.Add(m);
+					}
+				}
 
-                if (!hasGroup)
-                {
-                    groups.Add(new MaterialMeshGroup()
-                    {
-                        skinnedMeshes = new List<SkinnedMeshRenderer>(),
-                        meshes = new List<(MeshFilter mf, MeshRenderer mr)>()
-                        {
-                            m
-                        },
-                        material = m.mr.sharedMaterial
-                    });
-                }
-            }
+				if (!hasGroup)
+				{
+					groups.Add(new MaterialMeshGroup()
+					{
+						skinnedMeshes = new List<SkinnedMeshRenderer>(),
+						meshes = new List<(MeshFilter mf, MeshRenderer mr)>()
+						{
+							m
+						},
+						material = m.mr.sharedMaterial
+					});
+				}
+			}
 
-            List<GameObject> tmp = new List<GameObject>();
-            for (int i = 0; i < groups.Count; i++)
-            {
-                tmp.Add(new GameObject("tmpChild", typeof(SkinnedMeshRenderer)));
-                tmp[i].transform.parent = target.transform;
+			List<GameObject> tmp = new List<GameObject>();
+			for (int i = 0; i < groups.Count; i++)
+			{
+				tmp.Add(new GameObject("tmpChild", typeof(SkinnedMeshRenderer)));
+				tmp[i].transform.parent = target.transform;
 
-                MaterialMeshGroup mmg = groups[i];
-                tmp[i].GetComponent<SkinnedMeshRenderer>().Combine(mmg.skinnedMeshes, mmg.meshes, mmg.material);
-            }
+				MaterialMeshGroup mmg = groups[i];
+				tmp[i].GetComponent<SkinnedMeshRenderer>().Combine(mmg.skinnedMeshes, mmg.meshes, mmg.material);
+			}
 
-            // TODO: Merge materialMergedObjects.
-            // TEMP: Remove when materialMergedObjects.
-            SkinnedMeshRenderer newSkinnedMeshRenderer = tmp[0].GetComponent<SkinnedMeshRenderer>();
-            target.sharedMesh = newSkinnedMeshRenderer.sharedMesh;
-            target.sharedMaterial = newSkinnedMeshRenderer.sharedMaterial;
-            target.bones = newSkinnedMeshRenderer.bones;
+			// TODO: Merge materialMergedObjects.
+			// TEMP: Remove when materialMergedObjects.
+			SkinnedMeshRenderer newSkinnedMeshRenderer = tmp[0].GetComponent<SkinnedMeshRenderer>();
+			target.sharedMesh = newSkinnedMeshRenderer.sharedMesh;
+			target.sharedMaterial = newSkinnedMeshRenderer.sharedMaterial;
+			target.bones = newSkinnedMeshRenderer.bones;
 
-            foreach (var go in tmp)
-            {
-                GameObject.DestroyImmediate(go);
-            }
+			foreach (var go in tmp)
+			{
+				GameObject.DestroyImmediate(go);
+			}
 
-            // Set a name to make it more clear.
-            target.sharedMesh.name = target.transform.name.Replace("(Clone)", "");
-            return target;
-        }
+			// Set a name to make it more clear.
+			target.sharedMesh.name = target.transform.name.Replace("(Clone)", "");
+			return target;
+		}
 
-        public static SkinnedMeshRenderer Combine(this SkinnedMeshRenderer target, List<SkinnedMeshRenderer> skinnedMeshes, List<(MeshFilter mf, MeshRenderer mr)> meshes, Material mainMaterial)
-        {
-            List<Transform> bones = new List<Transform>();
-            List<BoneWeight> boneWeights = new List<BoneWeight>();
-            List<Matrix4x4> bindPoses = new List<Matrix4x4>();
-            List<CombineInstance> combineInstances = new List<CombineInstance>();
+		public static SkinnedMeshRenderer Combine(this SkinnedMeshRenderer target, List<SkinnedMeshRenderer> skinnedMeshes, List<(MeshFilter mf, MeshRenderer mr)> meshes, Material mainMaterial)
+		{
+			List<Transform> bones = new List<Transform>();
+			List<BoneWeight> boneWeights = new List<BoneWeight>();
+			List<Matrix4x4> bindPoses = new List<Matrix4x4>();
+			List<CombineInstance> combineInstances = new List<CombineInstance>();
 
-            // Combine SkinnedMeshes.
-            int boneOffset = 0;
-            for (int s = 0; s < skinnedMeshes.Count; s++)
-            {
-                SkinnedMeshRenderer smr = skinnedMeshes[s];
+			// Combine SkinnedMeshes.
+			int boneOffset = 0;
+			for (int s = 0; s < skinnedMeshes.Count; s++)
+			{
+				SkinnedMeshRenderer smr = skinnedMeshes[s];
 
-                //if the skinned mesh renderer has a material other than the default
-                //we assume it's a one-off face material and deal with it later
-                if (smr.sharedMaterial != mainMaterial)
-                {
-                    continue;
-                }
+				//if the skinned mesh renderer has a material other than the default
+				//we assume it's a one-off face material and deal with it later
+				if (smr.sharedMaterial != mainMaterial)
+				{
+					continue;
+				}
 
-                BoneWeight[] meshBoneweight = smr.sharedMesh.boneWeights;
+				BoneWeight[] meshBoneweight = smr.sharedMesh.boneWeights;
 
-                // May want to modify this if the renderer shares bones as unnecessary bones will get added.
-                // We don't care since it is going to be converted into vertex animations later anyways.
-                for (int i = 0; i < meshBoneweight.Length; ++i)
-                {
-                    BoneWeight bWeight = meshBoneweight[i];
+				// May want to modify this if the renderer shares bones as unnecessary bones will get added.
+				// We don't care since it is going to be converted into vertex animations later anyways.
+				for (int i = 0; i < meshBoneweight.Length; ++i)
+				{
+					BoneWeight bWeight = meshBoneweight[i];
 
-                    bWeight.boneIndex0 += boneOffset;
-                    bWeight.boneIndex1 += boneOffset;
-                    bWeight.boneIndex2 += boneOffset;
-                    bWeight.boneIndex3 += boneOffset;
+					bWeight.boneIndex0 += boneOffset;
+					bWeight.boneIndex1 += boneOffset;
+					bWeight.boneIndex2 += boneOffset;
+					bWeight.boneIndex3 += boneOffset;
 
-                    boneWeights.Add(bWeight);
-                }
+					boneWeights.Add(bWeight);
+				}
 
-                boneOffset += smr.bones.Length;
+				boneOffset += smr.bones.Length;
 
-                Transform[] meshBones = smr.bones;
-                for (int i = 0; i < meshBones.Length; ++i)
-                {
-                    bones.Add(meshBones[i]);
+				Transform[] meshBones = smr.bones;
+				for (int i = 0; i < meshBones.Length; ++i)
+				{
+					bones.Add(meshBones[i]);
 
-                    //we take the old bind pose that mapped from our mesh to world to bone,
-                    //and take out our localToWorldMatrix, so now it's JUST the bone matrix
-                    //since our skinned mesh renderer is going to be on the root of our object that works
-                    bindPoses.Add(smr.sharedMesh.bindposes[i] * smr.transform.worldToLocalMatrix);
-                }
+					//we take the old bind pose that mapped from our mesh to world to bone,
+					//and take out our localToWorldMatrix, so now it's JUST the bone matrix
+					//since our skinned mesh renderer is going to be on the root of our object that works
+					bindPoses.Add(smr.sharedMesh.bindposes[i] * smr.transform.worldToLocalMatrix);
+				}
 
-                CombineInstance ci = new CombineInstance
-                {
-                    mesh = smr.sharedMesh,
-                    transform = smr.transform.localToWorldMatrix
-                };
-                combineInstances.Add(ci);
+				CombineInstance ci = new CombineInstance
+				{
+					mesh = smr.sharedMesh,
+					transform = smr.transform.localToWorldMatrix
+				};
+				combineInstances.Add(ci);
 
-                GameObject.DestroyImmediate(smr);
-            }
+				GameObject.DestroyImmediate(smr);
+			}
 
-            // Combine Meshes.
-            for (int s = 0; meshes != null && s < meshes.Count; s++)
-            {
-                MeshFilter filter = meshes[s].mf;
-                MeshRenderer renderer = meshes[s].mr;
-            
-                //if the skinned mesh renderer has a material other than the default
-                //we assume it's a one-off face material and deal with it later
-                if (renderer.sharedMaterial != mainMaterial)
-                {
-                    continue;
-                }
+			// Combine Meshes.
+			for (int s = 0; meshes != null && s < meshes.Count; s++)
+			{
+				MeshFilter filter = meshes[s].mf;
+				MeshRenderer renderer = meshes[s].mr;
+			
+				//if the skinned mesh renderer has a material other than the default
+				//we assume it's a one-off face material and deal with it later
+				if (renderer.sharedMaterial != mainMaterial)
+				{
+					continue;
+				}
 
-                // May want to modify this if the renderer shares bones as unnecessary bones will get added.
-                // We don't care since it is going to be converted into vertex animations later anyways.
-                int vertCount = filter.sharedMesh.vertexCount;
-                for (int i = 0; i < vertCount; ++i)
-                {
-                    BoneWeight bWeight = new BoneWeight
-                    {
-                        boneIndex0 = boneOffset,
-                        boneIndex1 = boneOffset,
-                        boneIndex2 = boneOffset,
-                        boneIndex3 = boneOffset,
-                        weight0 = 1
-                    };
+				// May want to modify this if the renderer shares bones as unnecessary bones will get added.
+				// We don't care since it is going to be converted into vertex animations later anyways.
+				int vertCount = filter.sharedMesh.vertexCount;
+				for (int i = 0; i < vertCount; ++i)
+				{
+					BoneWeight bWeight = new BoneWeight
+					{
+						boneIndex0 = boneOffset,
+						boneIndex1 = boneOffset,
+						boneIndex2 = boneOffset,
+						boneIndex3 = boneOffset,
+						weight0 = 1
+					};
 
-                    boneWeights.Add(bWeight);
-                }
+					boneWeights.Add(bWeight);
+				}
 
-                boneOffset += 1;
+				boneOffset += 1;
 
-                bones.Add(filter.transform);
+				bones.Add(filter.transform);
 
-                // TODO: figure out what this should be.
-                bindPoses.Add(filter.transform.worldToLocalMatrix);
+				// TODO: figure out what this should be.
+				bindPoses.Add(filter.transform.worldToLocalMatrix);
 
-                CombineInstance ci = new CombineInstance
-                {
-                    mesh = filter.sharedMesh,
-                    transform = filter.transform.localToWorldMatrix
-                };
-                combineInstances.Add(ci);
+				CombineInstance ci = new CombineInstance
+				{
+					mesh = filter.sharedMesh,
+					transform = filter.transform.localToWorldMatrix
+				};
+				combineInstances.Add(ci);
 
-                GameObject.DestroyImmediate(filter);
-                GameObject.DestroyImmediate(renderer);
-            }
+				GameObject.DestroyImmediate(filter);
+				GameObject.DestroyImmediate(renderer);
+			}
 
-            // Actually combine and recalculate mesh.
-            Mesh skinnedMesh = new Mesh();
-            skinnedMesh.CombineMeshes(combineInstances.ToArray(), true, true);
-            skinnedMesh.RecalculateBounds();
+			// Actually combine and recalculate mesh.
+			Mesh skinnedMesh = new Mesh();
+			skinnedMesh.CombineMeshes(combineInstances.ToArray(), true, true);
+			skinnedMesh.RecalculateBounds();
 
-            // Copy settings to target.
-            target.sharedMesh = skinnedMesh;
-            target.sharedMaterial = mainMaterial;
-            target.bones = bones.ToArray();
-            target.sharedMesh.boneWeights = boneWeights.ToArray();
-            target.sharedMesh.bindposes = bindPoses.ToArray();
+			// Copy settings to target.
+			target.sharedMesh = skinnedMesh;
+			target.sharedMaterial = mainMaterial;
+			target.bones = bones.ToArray();
+			target.sharedMesh.boneWeights = boneWeights.ToArray();
+			target.sharedMesh.bindposes = bindPoses.ToArray();
 
-            return target;
-        }
+			return target;
+		}
 
-        public static void ConbineAndConvertGameObject(this GameObject gameObject)
-        {
-            // Get Skinned Meshes.
-            List<SkinnedMeshRenderer> skinnedMeshes = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>(true).ToList();
-            // Get Meshes.
-            List<(MeshFilter, MeshRenderer)> meshes = new List<(MeshFilter, MeshRenderer)>();
-            foreach (var mf in gameObject.GetComponentsInChildren<MeshFilter>(true))
-            {
-                if (mf.TryGetComponent(out MeshRenderer mr))
-                {
-                    meshes.Add((mf, mr));
-                }
-            }
+		public static void ConbineAndConvertGameObject(this GameObject gameObject)
+		{
+			// Get Skinned Meshes.
+			List<SkinnedMeshRenderer> skinnedMeshes = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>(true).ToList();
+			// Get Meshes.
+			List<(MeshFilter, MeshRenderer)> meshes = new List<(MeshFilter, MeshRenderer)>();
+			foreach (var mf in gameObject.GetComponentsInChildren<MeshFilter>(true))
+			{
+				if (mf.TryGetComponent(out MeshRenderer mr))
+				{
+					meshes.Add((mf, mr));
+				}
+			}
 
-            // Add target mesh.
-            SkinnedMeshRenderer target = gameObject.AddComponent<SkinnedMeshRenderer>();
-            target.Combine(skinnedMeshes, meshes);
-        }
-    }
+			// Add target mesh.
+			SkinnedMeshRenderer target = gameObject.AddComponent<SkinnedMeshRenderer>();
+			target.Combine(skinnedMeshes, meshes);
+		}
+	}
 }
