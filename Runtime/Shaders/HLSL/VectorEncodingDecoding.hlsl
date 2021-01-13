@@ -58,10 +58,10 @@ void Float3ToFloat2_float(float3 f3, out float2 f2)
 	//float3 rotation = normalize(float3(f3.x, 0, f3.y));
 	float3 rotation = normalize(float3(f3.x, 0, f3.z));
 
-    f2.x = acos (dot(rotation, float3(1, 0, 0))) * sign(f3.z);
-    f2.x = ((f2.x / V_PI) + 1) * 0.5f;
-    
-    f2.y =  acos(f3.y) / V_PI;
+	f2.x = acos (dot(rotation, float3(1, 0, 0))) * sign(f3.z);
+	f2.x = ((f2.x / V_PI) + 1) * 0.5f;
+	
+	f2.y =  acos(f3.y) / V_PI;
 
 	f2 *= 15;
 	f2.x = round(f2.x);
