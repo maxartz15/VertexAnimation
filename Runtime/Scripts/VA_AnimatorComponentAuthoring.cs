@@ -26,7 +26,9 @@ namespace TAO.VertexAnimation
 	{
 		protected override void OnUpdate()
 		{
-			BlobAssetStore.TryGet(new Unity.Entities.Hash128(VA_AnimationLibraryUtils.AnimationLibraryAssetStoreName), out BlobAssetReference<VA_AnimationLibraryData> animLib);
+			//BlobAssetStore.TryGet(new Unity.Entities.Hash128(VA_AnimationLibraryUtils.AnimationLibraryAssetStoreName), out BlobAssetReference<VA_AnimationLibraryData> animLib);
+			// Static because of multi scene setup.
+			BlobAssetReference<VA_AnimationLibraryData> animLib = VA_AnimationLibraryConversionSystem.animLibAssetRef;
 
 			Entities.ForEach((VA_AnimatorComponentAuthoring animator) =>
 			{

@@ -12,6 +12,9 @@ namespace TAO.VertexAnimation
 	
 	public class VA_AnimationLibraryConversionSystem : GameObjectConversionSystem
 	{
+		// Static because of multi scene setup.
+		public static BlobAssetReference<VA_AnimationLibraryData> animLibAssetRef;
+
 		protected override void OnUpdate()
 		{
 			Entities.ForEach((VA_AnimationLibraryComponentAuthoring animationLib) =>
@@ -34,7 +37,9 @@ namespace TAO.VertexAnimation
 					}
 
 					// Construct blob asset reference.
-					BlobAssetReference<VA_AnimationLibraryData> animLibAssetRef = blobBuilder.CreateBlobAssetReference<VA_AnimationLibraryData>(Allocator.Persistent);
+					//BlobAssetReference<VA_AnimationLibraryData> animLibAssetRef = blobBuilder.CreateBlobAssetReference<VA_AnimationLibraryData>(Allocator.Persistent);
+					// Static because of multi scene setup.
+					animLibAssetRef = blobBuilder.CreateBlobAssetReference<VA_AnimationLibraryData>(Allocator.Persistent);
 
 					// Add it to the asset store.
 					BlobAssetStore.TryAdd(new Hash128(VA_AnimationLibraryUtils.AnimationLibraryAssetStoreName), animLibAssetRef);
