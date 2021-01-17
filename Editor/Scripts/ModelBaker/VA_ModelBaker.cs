@@ -16,6 +16,8 @@ namespace TAO.VertexAnimation.Editor
 		public int textureWidth = 512;
 
 		public bool generateLODS = true;
+		// TODO: Improve curve/lod settings. LOD-Mesh Quality pair.
+		//public Vector2[] lodLevels = new Vector2[4] { new Vector2(32, 100), new Vector2(32, 65), new Vector2(32, 30), new Vector2(3, 0) };
 		public AnimationCurve lodCurve = new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 0.01f));
 		public bool saveBakedDataToAsset = true;
 		public bool generateAnimationBook = true;
@@ -41,8 +43,7 @@ namespace TAO.VertexAnimation.Editor
 
 			if (generateLODS)
 			{
-				// TODO: LODs.
-				meshes = new Mesh[1] { bakedData.mesh };
+				meshes = bakedData.mesh.GenerateLOD(3, lodCurve);
 			}
 			else
 			{
@@ -57,7 +58,10 @@ namespace TAO.VertexAnimation.Editor
 			AssetDatabaseUtils.RemoveChildAssets(this, new Object[2] { book, material });
 
 			// TODO: LODs
-			AssetDatabase.AddObjectToAsset(bakedData.mesh, this);
+			foreach (var m in meshes)
+			{
+				AssetDatabase.AddObjectToAsset(m, this);
+			}
 
 			foreach (var pm in bakedData.positionMaps)
 			{

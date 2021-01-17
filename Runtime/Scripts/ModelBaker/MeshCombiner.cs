@@ -243,5 +243,5 @@ namespace TAO.VertexAnimation
 			SkinnedMeshRenderer target = gameObject.AddComponent<SkinnedMeshRenderer>();
 			target.Combine(skinnedMeshes, meshes);
 		}
-	}
+    }
 }
