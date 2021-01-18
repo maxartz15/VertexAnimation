@@ -7,22 +7,65 @@ namespace TAO.VertexAnimation.Editor
 	{
 		public static GameObject Create(string path, string name, Mesh[] meshes, Material material, float[] lodTransitions)
 		{
-			// Create parent.
-			GameObject parent = new GameObject(name, typeof(LODGroup), typeof(VA_AnimatorComponentAuthoring), typeof(Unity.Entities.ConvertToEntity));
+			GameObject parent = null;
+			if (AssetDatabaseUtils.HasAsset(path, typeof(GameObject)))
+			{
+				// Load existing parent.
+				parent = PrefabUtility.LoadPrefabContents(path);
+
+				// Check setup.
+				if (!parent.TryGetComponent(out LODGroup _))
+				{
+					parent.AddComponent<LODGroup>();
+				}
+
+				if (!parent.TryGetComponent(out VA_AnimatorComponentAuthoring _))
+				{
+					parent.AddComponent<VA_AnimatorComponentAuthoring>();
+				}
+
+				if (!parent.TryGetComponent(out Unity.Entities.ConvertToEntity _))
+				{
+					parent.AddComponent<Unity.Entities.ConvertToEntity>();
+				}
+			}
+			else
+			{
+				// Create parent.
+				parent = new GameObject(name, typeof(LODGroup), typeof(VA_AnimatorComponentAuthoring), typeof(Unity.Entities.ConvertToEntity));
+			}
 
 			// Create all LODs.
 			LOD[] lods = new LOD[meshes.Length];
 
 			for (int i = 0; i < meshes.Length; i++)
 			{
-				GameObject lod = new GameObject(string.Format("{0}_LOD{1}", name, i), typeof(MeshFilter), typeof(MeshRenderer));
-				
-				var mf = lod.GetComponent<MeshFilter>();
-				mf.sharedMesh = meshes[i];
-				var mr = lod.GetComponent<MeshRenderer>();
-				mr.sharedMaterial = material;
+				string childName = string.Format("{0}_LOD{1}", name, i);
 
-				lod.transform.SetParent(parent.transform);
+				GameObject child;
+				{
+					Transform t = parent.transform.Find(childName);
+					if (t)
+					{
+						child = t.gameObject;
+					}
+					else
+					{
+						child = new GameObject(childName, typeof(MeshFilter), typeof(MeshRenderer));
+					}
+				}
+
+				if (child.TryGetComponent(out MeshFilter mf))
+				{
+					mf.sharedMesh = meshes[i];
+				}
+
+				if (child.TryGetComponent(out MeshRenderer mr))
+				{
+					mr.sharedMaterial = material;
+				}
+
+				child.transform.SetParent(parent.transform);
 				lods[i] = new LOD(lodTransitions[i], new Renderer[1] { mr });
 			}
 

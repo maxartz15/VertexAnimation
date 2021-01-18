@@ -39,31 +39,19 @@ namespace TAO.VertexAnimation.Editor
 
 		private void BakeGUI()
 		{
-			EditorGUILayout.PropertyField(serializedObject.FindProperty("saveBakedDataToAsset"));
+			EditorGUILayout.PropertyField(serializedObject.FindProperty("lodSettings").FindPropertyRelative("lodSettings"));
+			EditorGUILayout.PropertyField(serializedObject.FindProperty("generateAnimationBook"));
 
-			int il = EditorGUI.indentLevel;
-			if (modelBaker.saveBakedDataToAsset)
+			using (new EditorGUILayout.HorizontalScope())
 			{
-				EditorGUI.indentLevel++;
-				EditorGUILayout.PropertyField(serializedObject.FindProperty("generateAnimationBook"));
-				EditorGUILayout.PropertyField(serializedObject.FindProperty("lodSettings"));
-
-				using (new EditorGUILayout.HorizontalScope())
-				{
-					EditorGUILayout.PropertyField(serializedObject.FindProperty("generatePrefab"));
-					EditorGUILayout.PropertyField(serializedObject.FindProperty("materialShader"), new GUIContent(""));
-				}
+				EditorGUILayout.PropertyField(serializedObject.FindProperty("generatePrefab"));
+				EditorGUILayout.PropertyField(serializedObject.FindProperty("materialShader"), new GUIContent(""));
 			}
-			EditorGUI.indentLevel = il;
 
 			if (GUILayout.Button("Bake", GUILayout.Height(32)))
 			{
 				modelBaker.Bake();
-
-				if (modelBaker.saveBakedDataToAsset)
-				{
-					modelBaker.SaveAssets();
-				}
+				modelBaker.SaveAssets();
 			}
 
 			if (GUILayout.Button("Delete", EditorStyles.miniButtonRight))

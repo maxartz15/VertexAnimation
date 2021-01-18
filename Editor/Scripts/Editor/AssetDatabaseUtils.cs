@@ -43,5 +43,10 @@ namespace TAO.VertexAnimation.Editor
 				}
 			}
 		}
+
+		public static bool HasAsset(string path, System.Type type)
+		{
+			return (AssetDatabase.LoadAssetAtPath(path, type) ? true : false);
+		}
 	}
 }

@@ -16,7 +16,6 @@ namespace TAO.VertexAnimation.Editor
 		public int textureWidth = 512;
 	
 		public LODSettings lodSettings = new LODSettings();
-		public bool saveBakedDataToAsset = true;
 		public bool generateAnimationBook = true;
 		public bool generatePrefab = true;
 		public Shader materialShader = null;
@@ -34,7 +33,6 @@ namespace TAO.VertexAnimation.Editor
 		[System.Serializable]
 		public class LODSettings
 		{
-			public bool generate = true;
 			public LODSetting[] lodSettings = new LODSetting[3] { new LODSetting(1, .4f), new LODSetting(.6f, .15f), new LODSetting(.3f, .01f) };
 
 			public float[] GetQualitySettings()
@@ -91,15 +89,7 @@ namespace TAO.VertexAnimation.Editor
 			bakedData = target.Bake(animationClips, fps, textureWidth);
 
 			positionMap = VA_Texture2DArrayUtils.CreateTextureArray(bakedData.positionMaps.ToArray(), false, true, TextureWrapMode.Repeat, FilterMode.Point, 1, string.Format("{0}_PositionMap", name), true);
-
-			if (lodSettings.generate)
-			{
-				meshes = bakedData.mesh.GenerateLOD(lodSettings.LODCount(), lodSettings.GetQualitySettings());
-			}
-			else
-			{
-				meshes = new Mesh[1] { bakedData.mesh };
-			}
+			meshes = bakedData.mesh.GenerateLOD(lodSettings.LODCount(), lodSettings.GetQualitySettings());
 
 			DestroyImmediate(target);
 		}
@@ -114,10 +104,6 @@ namespace TAO.VertexAnimation.Editor
 			}
 
 			AssetDatabase.AddObjectToAsset(positionMap, this);
-			//foreach (var pm in bakedData.positionMaps)
-			//{
-			//	AssetDatabase.AddObjectToAsset(pm, this);
-			//}
 
 			AssetDatabase.SaveAssets();
 
@@ -161,7 +147,7 @@ namespace TAO.VertexAnimation.Editor
 			AssetDatabase.Refresh();
 		}
 
-		public void GeneratePrefab()
+		private void GeneratePrefab()
 		{
 			string path = AssetDatabase.GetAssetPath(this);
 			int start = path.LastIndexOf('/');
@@ -186,7 +172,7 @@ namespace TAO.VertexAnimation.Editor
 			prefab = AnimationPrefab.Create(path, name, meshes, material, lodSettings.GetTransitionSettings());
 		}
 
-		public void GenerateBook()
+		private void GenerateBook()
 		{
 			if (!book)
 			{
