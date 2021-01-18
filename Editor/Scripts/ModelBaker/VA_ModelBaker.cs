@@ -90,7 +90,7 @@ namespace TAO.VertexAnimation.Editor
 			target.ConbineAndConvertGameObject();
 			bakedData = target.Bake(animationClips, fps, textureWidth);
 
-			positionMap = VA_Texture2DArrayUtils.CreateTextureArray(bakedData.positionMaps.ToArray(), false, true, TextureWrapMode.Repeat, FilterMode.Point, 1, string.Format("{0}-PositionMap", name), true);
+			positionMap = VA_Texture2DArrayUtils.CreateTextureArray(bakedData.positionMaps.ToArray(), false, true, TextureWrapMode.Repeat, FilterMode.Point, 1, string.Format("{0}_PositionMap", name), true);
 
 			if (lodSettings.generate)
 			{
