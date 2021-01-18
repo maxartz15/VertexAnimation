@@ -4,7 +4,7 @@ using UnityEditor;
 
 namespace TAO.VertexAnimation.Editor
 {
-	[CreateAssetMenu(fileName = "new ModelBaker", menuName = "VA_ModelBaker/ModelBaker", order = 400)]
+	[CreateAssetMenu(fileName = "new ModelBaker", menuName = "TAO/VertexAnimation/ModelBaker", order = 400)]
 	public class VA_ModelBaker : ScriptableObject
 	{
 #if UNITY_EDITOR
@@ -23,6 +23,7 @@ namespace TAO.VertexAnimation.Editor
 
 		// Output.
 		public GameObject prefab = null;
+		public Texture2DArray positionMap = null;
 		public Material material = null;
 		public Mesh[] meshes = null;
 		public VA_AnimationBook book = null;
@@ -89,6 +90,8 @@ namespace TAO.VertexAnimation.Editor
 			target.ConbineAndConvertGameObject();
 			bakedData = target.Bake(animationClips, fps, textureWidth);
 
+			positionMap = VA_Texture2DArrayUtils.CreateTextureArray(bakedData.positionMaps.ToArray(), false, true, TextureWrapMode.Repeat, FilterMode.Point, 1, string.Format("{0}-PositionMap", name), true);
+
 			if (lodSettings.generate)
 			{
 				meshes = bakedData.mesh.GenerateLOD(lodSettings.LODCount(), lodSettings.GetQualitySettings());
@@ -105,16 +108,16 @@ namespace TAO.VertexAnimation.Editor
 		{
 			AssetDatabaseUtils.RemoveChildAssets(this, new Object[2] { book, material });
 
-			// TODO: LODs
 			foreach (var m in meshes)
 			{
 				AssetDatabase.AddObjectToAsset(m, this);
 			}
 
-			foreach (var pm in bakedData.positionMaps)
-			{
-				AssetDatabase.AddObjectToAsset(pm, this);
-			}
+			AssetDatabase.AddObjectToAsset(positionMap, this);
+			//foreach (var pm in bakedData.positionMaps)
+			//{
+			//	AssetDatabase.AddObjectToAsset(pm, this);
+			//}
 
 			AssetDatabase.SaveAssets();
 
@@ -175,6 +178,9 @@ namespace TAO.VertexAnimation.Editor
 			{
 				material.shader = materialShader;
 			}
+
+			material.SetTexture("_PositionMap", positionMap);
+			material.SetInt("_MaxFrames", bakedData.maxFrames);
 
 			// Generate Prefab
 			prefab = AnimationPrefab.Create(path, name, meshes, material, lodSettings.GetTransitionSettings());

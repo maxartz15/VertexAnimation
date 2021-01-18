@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace TAO.VertexAnimation
 {
-	[CreateAssetMenu(fileName = "new AnimationBook", menuName = "VA_Animation/AnimationBook", order = 400)]
+	[CreateAssetMenu(fileName = "new AnimationBook", menuName = "TAO/VertexAnimation/AnimationBook", order = 400)]
 	public class VA_AnimationBook : ScriptableObject
 	{
 		public PlayData playData = null;

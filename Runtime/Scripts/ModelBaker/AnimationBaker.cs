@@ -10,6 +10,7 @@ namespace TAO.VertexAnimation
 		{
 			public Mesh mesh;
 			public List<Texture2D> positionMaps;
+			public int maxFrames;
 
 			// Returns main position map.
 			public Texture2D GetPositionMap
@@ -84,6 +85,7 @@ namespace TAO.VertexAnimation
 				BakedData bd = Bake(model, ac, animationInfo);
 				bakedData.mesh = bd.mesh;
 				bakedData.positionMaps.AddRange(bd.positionMaps);
+				bakedData.maxFrames = maxFrames;
 			}
 
 			return bakedData;
@@ -106,7 +108,8 @@ namespace TAO.VertexAnimation
 			BakedData bakedData = new BakedData()
 			{
 				mesh = mesh,
-				positionMaps = new List<Texture2D>() { BakePositionMap(model, animationClip, animationInfo) }
+				positionMaps = new List<Texture2D>() { BakePositionMap(model, animationClip, animationInfo) },
+				maxFrames = animationInfo.maxFrames
 			};
 
 			return bakedData;
