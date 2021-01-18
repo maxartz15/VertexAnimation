@@ -14,11 +14,8 @@ namespace TAO.VertexAnimation.Editor
 		[Range(1, 60)]
 		public int fps = 24;
 		public int textureWidth = 512;
-
-		public bool generateLODS = true;
-		// TODO: Improve curve/lod settings. LOD-Mesh Quality pair.
-		//public Vector2[] lodLevels = new Vector2[4] { new Vector2(32, 100), new Vector2(32, 65), new Vector2(32, 30), new Vector2(3, 0) };
-		public AnimationCurve lodCurve = new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 0.01f));
+	
+		public LODSettings lodSettings = new LODSettings();
 		public bool saveBakedDataToAsset = true;
 		public bool generateAnimationBook = true;
 		public bool generatePrefab = true;
@@ -33,6 +30,57 @@ namespace TAO.VertexAnimation.Editor
 		[SerializeField]
 		private AnimationBaker.BakedData bakedData;
 
+		[System.Serializable]
+		public class LODSettings
+		{
+			public bool generate = true;
+			public LODSetting[] lodSettings = new LODSetting[3] { new LODSetting(1, .4f), new LODSetting(.6f, .15f), new LODSetting(.3f, .01f) };
+
+			public float[] GetQualitySettings()
+			{
+				float[] q = new float[lodSettings.Length];
+
+				for (int i = 0; i < lodSettings.Length; i++)
+				{
+					q[i] = lodSettings[i].quality;
+				}
+
+				return q;
+			}
+
+			public float[] GetTransitionSettings()
+			{
+				float[] t = new float[lodSettings.Length];
+
+				for (int i = 0; i < lodSettings.Length; i++)
+				{
+					t[i] = lodSettings[i].screenRelativeTransitionHeight;
+				}
+
+				return t;
+			}
+
+			public int LODCount()
+			{
+				return lodSettings.Length;
+			}
+		}
+
+		[System.Serializable]
+		public struct LODSetting
+		{
+			[Range(1.0f, 0.0f)]
+			public float quality;
+			[Range(1.0f, 0.0f)]
+			public float screenRelativeTransitionHeight;
+
+			public LODSetting(float q, float t)
+			{
+				quality = q;
+				screenRelativeTransitionHeight = t;
+			}
+		}
+
 		public void Bake()
 		{
 			var target = Instantiate(model);
@@ -41,9 +89,9 @@ namespace TAO.VertexAnimation.Editor
 			target.ConbineAndConvertGameObject();
 			bakedData = target.Bake(animationClips, fps, textureWidth);
 
-			if (generateLODS)
+			if (lodSettings.generate)
 			{
-				meshes = bakedData.mesh.GenerateLOD(3, lodCurve);
+				meshes = bakedData.mesh.GenerateLOD(lodSettings.LODCount(), lodSettings.GetQualitySettings());
 			}
 			else
 			{
@@ -129,7 +177,7 @@ namespace TAO.VertexAnimation.Editor
 			}
 
 			// Generate Prefab
-			prefab = AnimationPrefab.Create(path, name, meshes, material, lodCurve);
+			prefab = AnimationPrefab.Create(path, name, meshes, material, lodSettings.GetTransitionSettings());
 		}
 
 		public void GenerateBook()
