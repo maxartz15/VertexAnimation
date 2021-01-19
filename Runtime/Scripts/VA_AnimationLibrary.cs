@@ -10,16 +10,20 @@ namespace TAO.VertexAnimation
 		private List<VA_AnimationBook> animationBooks = new List<VA_AnimationBook>();
 
 		[HideInInspector]
-		public List<VA_AnimationData> animations = null;
+		public List<VA_AnimationData> animationData = null;
 
 		public void Init()
 		{
-			animations = new List<VA_AnimationData>();
+			animationData = new List<VA_AnimationData>();
 
-			foreach (VA_AnimationBook ab in animationBooks)
+			foreach (VA_AnimationBook book in animationBooks)
 			{
-				ab.SetMaterials();
-				animations.AddRange(ab.playData.GetAnimations);
+				book.SetMaterials();
+
+				foreach (VA_Animation animation in book.animations)
+				{
+					animationData.Add(animation.Data);
+				}
 			}
 		}
 

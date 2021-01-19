@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.Linq;
 
 namespace TAO.VertexAnimation.Editor
 {
@@ -26,7 +27,9 @@ namespace TAO.VertexAnimation.Editor
 		public Material material = null;
 		public Mesh[] meshes = null;
 		public VA_AnimationBook book = null;
+		public List<VA_Animation> animations = new List<VA_Animation>();
 
+		// TODO: release baked data from memory when done.
 		[SerializeField]
 		private AnimationBaker.BakedData bakedData;
 
@@ -179,34 +182,64 @@ namespace TAO.VertexAnimation.Editor
 				book = CreateInstance<VA_AnimationBook>();
 			}
 
-			book.name = string.Format("{0}Book", name);
-			book.editorData = new VA_AnimationBook.EditorData
-			{
-				materials = new Material[1] { material }
-			};
-
-			foreach (Texture2D tex in bakedData.positionMaps)
-			{
-				book.editorData.animationPages.Add(new VA_AnimationBook.EditorAnimationPage
-				{
-					name = "",
-					frames = 0,
-					textures = new List<VA_AnimationBook.EditorTextureEntry>()
-					{
-						new VA_AnimationBook.EditorTextureEntry
-						{
-							texture2D = tex
-						}
-					}
-				});
-			}
-
-			VA_AssetBuilder.AutoFill(ref book);
+			book.name = string.Format("{0}_Book", name);
+			book.positionMap = positionMap;
+			book.TryAddMaterial(material);
 
 			if (!AssetDatabaseUtils.HasChildAsset(this, book))
 			{
 				AssetDatabase.AddObjectToAsset(book, this);
 			}
+
+			// Add animations.
+			List<NamingConventionUtils.TextureInfo> info = new List<NamingConventionUtils.TextureInfo>();
+
+			foreach (var t in bakedData.positionMaps)
+			{
+				info.Add(t.name.GetTextureInfo());
+			}
+
+			for (int i = 0; i < info.Count; i++)
+			{
+				string animationName = string.Format("{0}_{1}", name, info[i].name);
+				VA_AnimationData newData = new VA_AnimationData(animationName, info[i].frames, info[i].maxFrames, info[i].fps, i, -1);
+				
+				if (TryGetAnimationWithName(animationName, out VA_Animation animation))
+				{
+					animation.SetData(newData);
+				}
+				else
+				{
+					animation = CreateInstance<VA_Animation>();
+					animation.name = animationName;
+					animation.SetData(newData);
+					animations.Add(animation);
+				}
+
+				book.TryAddAnimation(animation);
+
+				if (!AssetDatabaseUtils.HasChildAsset(book, animation))
+				{
+					AssetDatabase.AddObjectToAsset(animation, book);
+				}
+			}
+
+			// TODO: Remove unused animations.
+		}
+
+		private bool TryGetAnimationWithName(string name, out VA_Animation animation)
+		{
+			foreach (var a in animations)
+			{
+				if (a.name == name)
+				{
+					animation = a;
+					return true;
+				}
+			}
+
+			animation = null;
+			return false;
 		}
 #endif
 	}
