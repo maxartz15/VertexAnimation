@@ -20,6 +20,17 @@ namespace TAO.VertexAnimation.Editor
 			return false;
 		}
 
+		public static bool TryAddChildAsset(Object parent, Object child)
+		{
+			if (!HasChildAsset(parent, child))
+			{
+				AssetDatabase.AddObjectToAsset(child, parent);
+				return true;
+			}
+
+			return false;
+		}
+
 		public static void RemoveChildAssets(Object parent, Object[] filter = null)
 		{
 			var assets = AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(parent));

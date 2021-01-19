@@ -29,10 +29,6 @@ namespace TAO.VertexAnimation.Editor
 		public VA_AnimationBook book = null;
 		public List<VA_Animation> animations = new List<VA_Animation>();
 
-		// TODO: release baked data from memory when done.
-		[SerializeField]
-		private AnimationBaker.BakedData bakedData;
-
 		[System.Serializable]
 		public class LODSettings
 		{
@@ -89,15 +85,17 @@ namespace TAO.VertexAnimation.Editor
 			target.name = model.name;
 
 			target.ConbineAndConvertGameObject();
-			bakedData = target.Bake(animationClips, fps, textureWidth);
+			AnimationBaker.BakedData bakedData = target.Bake(animationClips, fps, textureWidth);
 
 			positionMap = VA_Texture2DArrayUtils.CreateTextureArray(bakedData.positionMaps.ToArray(), false, true, TextureWrapMode.Repeat, FilterMode.Point, 1, string.Format("{0}_PositionMap", name), true);
 			meshes = bakedData.mesh.GenerateLOD(lodSettings.LODCount(), lodSettings.GetQualitySettings());
 
 			DestroyImmediate(target);
+
+			SaveAssets(bakedData);
 		}
 
-		public void SaveAssets()
+		private void SaveAssets(AnimationBaker.BakedData bakedData)
 		{
 			AssetDatabaseUtils.RemoveChildAssets(this, new Object[2] { book, material });
 
@@ -112,45 +110,19 @@ namespace TAO.VertexAnimation.Editor
 
 			if (generatePrefab)
 			{
-				GeneratePrefab();
+				GeneratePrefab(bakedData);
 			}
 
 			if (generateAnimationBook)
 			{
-				GenerateBook();
+				GenerateBook(bakedData);
 			}
 
 			AssetDatabase.SaveAssets();
 			AssetDatabase.Refresh();
 		}
 
-		public void DeleteSavedAssets()
-		{
-			// Remove assets.
-			var assets = AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(this));
-			foreach (var a in assets)
-			{
-				if (a != this)
-				{
-					AssetDatabase.RemoveObjectFromAsset(a);
-				}
-			}
-
-			// Delete prefab.
-			string path = AssetDatabase.GetAssetPath(prefab);
-			AssetDatabase.DeleteAsset(path);
-
-			// Clear variables.
-			prefab = null;
-			material = null;
-			meshes = null;
-			book = null;
-
-			AssetDatabase.SaveAssets();
-			AssetDatabase.Refresh();
-		}
-
-		private void GeneratePrefab()
+		private void GeneratePrefab(AnimationBaker.BakedData bakedData)
 		{
 			string path = AssetDatabase.GetAssetPath(this);
 			int start = path.LastIndexOf('/');
@@ -175,8 +147,9 @@ namespace TAO.VertexAnimation.Editor
 			prefab = AnimationPrefab.Create(path, name, meshes, material, lodSettings.GetTransitionSettings());
 		}
 
-		private void GenerateBook()
+		private void GenerateBook(AnimationBaker.BakedData bakedData)
 		{
+			// Create book.
 			if (!book)
 			{
 				book = CreateInstance<VA_AnimationBook>();
@@ -184,26 +157,29 @@ namespace TAO.VertexAnimation.Editor
 
 			book.name = string.Format("{0}_Book", name);
 			book.positionMap = positionMap;
+			book.animations = new List<VA_Animation>();
 			book.TryAddMaterial(material);
 
+			// Save book.
 			if (!AssetDatabaseUtils.HasChildAsset(this, book))
 			{
 				AssetDatabase.AddObjectToAsset(book, this);
 			}
 
-			// Add animations.
-			List<NamingConventionUtils.TextureInfo> info = new List<NamingConventionUtils.TextureInfo>();
-
+			// Get animation info.
+			List<NamingConventionUtils.PositionMapInfo> info = new List<NamingConventionUtils.PositionMapInfo>();
 			foreach (var t in bakedData.positionMaps)
 			{
 				info.Add(t.name.GetTextureInfo());
 			}
 
+			// Create animations.
 			for (int i = 0; i < info.Count; i++)
 			{
 				string animationName = string.Format("{0}_{1}", name, info[i].name);
 				VA_AnimationData newData = new VA_AnimationData(animationName, info[i].frames, info[i].maxFrames, info[i].fps, i, -1);
-				
+
+				// Either update existing animation or create a new one.
 				if (TryGetAnimationWithName(animationName, out VA_Animation animation))
 				{
 					animation.SetData(newData);
@@ -217,29 +193,81 @@ namespace TAO.VertexAnimation.Editor
 				}
 
 				book.TryAddAnimation(animation);
-
-				if (!AssetDatabaseUtils.HasChildAsset(book, animation))
-				{
-					AssetDatabase.AddObjectToAsset(animation, book);
-				}
 			}
 
-			// TODO: Remove unused animations.
+			// Save animation objects.
+			foreach (var a in animations)
+			{
+				AssetDatabaseUtils.TryAddChildAsset(book, a);
+			}
 		}
 
 		private bool TryGetAnimationWithName(string name, out VA_Animation animation)
 		{
 			foreach (var a in animations)
 			{
-				if (a.name == name)
+				if (a != null)
 				{
-					animation = a;
-					return true;
+					if (a.name == name)
+					{
+						animation = a;
+						return true;
+					}
 				}
 			}
 
 			animation = null;
 			return false;
+		}
+
+		public void DeleteSavedAssets()
+		{
+			// Remove assets.
+			var assets = AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(this));
+			foreach (var a in assets)
+			{
+				if (a != this)
+				{
+					AssetDatabase.RemoveObjectFromAsset(a);
+				}
+			}
+
+			// Delete prefab.
+			string path = AssetDatabase.GetAssetPath(prefab);
+			AssetDatabase.DeleteAsset(path);
+
+			// Clear variables.
+			prefab = null;
+			positionMap = null;
+			material = null;
+			meshes = null;
+			book = null;
+			animations = new List<VA_Animation>();
+
+			AssetDatabase.SaveAssets();
+			AssetDatabase.Refresh();
+		}
+
+		public void DeleteUnusedAnimations()
+		{
+			if (book != null)
+			{
+				// Remove unused animations.
+				for (int i = 0; i < animations.Count; i++)
+				{
+					if (!book.animations.Contains(animations[i]))
+					{
+						AssetDatabase.RemoveObjectFromAsset(animations[i]);
+						animations[i] = null;
+					}
+				}
+
+				// Remove zero entries.
+				animations.RemoveAll(a => a == null);
+
+				AssetDatabase.SaveAssets();
+				AssetDatabase.Refresh();
+			}
 		}
 #endif
 	}

@@ -1,7 +1,5 @@
 using UnityEngine;
 using UnityEditor;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace TAO.VertexAnimation.Editor
 {
@@ -24,9 +22,6 @@ namespace TAO.VertexAnimation.Editor
 			BakeGUI();
 
 			serializedObject.ApplyModifiedProperties();
-
-			EditorGUILayoutUtils.HorizontalLine(color: Color.gray);
-			OutputGUI();
 		}
 
 		private void InputGUI()
@@ -51,23 +46,25 @@ namespace TAO.VertexAnimation.Editor
 			if (GUILayout.Button("Bake", GUILayout.Height(32)))
 			{
 				modelBaker.Bake();
-				modelBaker.SaveAssets();
 			}
 
-			if (GUILayout.Button("Delete", EditorStyles.miniButtonRight))
+			using (new EditorGUILayout.HorizontalScope())
 			{
-				if (EditorUtility.DisplayDialog("Delete Assets", "Deleting assets will loose references within the project.", "Ok", "Cancel"))
+				if (GUILayout.Button("Delete Unused Animations", EditorStyles.miniButtonLeft))
 				{
-					modelBaker.DeleteSavedAssets();
+					if (EditorUtility.DisplayDialog("Delete Unused Animations", "Deleting assets will loose references within the project.", "Ok", "Cancel"))
+					{
+						modelBaker.DeleteUnusedAnimations();
+					}
 				}
-			}
-		}
 
-		private void OutputGUI()
-		{
-			using (new EditorGUI.DisabledGroupScope(true))
-			{
-				EditorGUILayout.PropertyField(serializedObject.FindProperty("bakedData"));
+				if (GUILayout.Button("Delete", EditorStyles.miniButtonRight))
+				{
+					if (EditorUtility.DisplayDialog("Delete Assets", "Deleting assets will loose references within the project.", "Ok", "Cancel"))
+					{
+						modelBaker.DeleteSavedAssets();
+					}
+				}
 			}
 		}
 	}

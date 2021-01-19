@@ -6,7 +6,7 @@ namespace TAO.VertexAnimation
 {
 	public static class NamingConventionUtils
 	{
-		public struct TextureInfo
+		public struct PositionMapInfo
 		{
 			public string name;
 			public int frames;
@@ -14,9 +14,9 @@ namespace TAO.VertexAnimation
 			public int fps;
 		}
 
-		public static TextureInfo GetTextureInfo(this string name)
+		public static PositionMapInfo GetTextureInfo(this string name)
 		{
-			TextureInfo textureInfo = new TextureInfo();
+			PositionMapInfo textureInfo = new PositionMapInfo();
 
 			string[] parts = name.Split('_');
 			foreach (var p in parts)

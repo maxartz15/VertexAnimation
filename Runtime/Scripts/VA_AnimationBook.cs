@@ -21,10 +21,7 @@ namespace TAO.VertexAnimation
 			}
 		}
 
-		public int MaxFrames
-		{
-			get; private set;
-		}
+		public int MaxFrames { get; private set; } = 0;
 
 		public Texture2DArray positionMap = null;
 		public List<VA_Animation> animations = new List<VA_Animation>();
@@ -34,9 +31,10 @@ namespace TAO.VertexAnimation
 		{
 			if (animations != null && animations.Count != 0)
 			{
-				if (!animations.Contains(animation) && animation.Data.maxFrames == MaxFrames)
+				if (!animations.Contains(animation))
 				{
 					animations.Add(animation);
+					OnValidate();
 					return true;
 				}
 			}
@@ -45,7 +43,7 @@ namespace TAO.VertexAnimation
 				// Add first animation.
 				animations.Add(animation);
 				// Set maxFrames for this animation book.
-				MaxFrames = animations[0].Data.maxFrames;
+				OnValidate();
 
 				return true;
 			}
@@ -67,16 +65,10 @@ namespace TAO.VertexAnimation
 			return false;
 		}
 
-		public void RemoveAnimation(VA_Animation animation)
+		public void UpdateMaterials()
 		{
-			if (animations != null)
-			{
-				animations.Remove(animation);
-			}
-		}
+			OnValidate();
 
-		public void SetMaterials()
-		{
 			if (materials != null)
 			{
 				foreach (var mat in materials)
@@ -97,8 +89,21 @@ namespace TAO.VertexAnimation
 			}
 		}
 
+		private void UpdateMaxFrames()
+		{
+			if (animations != null && animations.Count != 0)
+			{
+				if (animations[0] != null)
+				{
+					MaxFrames = animations[0].Data.maxFrames;
+				}
+			}
+		}
+
 		private void OnValidate()
 		{
+			UpdateMaxFrames();
+
 			if (animations != null)
 			{
 				foreach (var a in animations)
@@ -115,7 +120,7 @@ namespace TAO.VertexAnimation
 
 			if (positionMap != null)
 			{
-				if (positionMap.depth > animations.Count)
+				if (positionMap.depth < animations.Count)
 				{
 					Debug.LogWarning(string.Format("More animations ({0}) than positionMaps in {1}!", animations.Count, this.name));
 				}

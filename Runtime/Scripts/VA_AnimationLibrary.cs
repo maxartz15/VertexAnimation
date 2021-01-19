@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 
 namespace TAO.VertexAnimation
@@ -12,24 +13,58 @@ namespace TAO.VertexAnimation
 		[HideInInspector]
 		public List<VA_AnimationData> animationData = null;
 
+#if UNITY_EDITOR
+		[SerializeField]
+		private List<VA_Animation> loadedAnimationsPreview = null;
+#endif
+
 		public void Init()
 		{
 			animationData = new List<VA_AnimationData>();
 
 			foreach (VA_AnimationBook book in animationBooks)
 			{
-				book.SetMaterials();
+				book.UpdateMaterials();
 
-				foreach (VA_Animation animation in book.animations)
+				if (book != null)
 				{
-					animationData.Add(animation.Data);
+					foreach (VA_Animation animation in book.animations)
+					{
+						animationData.Add(animation.Data);
+					}
 				}
 			}
 		}
 
 		private void OnValidate()
 		{
-			// TODO: Check for naming conflicts in AnimationBooks.
+			Dictionary<string, VA_Animation> usedNames = new Dictionary<string, VA_Animation>();
+
+			foreach (VA_AnimationBook book in animationBooks)
+			{
+				if (book != null)
+				{
+					foreach (VA_Animation animation in book.animations)
+					{
+						if (!usedNames.ContainsKey(animation.name))
+						{
+							usedNames.Add(animation.name, animation);
+						}
+						else
+						{
+							Debug.LogWarning(string.Format("Naming conflict found in {0} - Animation {1} and {2} have the same name!", name, usedNames[animation.name].name, animation.name));
+						}
+					}
+				}
+			}
+
+#if UNITY_EDITOR
+			loadedAnimationsPreview = new List<VA_Animation>();
+			foreach (var un in usedNames)
+			{
+				loadedAnimationsPreview.Add(un.Value);
+			}
+#endif
 		}
 	}
 }

@@ -1,3 +1,4 @@
+using Unity.Collections;
 using UnityEngine;
 
 namespace TAO.VertexAnimation
@@ -25,6 +26,11 @@ namespace TAO.VertexAnimation
 		{
 			a_data.name = this.name;
 			Data = a_data;
+		}
+
+		public FixedString32 GetName()
+		{
+			return Data.name;
 		}
 	}
 }
