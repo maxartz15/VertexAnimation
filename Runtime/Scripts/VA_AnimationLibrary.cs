@@ -30,7 +30,9 @@ namespace TAO.VertexAnimation
 				{
 					foreach (VA_Animation animation in book.animations)
 					{
-						animationData.Add(animation.Data);
+						// TODO: Fix data name, FixedString32 doesn't transfer from editor?
+						//animation.Data.name = new FixedString32(animation.name);
+						animationData.Add(animation.GetData());
 					}
 				}
 			}

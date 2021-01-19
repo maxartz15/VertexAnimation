@@ -34,6 +34,7 @@ namespace TAO.VertexAnimation
 					{
 						// Copy data.
 						animationDataArray[i] = animationLib.animationLibrary.animationData[i];
+						UnityEngine.Debug.Log("VA_AnimationLibrary added " + animationDataArray[i].name.ToString());
 					}
 
 					// Construct blob asset reference.
