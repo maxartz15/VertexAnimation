@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
 
 namespace TAO.VertexAnimation
 {
@@ -49,6 +47,11 @@ namespace TAO.VertexAnimation
 			}
 
 			return textureInfo;
+		}
+
+		public static string ConvertToValidString(this string str)
+		{
+			return string.Concat(str.Where(char.IsLetterOrDigit));
 		}
 	}
 }

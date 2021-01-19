@@ -53,12 +53,20 @@ namespace TAO.VertexAnimation
 
 		public bool TryAddMaterial(Material material)
 		{
-			if (!materials.Contains(material))
+			if (material != null)
 			{
-				if (material.HasProperty("_PositionMap") && material.HasProperty("_MaxFrames"))
+				if (materials == null)
 				{
-					materials.Add(material);
-					return true;
+					materials = new List<Material>();
+				}
+
+				if (!materials.Contains(material))
+				{
+					if (material.HasProperty("_PositionMap") && material.HasProperty("_MaxFrames"))
+					{
+						materials.Add(material);
+						return true;
+					}
 				}
 			}
 

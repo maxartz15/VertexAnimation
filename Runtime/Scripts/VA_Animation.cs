@@ -16,13 +16,13 @@ namespace TAO.VertexAnimation
 		public VA_AnimationData GetData()
 		{
 			// TODO: Fix data name, FixedString32 doesn't transfer from editor?
-			Data.name = new FixedString32(name);
+			Data.name = new FixedString64(name);
 			return Data;
 		}
 
-		public FixedString32 GetName()
+		public FixedString64 GetName()
 		{
-			return new FixedString32(this.name);
+			return new FixedString64(this.name);
 		}
 	}
 }

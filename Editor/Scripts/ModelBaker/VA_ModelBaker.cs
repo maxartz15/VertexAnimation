@@ -79,6 +79,18 @@ namespace TAO.VertexAnimation.Editor
 			}
 		}
 
+		private void OnValidate()
+		{
+			if (materialShader == null)
+			{
+				materialShader = Shader.Find("VA_VertexAnimationBase");
+				if (materialShader == null)
+				{
+					materialShader = Shader.Find("Shader Graphs/VA_VertexAnimationBase");
+				}
+			}
+		}
+
 		public void Bake()
 		{
 			var target = Instantiate(model);

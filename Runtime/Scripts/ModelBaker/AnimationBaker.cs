@@ -158,7 +158,7 @@ namespace TAO.VertexAnimation
 
 			GameObject.DestroyImmediate(inst);
 
-			positionMap.name = string.Format("VA_N-{0}_F-{1}_MF-{2}_FPS-{3}", animationClip.name, animationInfo.frames, animationInfo.maxFrames, animationInfo.fps);
+			positionMap.name = string.Format("VA_N-{0}_F-{1}_MF-{2}_FPS-{3}", NamingConventionUtils.ConvertToValidString(animationClip.name), animationInfo.frames, animationInfo.maxFrames, animationInfo.fps);
 			positionMap.filterMode = FilterMode.Point;
 			positionMap.Apply(false, true);
 
