@@ -17,9 +17,16 @@ namespace TAO.VertexAnimation.Editor
         {
             serializedObject.Update();
 
-            // Texture Groups.
-            DrawDefaultInspector();
-            EditorGUILayoutUtils.HorizontalLine(color: Color.gray);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("positionMap"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("animations"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("materials"));
+
+			EditorGUILayoutUtils.HorizontalLine(color: Color.gray);
+
+			using (new EditorGUI.DisabledScope(disabled: true))
+            {
+                EditorGUILayout.IntField(new GUIContent("MaxFrames"), animationBook.MaxFrames);
+            }
 
             serializedObject.ApplyModifiedProperties();
         }

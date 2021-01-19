@@ -1,5 +1,14 @@
 # Change Log:
 
+## 0.1.2
+
+- Complete rework of asset pipeline.
+  - In-engine vertex animation texture generation.
+  - LOD generation.
+  - Prefab setup.
+  - Book setup.
+  - Animation setup.
+
 ## 0.1.1
 
 - Runtime fixes.
