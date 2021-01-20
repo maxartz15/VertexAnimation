@@ -9,6 +9,7 @@ namespace TAO.VertexAnimation
 			Mesh copy = new Mesh
 			{
 				name = mesh.name,
+				indexFormat = mesh.indexFormat,
 				vertices = mesh.vertices,
 				triangles = mesh.triangles,
 				normals = mesh.normals,
@@ -21,7 +22,7 @@ namespace TAO.VertexAnimation
 				uv5 = mesh.uv5,
 				uv6 = mesh.uv6,
 				uv7 = mesh.uv7,
-				uv8 = mesh.uv8,
+				uv8 = mesh.uv8
 			};
 
 			copy.RecalculateBounds();
