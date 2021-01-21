@@ -225,17 +225,25 @@ namespace TAO.VertexAnimation
 			return target;
 		}
 
-		public static void ConbineAndConvertGameObject(this GameObject gameObject)
+		public static void ConbineAndConvertGameObject(this GameObject gameObject, bool includeInactive = false)
 		{
 			// Get Skinned Meshes.
-			List<SkinnedMeshRenderer> skinnedMeshes = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>(true).ToList();
+			List<SkinnedMeshRenderer> skinnedMeshes = new List<SkinnedMeshRenderer>();
+			gameObject.GetComponentsInChildren(includeInactive, skinnedMeshes);
+
+			List<MeshFilter> meshFilters = new List<MeshFilter>();
+			gameObject.GetComponentsInChildren(includeInactive, meshFilters);
+
 			// Get Meshes.
 			List<(MeshFilter, MeshRenderer)> meshes = new List<(MeshFilter, MeshRenderer)>();
-			foreach (var mf in gameObject.GetComponentsInChildren<MeshFilter>(true))
+			foreach (var mf in meshFilters)
 			{
 				if (mf.TryGetComponent(out MeshRenderer mr))
 				{
-					meshes.Add((mf, mr));
+					if (includeInactive || (!includeInactive && mr.enabled))
+					{
+						meshes.Add((mf, mr));
+					}
 				}
 			}
 
