@@ -12,6 +12,7 @@ namespace TAO.VertexAnimation.Editor
 		// Input.
 		public GameObject model;
 		public AnimationClip[] animationClips;
+		public bool applyRootMotion = false;
 		[Range(1, 60)]
 		public int fps = 24;
 		public int textureWidth = 512;
@@ -97,7 +98,7 @@ namespace TAO.VertexAnimation.Editor
 			target.name = model.name;
 
 			target.ConbineAndConvertGameObject();
-			AnimationBaker.BakedData bakedData = target.Bake(animationClips, fps, textureWidth);
+			AnimationBaker.BakedData bakedData = target.Bake(animationClips, applyRootMotion, fps, textureWidth);
 
 			positionMap = VA_Texture2DArrayUtils.CreateTextureArray(bakedData.positionMaps.ToArray(), false, true, TextureWrapMode.Repeat, FilterMode.Point, 1, string.Format("{0}_PositionMap", name), true);
 			meshes = bakedData.mesh.GenerateLOD(lodSettings.LODCount(), lodSettings.GetQualitySettings());

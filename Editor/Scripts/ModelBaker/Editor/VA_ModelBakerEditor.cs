@@ -28,6 +28,7 @@ namespace TAO.VertexAnimation.Editor
 		{
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("model"));
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("animationClips"));
+			EditorGUILayout.PropertyField(serializedObject.FindProperty("applyRootMotion"));
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("fps"));
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("textureWidth"));
 		}

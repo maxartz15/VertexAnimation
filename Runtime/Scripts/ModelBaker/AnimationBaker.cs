@@ -25,6 +25,7 @@ namespace TAO.VertexAnimation
 		[System.Serializable]
 		public struct AnimationInfo
 		{
+			public bool applyRootMotion;
 			public int rawFrameHeight;
 			public int frameHeight;
 			public int frameSpacing;
@@ -35,8 +36,9 @@ namespace TAO.VertexAnimation
 			public int fps;
 
 			// Create animation info and calculate values.
-			public AnimationInfo(Mesh mesh, int frames, int textureWidth, int fps)
+			public AnimationInfo(Mesh mesh, bool applyRootMotion, int frames, int textureWidth, int fps)
 			{
+				this.applyRootMotion = applyRootMotion;
 				this.frames = frames;
 				this.textureWidth = textureWidth;
 				this.fps = fps;
@@ -51,7 +53,7 @@ namespace TAO.VertexAnimation
 			}
 		}
 
-		public static BakedData Bake(this GameObject model, AnimationClip[] animationClips, int fps, int textureWidth)
+		public static BakedData Bake(this GameObject model, AnimationClip[] animationClips, bool applyRootMotion, int fps, int textureWidth)
 		{
 			BakedData bakedData = new BakedData()
 			{
@@ -75,7 +77,7 @@ namespace TAO.VertexAnimation
 			Mesh mesh = model.GetComponent<SkinnedMeshRenderer>().sharedMesh;
 
 			// Get the info for the biggest animation.
-			AnimationInfo animationInfo = new AnimationInfo(mesh, maxFrames, textureWidth, fps);
+			AnimationInfo animationInfo = new AnimationInfo(mesh, applyRootMotion, maxFrames, textureWidth, fps);
 
 			foreach (AnimationClip ac in animationClips)
 			{
@@ -97,6 +99,12 @@ namespace TAO.VertexAnimation
 			{
 				name = string.Format("{0}", model.name)
 			};
+
+			// Set root motion options.
+			if (model.TryGetComponent(out Animator animator))
+			{
+				animator.applyRootMotion = animationInfo.applyRootMotion;
+			}
 
 			// Bake mesh for a copy and to apply the new UV's to.
 			SkinnedMeshRenderer skinnedMeshRenderer = model.GetComponent<SkinnedMeshRenderer>();
