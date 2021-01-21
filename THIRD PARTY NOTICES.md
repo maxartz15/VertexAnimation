@@ -1,4 +1,4 @@
-This package borrows code from various different sources, including:
+This package borrows code/assets from various different sources, including:
 
 ### Veribot
 - Author: [nonlly](https://sketchfab.com/nonlly)
