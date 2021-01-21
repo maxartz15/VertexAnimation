@@ -85,11 +85,7 @@ namespace TAO.VertexAnimation.Editor
 		{
 			if (materialShader == null)
 			{
-				materialShader = Shader.Find("VA_VertexAnimationBase");
-				if (materialShader == null)
-				{
-					materialShader = Shader.Find("Shader Graphs/VA_VertexAnimationBase");
-				}
+				materialShader = Shader.Find("TAO/Lit");
 			}
 		}
 
