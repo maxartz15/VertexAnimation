@@ -38,7 +38,7 @@ namespace TAO.VertexAnimation
 			}
 		}
 
-		private void OnValidate()
+		public void OnValidate()
 		{
 			Dictionary<string, VA_Animation> usedNames = new Dictionary<string, VA_Animation>();
 

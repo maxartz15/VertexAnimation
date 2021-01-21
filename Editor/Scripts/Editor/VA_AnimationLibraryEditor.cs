@@ -31,6 +31,11 @@ namespace TAO.VertexAnimation.Editor
 
 		private void InfoGUI()
 		{
+			if (GUILayout.Button("Refresh Preview"))
+			{
+				library.OnValidate();
+			}
+
 			using (new EditorGUI.DisabledScope(disabled: true))
 			{
 				EditorGUILayout.PropertyField(serializedObject.FindProperty("loadedAnimationsPreview"));
