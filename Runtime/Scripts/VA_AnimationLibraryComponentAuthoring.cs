@@ -8,6 +8,7 @@ namespace TAO.VertexAnimation
 	public class VA_AnimationLibraryComponentAuthoring : UnityEngine.MonoBehaviour
 	{
 		public VA_AnimationLibrary animationLibrary;
+		public bool debugMode = false;
 	}
 	
 	public class VA_AnimationLibraryConversionSystem : GameObjectConversionSystem
@@ -34,7 +35,11 @@ namespace TAO.VertexAnimation
 					{
 						// Copy data.
 						animationDataArray[i] = animationLib.animationLibrary.animationData[i];
-						UnityEngine.Debug.Log("VA_AnimationLibrary added " + animationDataArray[i].name.ToString());
+
+						if (animationLib.debugMode)
+						{
+							UnityEngine.Debug.Log("VA_AnimationLibrary added " + animationDataArray[i].name.ToString());
+						}
 					}
 
 					// Construct blob asset reference.
@@ -45,7 +50,10 @@ namespace TAO.VertexAnimation
 					// Add it to the asset store.
 					BlobAssetStore.TryAdd(new Hash128(VA_AnimationLibraryUtils.AnimationLibraryAssetStoreName), animLibAssetRef);
 
-					UnityEngine.Debug.Log("VA_AnimationLibrary has " + animLibAssetRef.Value.animations.Length.ToString() + " animations.");
+					if (animationLib.debugMode)
+					{
+						UnityEngine.Debug.Log("VA_AnimationLibrary has " + animLibAssetRef.Value.animations.Length.ToString() + " animations.");
+					}
 				}
 
 				// Remove the entity since we don't need it anymore.
