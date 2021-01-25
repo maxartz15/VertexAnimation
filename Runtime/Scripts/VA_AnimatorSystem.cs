@@ -34,6 +34,7 @@ namespace TAO.VertexAnimation
 				}
 			})
 			.WithNativeDisableContainerSafetyRestriction(animationData)
+			.WithName("VA_AnimatorSystem")
 			.ScheduleParallel();
 		}
 	}
