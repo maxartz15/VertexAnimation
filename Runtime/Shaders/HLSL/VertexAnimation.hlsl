@@ -25,7 +25,7 @@ float2 VA_UV_float(float2 uv, int maxFrames, float time)
 }
 
 void VA_float(float2 uv, SamplerState texSampler, Texture2D positionMap, float time, int maxFrames,
-	out float3 position, out float3 alpha)
+	out float3 position, out float alpha)
 {
 	float2 uvPosition = VA_UV_float(uv, maxFrames, time);
 
@@ -39,7 +39,7 @@ void VA_float(float2 uv, SamplerState texSampler, Texture2D positionMap, float t
 }
 
 void VA_ARRAY_float(float2 uv, SamplerState texSampler, Texture2DArray positionMap, float positionMapIndex, float time, int maxFrames,
-	out float3 position, out float3 alpha)
+	out float3 position, out float alpha)
 {
 	float2 uvPosition = VA_UV_float(uv, maxFrames, time);
 

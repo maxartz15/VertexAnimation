@@ -194,7 +194,7 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -803.0,
+            "x": -762.0,
             "y": 38.0,
             "width": 115.0,
             "height": 34.0
@@ -251,8 +251,8 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -669.0,
-            "y": -1.0,
+            "x": -628.0,
+            "y": -2.0,
             "width": 142.0,
             "height": 94.0
         }

@@ -151,7 +151,7 @@ namespace TAO.VertexAnimation
 				{
 					positionMap.SetPixel(x, y,
 							new Color(verts[v].x, verts[v].y, verts[v].z,
-							VectorUtils.Float3ToFloat(normals[v]))
+							VectorUtils.EncodeFloat3ToFloat1(normals[v]))
 						);
 
 					x++;

@@ -216,7 +216,7 @@
             "m_Id": "b89a68670a6642e19ae1063415132848"
         },
         {
-            "m_Id": "7106fc4a9e6e4a0a8bdd678ceb7f4f1c"
+            "m_Id": "5c5241600e5b40d998b82d09856f71a9"
         }
     ],
     "synonyms": [],
@@ -356,29 +356,17 @@
 
 {
     "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector3MaterialSlot",
-    "m_ObjectId": "7106fc4a9e6e4a0a8bdd678ceb7f4f1c",
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "5c5241600e5b40d998b82d09856f71a9",
     "m_Id": 2,
     "m_DisplayName": "Alpha",
     "m_SlotType": 0,
     "m_Hidden": false,
     "m_ShaderOutputName": "Alpha",
     "m_StageCapability": 3,
-    "m_Value": {
-        "x": 0.0,
-        "y": 0.0,
-        "z": 0.0
-    },
-    "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0,
-        "z": 0.0
-    },
-    "m_Labels": [
-        "X",
-        "Y",
-        "Z"
-    ]
+    "m_Value": 0.0,
+    "m_DefaultValue": 0.0,
+    "m_Labels": []
 }
 
 {
@@ -403,6 +391,21 @@
         "X",
         "Y"
     ]
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "7fcf2701605d41ac92b93ad9bffa69f0",
+    "m_Id": 10,
+    "m_DisplayName": "alpha",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "alpha",
+    "m_StageCapability": 3,
+    "m_Value": 0.0,
+    "m_DefaultValue": 0.0,
+    "m_Labels": []
 }
 
 {
@@ -446,7 +449,7 @@
             "m_Id": "c2b10d98649f477bb79b359db258f55a"
         },
         {
-            "m_Id": "c1454b74eac5469eb14d403b66a8283a"
+            "m_Id": "7fcf2701605d41ac92b93ad9bffa69f0"
         }
     ],
     "synonyms": [],
@@ -661,33 +664,6 @@
         "m_SerializedTexture": "{\"textureArray\":{\"instanceID\":0}}",
         "m_Guid": ""
     }
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector3MaterialSlot",
-    "m_ObjectId": "c1454b74eac5469eb14d403b66a8283a",
-    "m_Id": 10,
-    "m_DisplayName": "alpha",
-    "m_SlotType": 1,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "alpha",
-    "m_StageCapability": 3,
-    "m_Value": {
-        "x": 0.0,
-        "y": 0.0,
-        "z": 0.0
-    },
-    "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0,
-        "z": 0.0
-    },
-    "m_Labels": [
-        "X",
-        "Y",
-        "Z"
-    ]
 }
 
 {
