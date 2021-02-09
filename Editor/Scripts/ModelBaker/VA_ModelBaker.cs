@@ -173,6 +173,8 @@ namespace TAO.VertexAnimation.Editor
 				material.DisableKeyword("USE_INTERPOLATION_ON");
 			}
 
+			material.enableInstancing = true;
+
 			// Generate Prefab
 			prefab = AnimationPrefab.Create(path, name, meshes, material, lodSettings.GetTransitionSettings());
 		}
