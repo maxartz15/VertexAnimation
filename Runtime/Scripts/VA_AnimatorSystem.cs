@@ -1,6 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Transforms;
 using Unity.Mathematics;
+using UnityEngine.Animations;
 
 namespace TAO.VertexAnimation
 {
@@ -21,14 +22,31 @@ namespace TAO.VertexAnimation
 					// Get the animation lib data.
 					ref VA_AnimationLibraryData animationsRef = ref ac.animationLibrary.Value;
 
+					// Lerp animations.
+					// Set animation for lerp.
+					int animationIndexNext = ac.animationIndexNext;
+					if (ac.animationIndexNext < 0)
+					{
+						animationIndexNext = ac.animationIndex;
+					}
+
+					// Calculate next frame time for lerp.
+					float animationTimeNext = ac.animationTime + (1.0f / animationsRef.animations[animationIndexNext].maxFrames);
+					if (animationTimeNext > animationsRef.animations[animationIndexNext].duration)
+					{
+						// Set time. Using the difference to smooth out animations when looping.
+						animationTimeNext -= ac.animationTime;
+					}
+
+					// Set material data.
 					animationData[child] = new VA_AnimationDataComponent
 					{
 						Value = new float4
 						{
 							x = ac.animationTime,
 							y = VA_AnimationLibraryUtils.GetAnimationMapIndex(ref animationsRef, ac.animationIndex),
-							z = VA_AnimationLibraryUtils.GetColorMapIndex(ref animationsRef, ac.animationIndex),
-							w = 0
+							z = animationTimeNext,
+							w = VA_AnimationLibraryUtils.GetAnimationMapIndex(ref animationsRef, animationIndexNext)
 						}
 					};
 				}

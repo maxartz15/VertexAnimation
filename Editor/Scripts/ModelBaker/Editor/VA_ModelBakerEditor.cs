@@ -45,6 +45,9 @@ namespace TAO.VertexAnimation.Editor
 				EditorGUILayout.PropertyField(serializedObject.FindProperty("materialShader"), new GUIContent(""));
 			}
 
+			EditorGUILayout.PropertyField(serializedObject.FindProperty("useNormalA"), new GUIContent("Use Normal (A)"));
+			EditorGUILayout.PropertyField(serializedObject.FindProperty("useInterpolation"));
+
 			if (GUILayout.Button("Bake", GUILayout.Height(32)))
 			{
 				modelBaker.Bake();

@@ -15,8 +15,7 @@ namespace TAO.VertexAnimation
 	public struct VA_AnimatorComponent : IComponentData
 	{
 		public int animationIndex;
-		// TODO: Animation blending.
-		//public int animationIndexSchedule;
+		public int animationIndexNext;
 		public float animationTime;
 		public BlobAssetReference<VA_AnimationLibraryData> animationLibrary;
 	}
@@ -38,7 +37,7 @@ namespace TAO.VertexAnimation
 				VA_AnimatorComponent animatorComponent = new VA_AnimatorComponent
 				{
 					animationIndex = 0,
-					//animationIndexSchedule = -1,
+					animationIndexNext = -1,
 					animationTime = 0,
 					animationLibrary = animLib
 				};

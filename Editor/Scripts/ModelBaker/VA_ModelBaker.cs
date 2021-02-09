@@ -22,6 +22,8 @@ namespace TAO.VertexAnimation.Editor
 		public bool generateAnimationBook = true;
 		public bool generatePrefab = true;
 		public Shader materialShader = null;
+		public bool useInterpolation = true;
+		public bool useNormalA = true;
 
 		// Output.
 		public GameObject prefab = null;
@@ -152,6 +154,24 @@ namespace TAO.VertexAnimation.Editor
 
 			material.SetTexture("_PositionMap", positionMap);
 			material.SetInt("_MaxFrames", bakedData.maxFrames);
+
+			if (useNormalA)
+			{
+				material.EnableKeyword("USE_NORMALA_ON");
+			}
+			else
+			{
+				material.DisableKeyword("USE_NORMALA_ON");
+			}
+
+			if(useInterpolation)
+			{
+				material.EnableKeyword("USE_INTERPOLATION_ON");
+			}
+			else
+			{
+				material.DisableKeyword("USE_INTERPOLATION_ON");
+			}
 
 			// Generate Prefab
 			prefab = AnimationPrefab.Create(path, name, meshes, material, lodSettings.GetTransitionSettings());
