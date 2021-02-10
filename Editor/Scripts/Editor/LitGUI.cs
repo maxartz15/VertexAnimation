@@ -38,7 +38,6 @@ namespace TAO.VertexAnimation.Editor
 				OtherGUI();
 			}
 			EditorGUILayout.EndFoldoutHeaderGroup();
-
 		}
 
 		private void BaseMapGUI()
@@ -103,6 +102,8 @@ namespace TAO.VertexAnimation.Editor
 			MaterialProperty map = FindProperty("_PositionMap", properties);
 			materialEditor.TexturePropertySingleLine(MakeLabel(map), map);
 
+			MaterialProperty useInterpolation = FindProperty("USE_INTERPOLATION", properties);
+			materialEditor.ShaderProperty(useInterpolation, MakeLabel(useInterpolation, "For smooth animations."));
 			MaterialProperty useNormal = FindProperty("USE_NORMALA", properties);
 			materialEditor.ShaderProperty(useNormal, MakeLabel(useNormal, "Apply vertex normals saved in the alpha channel of the position map."));
 			MaterialProperty flipUV = FindProperty("VA_FLIP_UVS", properties);
