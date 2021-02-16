@@ -113,6 +113,7 @@ namespace TAO.VertexAnimation.Editor
 
 			foreach (var m in meshes)
 			{
+				m.Finalize();
 				AssetDatabase.AddObjectToAsset(m, this);
 			}
 
@@ -141,39 +142,19 @@ namespace TAO.VertexAnimation.Editor
 			path = path.Remove(start, path.Length - start);
 			path += "/" + name + ".prefab";
 
+			// Get info.
+			NamingConventionUtils.PositionMapInfo info = bakedData.GetPositionMap.name.GetTextureInfo();
+
 			// Generate Material
 			if (!AssetDatabaseUtils.HasChildAsset(this, material))
 			{
-				material = AnimationMaterial.Create(name, materialShader);
+				material = AnimationMaterial.Create(name, materialShader, positionMap, useNormalA, useInterpolation, info.maxFrames);
 				AssetDatabase.AddObjectToAsset(material, this);
 			}
 			else
 			{
-				material.shader = materialShader;
+				material.Update(name, materialShader, positionMap, useNormalA, useInterpolation, info.maxFrames);
 			}
-
-			material.SetTexture("_PositionMap", positionMap);
-			material.SetInt("_MaxFrames", bakedData.maxFrames);
-
-			if (useNormalA)
-			{
-				material.EnableKeyword("USE_NORMALA_ON");
-			}
-			else
-			{
-				material.DisableKeyword("USE_NORMALA_ON");
-			}
-
-			if(useInterpolation)
-			{
-				material.EnableKeyword("USE_INTERPOLATION_ON");
-			}
-			else
-			{
-				material.DisableKeyword("USE_INTERPOLATION_ON");
-			}
-
-			material.enableInstancing = true;
 
 			// Generate Prefab
 			prefab = AnimationPrefab.Create(path, name, meshes, material, lodSettings.GetTransitionSettings());

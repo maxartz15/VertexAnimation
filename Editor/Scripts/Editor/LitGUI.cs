@@ -116,11 +116,9 @@ namespace TAO.VertexAnimation.Editor
 
 				if (EditorGUI.EndChangeCheck())
 				{
-					Debug.Log(value);
 					SetKeyword("USE_INTERPOLATION_ON", value);
 				}
 			}
-
 
 			{
 				bool value = mat.IsKeywordEnabled("USE_NORMALA_ON");
@@ -148,7 +146,6 @@ namespace TAO.VertexAnimation.Editor
 
 				if (EditorGUI.EndChangeCheck())
 				{
-					Debug.Log(value);
 					SetKeyword("VA_FLIP_UVS_ON", value);
 				}
 			}
