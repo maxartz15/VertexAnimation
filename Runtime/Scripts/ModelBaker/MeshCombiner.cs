@@ -211,6 +211,20 @@ namespace TAO.VertexAnimation
 
 			// Actually combine and recalculate mesh.
 			Mesh skinnedMesh = new Mesh();
+
+			// Large mesh support.
+			int vertexCount = 0;
+			foreach (var ci in combineInstances)
+			{
+				vertexCount += ci.mesh.vertexCount;
+			}
+
+			if (vertexCount > 65535)
+			{
+				skinnedMesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+			}
+
+			// Combine meshes.
 			skinnedMesh.CombineMeshes(combineInstances.ToArray(), true, true);
 			skinnedMesh.RecalculateBounds();
 

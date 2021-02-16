@@ -261,7 +261,13 @@ namespace TAO.VertexAnimation
 					tris.Add(t * 3 + v - skipped);
 				}
 			}
-	
+
+			// Large mesh support.
+			if (vertices.Count > 65535)
+			{
+				mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+			}
+
 			mesh.vertices = vertices.ToArray();
 			mesh.normals = normals.ToArray();
 	
