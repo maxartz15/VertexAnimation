@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -102,12 +103,56 @@ namespace TAO.VertexAnimation.Editor
 			MaterialProperty map = FindProperty("_PositionMap", properties);
 			materialEditor.TexturePropertySingleLine(MakeLabel(map), map);
 
-			MaterialProperty useInterpolation = FindProperty("USE_INTERPOLATION", properties);
-			materialEditor.ShaderProperty(useInterpolation, MakeLabel(useInterpolation, "For smooth animations."));
-			MaterialProperty useNormal = FindProperty("USE_NORMALA", properties);
-			materialEditor.ShaderProperty(useNormal, MakeLabel(useNormal, "Apply vertex normals saved in the alpha channel of the position map."));
-			MaterialProperty flipUV = FindProperty("VA_FLIP_UVS", properties);
-			materialEditor.ShaderProperty(flipUV, MakeLabel(flipUV, "Flip UVs."));
+			var mat = materialEditor.target as Material;
+
+			{
+				bool value = mat.IsKeywordEnabled("USE_INTERPOLATION_ON");
+				MaterialProperty useInterpolation = FindProperty("USE_INTERPOLATION", properties);
+
+				EditorGUI.BeginChangeCheck();
+
+				value = EditorGUILayout.Toggle(MakeLabel(useInterpolation, "For smooth animations."), mat.IsKeywordEnabled("USE_INTERPOLATION_ON"));
+				//materialEditor.ShaderProperty(useInterpolation, MakeLabel(useInterpolation, "For smooth animations."));
+
+				if (EditorGUI.EndChangeCheck())
+				{
+					Debug.Log(value);
+					SetKeyword("USE_INTERPOLATION_ON", value);
+				}
+			}
+
+
+			{
+				bool value = mat.IsKeywordEnabled("USE_NORMALA_ON");
+				MaterialProperty useNormalA = FindProperty("USE_NORMALA", properties);
+
+				EditorGUI.BeginChangeCheck();
+
+				value = EditorGUILayout.Toggle(MakeLabel(useNormalA, "Apply vertex normals saved in the alpha channel of the position map."), mat.IsKeywordEnabled("USE_NORMALA_ON"));
+				//materialEditor.ShaderProperty(normal, MakeLabel(useNormalA, "Apply vertex normals saved in the alpha channel of the position map."));
+
+				if (EditorGUI.EndChangeCheck())
+				{
+					SetKeyword("USE_NORMALA_ON", value);
+				}
+			}
+
+			{
+				bool value = mat.IsKeywordEnabled("VA_FLIP_UVS");
+				MaterialProperty flipUV = FindProperty("VA_FLIP_UVS", properties);
+
+				EditorGUI.BeginChangeCheck();
+
+				value = EditorGUILayout.Toggle(MakeLabel(flipUV, "Flip UVs."), mat.IsKeywordEnabled("VA_FLIP_UVS_ON"));
+				//materialEditor.ShaderProperty(useInterpolation, MakeLabel(useInterpolation, "For smooth animations."));
+
+				if (EditorGUI.EndChangeCheck())
+				{
+					Debug.Log(value);
+					SetKeyword("VA_FLIP_UVS_ON", value);
+				}
+			}
+
 			MaterialProperty maxFrames = FindProperty("_MaxFrames", properties);
 			materialEditor.ShaderProperty(maxFrames, MakeLabel(maxFrames, "This will be auto filled by the animation system."));
 			MaterialProperty animationData = FindProperty("_AnimationData", properties);
