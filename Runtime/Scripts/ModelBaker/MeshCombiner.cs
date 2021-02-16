@@ -5,7 +5,6 @@
 
 using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace TAO.VertexAnimation
 {
@@ -88,8 +87,28 @@ namespace TAO.VertexAnimation
 
 			// TODO: Merge materialMergedObjects.
 			// TEMP: Remove when materialMergedObjects.
+			//SkinnedMeshRenderer newSkinnedMeshRenderer = tmp[0].GetComponent<SkinnedMeshRenderer>();
+			//target.sharedMesh = newSkinnedMeshRenderer.sharedMesh;
+			//target.sharedMaterial = newSkinnedMeshRenderer.sharedMaterial;
+			//target.bones = newSkinnedMeshRenderer.bones;
+
+			List<CombineInstance> combine = new List<CombineInstance>();
+			for (int i = 0; i < groups.Count; i++)
+			{
+				combine.Add(new CombineInstance
+				{
+					mesh = tmp[i].GetComponent<SkinnedMeshRenderer>().sharedMesh,
+					transform = tmp[i].transform.localToWorldMatrix
+				});
+			}
+
 			SkinnedMeshRenderer newSkinnedMeshRenderer = tmp[0].GetComponent<SkinnedMeshRenderer>();
-			target.sharedMesh = newSkinnedMeshRenderer.sharedMesh;
+			//target.sharedMesh = tmp[0].GetComponent<SkinnedMeshRenderer>().sharedMesh;
+			target.sharedMesh = new Mesh();
+			if (combine != null && combine.Count != 0)
+			{
+				target.sharedMesh.CombineMeshes(combine.ToArray(), false, false);
+			}
 			target.sharedMaterial = newSkinnedMeshRenderer.sharedMaterial;
 			target.bones = newSkinnedMeshRenderer.bones;
 
