@@ -79,6 +79,9 @@ namespace TAO.VertexAnimation
 			// Get the info for the biggest animation.
 			AnimationInfo animationInfo = new AnimationInfo(mesh, applyRootMotion, maxFrames, textureWidth, fps);
 
+			// Bounds
+			Bounds bounds = new Bounds();
+
 			foreach (AnimationClip ac in animationClips)
 			{
 				// Set the frames for this animation.
@@ -88,7 +91,12 @@ namespace TAO.VertexAnimation
 				bakedData.mesh = bd.mesh;
 				bakedData.positionMaps.AddRange(bd.positionMaps);
 				bakedData.maxFrames = maxFrames;
+
+				bounds.min = Vector3.Min(bounds.min, mesh.bounds.min);
+				bounds.max = Vector3.Max(bounds.max, mesh.bounds.max);
 			}
+
+			bakedData.mesh.bounds = bounds;
 
 			return bakedData;
 		}
@@ -116,17 +124,26 @@ namespace TAO.VertexAnimation
 			BakedData bakedData = new BakedData()
 			{
 				mesh = mesh,
-				positionMaps = new List<Texture2D>() { BakePositionMap(model, animationClip, animationInfo) },
-				maxFrames = animationInfo.maxFrames
+				positionMaps = new List<Texture2D>() { BakePositionMap(model, animationClip, animationInfo, out Bounds bounds) },
+				maxFrames = animationInfo.maxFrames,
 			};
+			mesh.bounds = bounds;
 
 			return bakedData;
 		}
 
-		public static Texture2D BakePositionMap(this GameObject model, AnimationClip animationClip, AnimationInfo animationInfo)
+		// TODO: Add nicer way to return data/bounds.
+		public static Texture2D BakePositionMap(this GameObject model, AnimationClip animationClip, AnimationInfo animationInfo, out Bounds bounds)
 		{
 			// Create positionMap Texture without MipMaps which is Linear and HDR to store values in a bigger range.
 			Texture2D positionMap = new Texture2D(animationInfo.textureWidth, animationInfo.textureHeight, TextureFormat.RGBAHalf, false, true);
+
+			// Keep track of min/max bounds.
+			bounds = new Bounds
+			{
+				min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue),
+				max = new Vector3(float.MinValue, float.MinValue, float.MinValue)
+			};
 
 			// Create instance to sample from.
 			GameObject inst = GameObject.Instantiate(model);
@@ -139,7 +156,10 @@ namespace TAO.VertexAnimation
 
 				Mesh sampledMesh = new Mesh();
 				skinnedMeshRenderer.BakeMesh(sampledMesh);
+				
 				sampledMesh.RecalculateBounds();
+				bounds.min = Vector3.Min(bounds.min, sampledMesh.bounds.min + bounds.center);
+				bounds.max = Vector3.Min(bounds.max, sampledMesh.bounds.max + bounds.center);
 
 				List<Vector3> verts = new List<Vector3>();
 				sampledMesh.GetVertices(verts);

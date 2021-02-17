@@ -113,6 +113,7 @@ namespace TAO.VertexAnimation.Editor
 
 			foreach (var m in meshes)
 			{
+				m.bounds = bakedData.mesh.bounds;
 				m.Finalize();
 				AssetDatabase.AddObjectToAsset(m, this);
 			}
