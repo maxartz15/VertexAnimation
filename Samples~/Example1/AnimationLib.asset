@@ -14,6 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animationBooks:
   - {fileID: 5308917091715319043, guid: f4349667ca4312e4baf669e11f247ba7, type: 2}
-  animationData: []
+  animationData:
+  - frames: 20
+    maxFrames: 32
+    animationMapIndex: 0
+    colorMapIndex: -1
+    frameTime: 0.5
+    duration: 0.59375
   loadedAnimationsPreview:
-  - {fileID: 5516028983296890367, guid: f4349667ca4312e4baf669e11f247ba7, type: 2}
+  - {fileID: -6703287855718520189, guid: f4349667ca4312e4baf669e11f247ba7, type: 2}

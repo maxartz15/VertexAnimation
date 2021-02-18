@@ -1,5 +1,17 @@
 # Change Log:
 
+## 0.1.4
+
+- Rootmotion option.
+- Disabled meshes option.
+- Mesh bounds.
+- Fixed normal.
+- Large mesh support.
+- Interpolation.
+- Lit shader with GUI.
+
+## 0.1.3
+
 ## 0.1.2
 
 - Complete rework of asset pipeline.

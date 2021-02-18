@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using System.Linq;
 
 namespace TAO.VertexAnimation.Editor
 {
@@ -19,9 +18,12 @@ namespace TAO.VertexAnimation.Editor
 		public bool includeInactive = false;
 	
 		public LODSettings lodSettings = new LODSettings();
+		public bool applyAnimationBounds = true;
 		public bool generateAnimationBook = true;
 		public bool generatePrefab = true;
 		public Shader materialShader = null;
+		public bool useInterpolation = true;
+		public bool useNormalA = true;
 
 		// Output.
 		public GameObject prefab = null;
@@ -109,13 +111,24 @@ namespace TAO.VertexAnimation.Editor
 		{
 			AssetDatabaseUtils.RemoveChildAssets(this, new Object[2] { book, material });
 
-			foreach (var m in meshes)
+			Bounds bounds = new Bounds
 			{
-				AssetDatabase.AddObjectToAsset(m, this);
+				max = bakedData.maxBounds,
+				min = bakedData.minBounds
+			};
+
+			for (int i = 0; i < meshes.Length; i++)
+			{
+				if (applyAnimationBounds)
+				{
+					meshes[i].bounds = bounds;
+				}
+
+				meshes[i].Finalize();
+				AssetDatabase.AddObjectToAsset(meshes[i], this);
 			}
 
 			AssetDatabase.AddObjectToAsset(positionMap, this);
-
 			AssetDatabase.SaveAssets();
 
 			if (generatePrefab)
@@ -139,19 +152,19 @@ namespace TAO.VertexAnimation.Editor
 			path = path.Remove(start, path.Length - start);
 			path += "/" + name + ".prefab";
 
+			// Get info.
+			NamingConventionUtils.PositionMapInfo info = bakedData.GetPositionMap.name.GetTextureInfo();
+
 			// Generate Material
 			if (!AssetDatabaseUtils.HasChildAsset(this, material))
 			{
-				material = AnimationMaterial.Create(name, materialShader);
+				material = AnimationMaterial.Create(name, materialShader, positionMap, useNormalA, useInterpolation, info.maxFrames);
 				AssetDatabase.AddObjectToAsset(material, this);
 			}
 			else
 			{
-				material.shader = materialShader;
+				material.Update(name, materialShader, positionMap, useNormalA, useInterpolation, info.maxFrames);
 			}
-
-			material.SetTexture("_PositionMap", positionMap);
-			material.SetInt("_MaxFrames", bakedData.maxFrames);
 
 			// Generate Prefab
 			prefab = AnimationPrefab.Create(path, name, meshes, material, lodSettings.GetTransitionSettings());

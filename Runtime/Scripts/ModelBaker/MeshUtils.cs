@@ -4,6 +4,7 @@ namespace TAO.VertexAnimation
 {
 	public static class MeshUtils
 	{
+		// Copy a mesh and it's properties.
 		public static Mesh Copy(this Mesh mesh)
 		{
 			Mesh copy = new Mesh
@@ -15,6 +16,7 @@ namespace TAO.VertexAnimation
 				normals = mesh.normals,
 				tangents = mesh.tangents,
 				colors = mesh.colors,
+				bounds = mesh.bounds,
 				uv = mesh.uv,
 				uv2 = mesh.uv2,
 				uv3 = mesh.uv3,
@@ -25,9 +27,14 @@ namespace TAO.VertexAnimation
 				uv8 = mesh.uv8
 			};
 
-			copy.RecalculateBounds();
-
 			return copy;
+		}
+
+		// Optimize the mesh and upload the mesh data, makes the mesh no longer readable.
+		public static void Finalize(this Mesh mesh)
+		{
+			mesh.Optimize();
+			mesh.UploadMeshData(true);
 		}
 	}
 }

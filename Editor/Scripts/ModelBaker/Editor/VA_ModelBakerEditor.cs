@@ -37,6 +37,7 @@ namespace TAO.VertexAnimation.Editor
 		private void BakeGUI()
 		{
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("lodSettings").FindPropertyRelative("lodSettings"));
+			EditorGUILayout.PropertyField(serializedObject.FindProperty("applyAnimationBounds"));
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("generateAnimationBook"));
 
 			using (new EditorGUILayout.HorizontalScope())
@@ -44,6 +45,9 @@ namespace TAO.VertexAnimation.Editor
 				EditorGUILayout.PropertyField(serializedObject.FindProperty("generatePrefab"));
 				EditorGUILayout.PropertyField(serializedObject.FindProperty("materialShader"), new GUIContent(""));
 			}
+
+			EditorGUILayout.PropertyField(serializedObject.FindProperty("useNormalA"), new GUIContent("Use Normal (A)"));
+			EditorGUILayout.PropertyField(serializedObject.FindProperty("useInterpolation"));
 
 			if (GUILayout.Button("Bake", GUILayout.Height(32)))
 			{
