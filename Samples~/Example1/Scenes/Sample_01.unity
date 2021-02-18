@@ -730,7 +730,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sampleSystem: 1
-  animationAsset: {fileID: 3778935671602017550, guid: f4349667ca4312e4baf669e11f247ba7, type: 2}
+  animationAsset: {fileID: 8333759228975207513, guid: f4349667ca4312e4baf669e11f247ba7, type: 2}
 --- !u!4 &1442963402
 Transform:
   m_ObjectHideFlags: 0

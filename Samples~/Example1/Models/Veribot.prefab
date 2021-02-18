@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4534186675853176511
+--- !u!1 &4439322377000321784
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2637317989238468324}
-  - component: {fileID: 2030271958008155644}
-  - component: {fileID: 2082090542424554337}
+  - component: {fileID: 2877426674608882339}
+  - component: {fileID: 2259671743654715835}
+  - component: {fileID: 2274912361467860774}
   m_Layer: 0
   m_Name: Veribot_LOD0
   m_TagString: Untagged
@@ -18,35 +18,35 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2637317989238468324
+--- !u!4 &2877426674608882339
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4534186675853176511}
+  m_GameObject: {fileID: 4439322377000321784}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 6853163039303404304}
+  m_Father: {fileID: 6659800846768908119}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &2030271958008155644
+--- !u!33 &2259671743654715835
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4534186675853176511}
-  m_Mesh: {fileID: 5941489778017322075, guid: f4349667ca4312e4baf669e11f247ba7, type: 2}
---- !u!23 &2082090542424554337
+  m_GameObject: {fileID: 4439322377000321784}
+  m_Mesh: {fileID: -7840539518661675495, guid: f4349667ca4312e4baf669e11f247ba7, type: 2}
+--- !u!23 &2274912361467860774
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4534186675853176511}
+  m_GameObject: {fileID: 4439322377000321784}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -81,7 +81,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &5964708316112597629
+--- !u!1 &5886741756517555770
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -89,9 +89,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1323372131127862203}
-  - component: {fileID: 4833308058096186705}
-  - component: {fileID: 7603375518817447113}
+  - component: {fileID: 1236943010672054268}
+  - component: {fileID: 4639924768716265750}
+  - component: {fileID: 7706665375240700046}
   m_Layer: 0
   m_Name: Veribot_LOD2
   m_TagString: Untagged
@@ -99,35 +99,35 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1323372131127862203
+--- !u!4 &1236943010672054268
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5964708316112597629}
+  m_GameObject: {fileID: 5886741756517555770}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 6853163039303404304}
+  m_Father: {fileID: 6659800846768908119}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &4833308058096186705
+--- !u!33 &4639924768716265750
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5964708316112597629}
-  m_Mesh: {fileID: -2778213634165482431, guid: f4349667ca4312e4baf669e11f247ba7, type: 2}
---- !u!23 &7603375518817447113
+  m_GameObject: {fileID: 5886741756517555770}
+  m_Mesh: {fileID: 1088559608697913439, guid: f4349667ca4312e4baf669e11f247ba7, type: 2}
+--- !u!23 &7706665375240700046
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5964708316112597629}
+  m_GameObject: {fileID: 5886741756517555770}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -162,7 +162,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &6237684819455752789
+--- !u!1 &6190122539575154194
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -170,10 +170,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6853163039303404304}
-  - component: {fileID: 7056653554868356473}
-  - component: {fileID: 1075111289751587653}
-  - component: {fileID: 3995250710027893510}
+  - component: {fileID: 6659800846768908119}
+  - component: {fileID: 7104793353331976510}
+  - component: {fileID: 980833545991907074}
+  - component: {fileID: 3748953902348982081}
   m_Layer: 0
   m_Name: Veribot
   m_TagString: Untagged
@@ -181,33 +181,33 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6853163039303404304
+--- !u!4 &6659800846768908119
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6237684819455752789}
+  m_GameObject: {fileID: 6190122539575154194}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 2637317989238468324}
-  - {fileID: 626963313162696141}
-  - {fileID: 1323372131127862203}
+  - {fileID: 2877426674608882339}
+  - {fileID: 847913833053165962}
+  - {fileID: 1236943010672054268}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!205 &7056653554868356473
+--- !u!205 &7104793353331976510
 LODGroup:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6237684819455752789}
+  m_GameObject: {fileID: 6190122539575154194}
   serializedVersion: 2
-  m_LocalReferencePoint: {x: -0.043716908, y: 2.8345191, z: -0.0000009536743}
-  m_Size: 7.4401426
+  m_LocalReferencePoint: {x: 0.002152443, y: 3.0721068, z: 0.039553642}
+  m_Size: 8.517475
   m_FadeMode: 0
   m_AnimateCrossFading: 0
   m_LastLODIsBillboard: 0
@@ -215,42 +215,42 @@ LODGroup:
   - screenRelativeHeight: 0.4
     fadeTransitionWidth: 0
     renderers:
-    - renderer: {fileID: 2082090542424554337}
+    - renderer: {fileID: 2274912361467860774}
   - screenRelativeHeight: 0.15
     fadeTransitionWidth: 0
     renderers:
-    - renderer: {fileID: 390364405863016416}
+    - renderer: {fileID: 440742223738194855}
   - screenRelativeHeight: 0.01
     fadeTransitionWidth: 0
     renderers:
-    - renderer: {fileID: 7603375518817447113}
+    - renderer: {fileID: 7706665375240700046}
   m_Enabled: 1
---- !u!114 &1075111289751587653
+--- !u!114 &980833545991907074
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6237684819455752789}
+  m_GameObject: {fileID: 6190122539575154194}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 29deecb09ead9e74aa32f9d265f1e7ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3995250710027893510
+--- !u!114 &3748953902348982081
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6237684819455752789}
+  m_GameObject: {fileID: 6190122539575154194}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ConversionMode: 0
---- !u!1 &7742355509012012649
+--- !u!1 &7495487026154091054
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -258,9 +258,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 626963313162696141}
-  - component: {fileID: 734495524141906358}
-  - component: {fileID: 390364405863016416}
+  - component: {fileID: 847913833053165962}
+  - component: {fileID: 668359196446692849}
+  - component: {fileID: 440742223738194855}
   m_Layer: 0
   m_Name: Veribot_LOD1
   m_TagString: Untagged
@@ -268,35 +268,35 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &626963313162696141
+--- !u!4 &847913833053165962
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7742355509012012649}
+  m_GameObject: {fileID: 7495487026154091054}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 6853163039303404304}
+  m_Father: {fileID: 6659800846768908119}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &734495524141906358
+--- !u!33 &668359196446692849
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7742355509012012649}
-  m_Mesh: {fileID: -1039374256406497124, guid: f4349667ca4312e4baf669e11f247ba7, type: 2}
---- !u!23 &390364405863016416
+  m_GameObject: {fileID: 7495487026154091054}
+  m_Mesh: {fileID: -6972708639971023447, guid: f4349667ca4312e4baf669e11f247ba7, type: 2}
+--- !u!23 &440742223738194855
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7742355509012012649}
+  m_GameObject: {fileID: 7495487026154091054}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
