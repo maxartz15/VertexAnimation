@@ -20,8 +20,8 @@ namespace TAO.VertexAnimation
 			// UVs (UV0, UV1, ..., UV7)
 			// Other...
 	
-			public List<Vector3> vertices = new List<Vector3>(3);
-			public List<Vector3> normals = new List<Vector3>(3);
+			public Vector3[] vertices = new Vector3[3];
+			public Vector3[] normals = new Vector3[3];
 			public Dictionary<int, List<Vector2>> uvs = new Dictionary<int, List<Vector2>>();
 	
 			public float Perimeter()
@@ -46,7 +46,7 @@ namespace TAO.VertexAnimation
 				float distance = Mathf.Infinity;
 				int closestVertex = -1;
 	
-				for (int v = 0; v < vertices.Count; v++)
+				for (int v = 0; v < vertices.Length; v++)
 				{
 					if (vertices[v] != vertex)
 					{
@@ -83,7 +83,7 @@ namespace TAO.VertexAnimation
 				if (sourceTriangle != this)
 				{
 					Vector3 sourceVertex = sourceTriangle.vertices[sourceVertexIndex];
-					int index = vertices.IndexOf(sourceVertex);
+					int index = System.Array.IndexOf(vertices, sourceVertex);
 	
 					if (index != -1)
 					{
@@ -155,10 +155,10 @@ namespace TAO.VertexAnimation
 		public static List<Triangle> ToTriangles(this Mesh mesh)
 		{
 			List<Triangle> triangles = new List<Triangle>();
-	
-			List<Vector3> verts = new List<Vector3>(mesh.vertices);
-			List<Vector3> normals = new List<Vector3>(mesh.normals);
-			List<int> tris = new List<int>(mesh.triangles);
+
+			Vector3[] verts = mesh.vertices;
+			Vector3[] normals = mesh.normals;
+			int[] tris = mesh.triangles;
 	
 			Dictionary<int, List<Vector2>> uvs = new Dictionary<int, List<Vector2>>();
 			for (int u = 0; u < 8; u++)
@@ -172,18 +172,18 @@ namespace TAO.VertexAnimation
 				}
 			}
 	
-			for (int t = 0; t < tris.Count; t += 3)
+			for (int t = 0; t < tris.Length; t += 3)
 			{
 				Triangle tri = new Triangle();
 	
-				tri.vertices.Add(verts[tris[t + 0]]);
-				tri.vertices.Add(verts[tris[t + 1]]);
-				tri.vertices.Add(verts[tris[t + 2]]);
+				tri.vertices[0] = verts[tris[t + 0]];
+				tri.vertices[1] = verts[tris[t + 1]];
+				tri.vertices[2] = verts[tris[t + 2]];
 	
-				tri.normals.Add(normals[tris[t + 0]]);
-				tri.normals.Add(normals[tris[t + 1]]);
-				tri.normals.Add(normals[tris[t + 2]]);
-	
+				tri.normals[0] = normals[tris[t + 0]];
+				tri.normals[1] = normals[tris[t + 1]];
+				tri.normals[2] = normals[tris[t + 2]];
+
 				foreach (var uv in uvs)
 				{
 					if (tri.uvs.TryGetValue(uv.Key, out List<Vector2> coordinates))
@@ -215,14 +215,14 @@ namespace TAO.VertexAnimation
 			mesh.Clear();
 	
 			List<Vector3> vertices = new List<Vector3>(triangles.Count * 3);
-			List<int> tris = new List<int>(triangles.Count * 3);
 			List<Vector3> normals = new List<Vector3>(triangles.Count * 3);
+			List<int> tris = new List<int>(triangles.Count * 3);
 			Dictionary<int, List<Vector2>> uvs = new Dictionary<int, List<Vector2>>();
-	
+
 			int skipped = 0;
 			for (int t = 0; t < triangles.Count; t++)
 			{
-				for (int v = 0; v < triangles[t].vertices.Count; v++)
+				for (int v = 0; v < triangles[t].vertices.Length; v++)
 				{
 					// Check for existing matching vert.
 					int vIndex = vertices.IndexOf(triangles[t].vertices[v]);
@@ -275,7 +275,7 @@ namespace TAO.VertexAnimation
 			{
 				mesh.SetUVs(uv.Key, uv.Value);
 			}
-	
+
 			mesh.triangles = tris.ToArray();
 	
 			mesh.Optimize();

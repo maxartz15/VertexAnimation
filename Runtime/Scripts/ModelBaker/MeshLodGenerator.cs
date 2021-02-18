@@ -11,7 +11,13 @@ namespace TAO.VertexAnimation
 			for (int lm = 0; lm < lodMeshes.Length; lm++)
 			{
 				lodMeshes[lm] = mesh.Copy();
-				lodMeshes[lm] = lodMeshes[lm].Simplify(quality[lm]);
+
+				// Only simplify when needed.
+				if (quality[lm] < 1.0f)
+				{
+					lodMeshes[lm] = lodMeshes[lm].Simplify(quality[lm]);
+				}
+
 				lodMeshes[lm].name = string.Format("{0}_LOD{1}", lodMeshes[lm].name, lm);
 			}
 
