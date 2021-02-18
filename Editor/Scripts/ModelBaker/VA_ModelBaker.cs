@@ -18,6 +18,7 @@ namespace TAO.VertexAnimation.Editor
 		public bool includeInactive = false;
 	
 		public LODSettings lodSettings = new LODSettings();
+		public bool applyAnimationBounds = true;
 		public bool generateAnimationBook = true;
 		public bool generatePrefab = true;
 		public Shader materialShader = null;
@@ -118,7 +119,11 @@ namespace TAO.VertexAnimation.Editor
 
 			for (int i = 0; i < meshes.Length; i++)
 			{
-				meshes[i].bounds = bounds;
+				if (applyAnimationBounds)
+				{
+					meshes[i].bounds = bounds;
+				}
+
 				meshes[i].Finalize();
 				AssetDatabase.AddObjectToAsset(meshes[i], this);
 			}

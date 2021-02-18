@@ -37,6 +37,7 @@ namespace TAO.VertexAnimation.Editor
 		private void BakeGUI()
 		{
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("lodSettings").FindPropertyRelative("lodSettings"));
+			EditorGUILayout.PropertyField(serializedObject.FindProperty("applyAnimationBounds"));
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("generateAnimationBook"));
 
 			using (new EditorGUILayout.HorizontalScope())
