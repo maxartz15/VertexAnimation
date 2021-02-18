@@ -111,15 +111,20 @@ namespace TAO.VertexAnimation.Editor
 		{
 			AssetDatabaseUtils.RemoveChildAssets(this, new Object[2] { book, material });
 
-			foreach (var m in meshes)
+			Bounds bounds = new Bounds
 			{
-				m.bounds = bakedData.mesh.bounds;
-				m.Finalize();
-				AssetDatabase.AddObjectToAsset(m, this);
+				max = bakedData.maxBounds,
+				min = bakedData.minBounds
+			};
+
+			for (int i = 0; i < meshes.Length; i++)
+			{
+				meshes[i].bounds = bounds;
+				meshes[i].Finalize();
+				AssetDatabase.AddObjectToAsset(meshes[i], this);
 			}
 
 			AssetDatabase.AddObjectToAsset(positionMap, this);
-
 			AssetDatabase.SaveAssets();
 
 			if (generatePrefab)

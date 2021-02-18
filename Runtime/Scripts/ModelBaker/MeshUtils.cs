@@ -16,6 +16,7 @@ namespace TAO.VertexAnimation
 				normals = mesh.normals,
 				tangents = mesh.tangents,
 				colors = mesh.colors,
+				bounds = mesh.bounds,
 				uv = mesh.uv,
 				uv2 = mesh.uv2,
 				uv3 = mesh.uv3,
@@ -25,8 +26,6 @@ namespace TAO.VertexAnimation
 				uv7 = mesh.uv7,
 				uv8 = mesh.uv8
 			};
-
-			copy.RecalculateBounds();
 
 			return copy;
 		}
