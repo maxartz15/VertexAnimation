@@ -1,6 +1,6 @@
 # TECH ART OUTSOURCE - Vertex Animation
 
-![ProjectCastle](Documentation~/Images/ProjectCastle_01.gif)
+![](Documentation~/Images/ProjectCastle_01.gif)
 
 A vertex animation baking tool, shaders, and animation system for Unity DOTS/ECS.  
 Render tens of thousands of models at the same time each with its own animation state.  
@@ -25,7 +25,7 @@ Render tens of thousands of models at the same time each with its own animation 
 
 Artist friendly GUI for converting models.
 
-![ModelBaker](Documentation~/Images/VA_ModelBaker_01.png)
+![](Documentation~/Images/VA_ModelBaker_01.png)
 
 ### DOTS Animation System
 
@@ -55,7 +55,7 @@ protected override void OnUpdate()
 Lit example shader (build in shader graph).  
 Full shader graph support.
 
-![Shaders](Documentation~/Images/VA_Shaders_01.png)
+![](Documentation~/Images/VA_Shaders_01.png)
 
 ## Install
 

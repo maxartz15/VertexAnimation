@@ -4,6 +4,8 @@
 
 Import the sample assets to quickly get an idea on how to integrate vertex animation into your project.
 
+![](Images/SampleAssets_01.gif)
+
 ## Components
 
 ### VA_ModelBaker
