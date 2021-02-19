@@ -20,6 +20,7 @@ Render tens of thousands of models at the same time each with its own animation 
   - Interpolation
   - Normal encoding and decoding
   - Shader graph support
+  - Animation blending
 
 ### Model Baker
 
