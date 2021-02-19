@@ -1,11 +1,71 @@
 # TECH ART OUTSOURCE - Vertex Animation
 
-A base for next block to continue working on.
+![ProjectCastle](Documentation~/Images/ProjectCastle_01.gif)
+
+A vertex animation baking tool, shaders, and animation system for Unity DOTS/ECS.  
+Render tens of thousands of models at the same time each with its own animation state.  
+
+## Features
+
+- Vertex animation model baker
+  - Multiple animations (stored in one Texture2DArray)
+  - LOD generation
+  - Prefab generation
+  - Animation book generation
+- DOTS animation system
+  - Simple API
+  - Animation library and books
+- Shaders
+  - Lit vertex animation shader
+  - Interpolation
+  - Normal encoding and decoding
+  - Shader graph support
+
+### Model Baker
+
+Artist friendly GUI for converting models.
+
+![ModelBaker](Documentation~/Images/VA_ModelBaker_01.png)
+
+### DOTS Animation System
+
+Sample code to play an animation.
+
+```C#
+protected override void OnUpdate()
+{
+    float deltaTime = UnityEngine.Time.deltaTime;
+
+    Entities.ForEach((Entity entity, ref VA_AnimatorComponent ac) =>
+    {
+        // Get the animation lib data.
+        ref VA_AnimationLibraryData animationsRef = ref ac.animationLibrary.Value;
+
+        // Set the animation index on the AnimatorComponent to play this animation.
+        ac.animationIndex = VA_AnimationLibraryUtils.GetAnimation(ref animationsRef, animationName);
+
+        // 'Play' the actual animation.
+        ac.animationTime += deltaTime * animationsRef.animations[ac.animationIndex].frameTime;
+    }).ScheduleParallel();
+}
+```
+
+### Shaders
+
+Lit example shader (build in shader graph).  
+Full shader graph support.
+
+![Shaders](Documentation~/Images/VA_Shaders_01.png)
 
 ## Install
 
 [Installing from a Git URL](https://docs.unity3d.com/Manual/upm-ui-giturl.html)
 
+[Documentation](Documentation~/VertexAnimation.md)
+
+## Used By
+
+- [Project Castle]()
 
 ## LICENSE
 
