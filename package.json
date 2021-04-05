@@ -20,8 +20,13 @@
   "samples": [
     {
       "displayName": "Example 1",
-      "description": "This sample is just an example",
+      "description": "Example for testing",
       "path": "Samples~/Example1"
+    },
+    {
+      "displayName": "Example 2",
+      "description": "Character and spawner example",
+      "path": "Samples~/Example2"
     }
   ],
   "dependencies": {
