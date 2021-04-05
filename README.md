@@ -20,6 +20,7 @@ Render tens of thousands of models at the same time each with its own animation 
   - Interpolation
   - Normal encoding and decoding
   - Shader graph support
+  - Animation blending
 
 ### Model Baker
 
@@ -70,7 +71,7 @@ Example 2: Contains an animation system that shows how you could setup animated 
 
 ## Used By
 
-- [Project Castle]()
+- [Project Castle](https://store.steampowered.com/app/1517150/Project_Castle/)
 
 ## LICENSE
 
