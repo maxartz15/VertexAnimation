@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0d1625f26e651894b954faf1934378dc, type: 3}
-  m_Name: AnimationLib
+  m_Name: Example1AnimationLib
   m_EditorClassIdentifier: 
   animationBooks:
   - {fileID: 5308917091715319043, guid: f4349667ca4312e4baf669e11f247ba7, type: 2}
@@ -22,4 +22,4 @@ MonoBehaviour:
     frameTime: 0.5
     duration: 0.59375
   loadedAnimationsPreview:
-  - {fileID: -6703287855718520189, guid: f4349667ca4312e4baf669e11f247ba7, type: 2}
+  - {fileID: 838620241788919210, guid: f4349667ca4312e4baf669e11f247ba7, type: 2}

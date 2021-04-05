@@ -3,7 +3,7 @@ using Unity.Mathematics;
 using Unity.Collections;
 using TAO.VertexAnimation;
 
-public class SampleAnimationSystemsAuthoring : UnityEngine.MonoBehaviour
+public class SampleAnimationSystemAuthoring : UnityEngine.MonoBehaviour
 {
 	[UnityEngine.SerializeField]
 	private SampleSystem sampleSystem = SampleSystem.PlayRandomAnimation;
