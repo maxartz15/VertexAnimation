@@ -63,6 +63,11 @@ Full shader graph support.
 
 [Documentation](Documentation~/VertexAnimation.md)
 
+## Getting Started
+
+Example 1: Mainly used for testing.  
+Example 2: Contains an animation system that shows how you could setup animated characters and a spawning system to test performance.
+
 ## Used By
 
 - [Project Castle]()
