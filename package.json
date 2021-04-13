@@ -1,7 +1,7 @@
 {
   "name": "com.tech_art_outsource.vertex_animation",
   "displayName": "TAO Vertex Animation",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "unity": "2020.2",
   "unityRelease": "1f1",
   "description": "Vertex animation shaders and tools.",
@@ -27,6 +27,11 @@
       "displayName": "Example 2",
       "description": "Character and spawner example",
       "path": "Samples~/Example2"
+    },
+    {
+      "displayName": "Example 3",
+      "description": "Mono animation system example",
+      "path": "Samples~/Example3"
     }
   ],
   "dependencies": {
