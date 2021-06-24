@@ -79,7 +79,8 @@ There are plenty of improvements to be made, e.g.:
 - (Optional) per bone vertex animation (instead of per-vertex), this can reduce the texture size needed to store the animations.
 - Add option to export rotation map separately instead of compressing into the alpha channel, this will make it slower but higher quality.
 - The LOD generation is very basic and slow, the ability to swap out algorithms would be cool.
-Split different modules into separate packages (LOD generation, animation baker + shaders, and the animation system)?
+- Split different modules into separate packages (LOD generation, animation baker + shaders, and the animation system)?
+- Multi-material and/or sub-meshes support.
 
 ## Used By
 
