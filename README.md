@@ -20,7 +20,6 @@ Render tens of thousands of models at the same time each with its own animation 
   - Interpolation
   - Normal encoding and decoding
   - Shader graph support
-  - Animation blending
 
 ### Model Baker
 
@@ -70,9 +69,22 @@ Full shader graph support.
 - Example 2: Contains an animation system that shows how you could setup animated characters and a spawning system to test performance.
 - Example 3: MonoBehaviour example for if you are not using DOTS.
 
+## Extra Info
+
+This project is developed by the TAO (Tech Art Outsource) group at BUAS (Breda University of Applied Sciences).
+
+![](Documentation~/Images/BUASLogo.png)
+
+There are plenty of improvements to be made, e.g.:
+- (Optional) per bone vertex animation (instead of per-vertex), this can reduce the texture size needed to store the animations.
+- Add option to export rotation map separately instead of compressing into the alpha channel, this will make it slower but higher quality.
+- The LOD generation is very basic and slow, the ability to swap out algorithms would be cool.
+Split different modules into separate packages (LOD generation, animation baker + shaders, and the animation system)?
+
 ## Used By
 
-- [Project Castle](https://store.steampowered.com/app/1517150/Project_Castle/)
+- [Vedelem: The Golden Horde](https://store.steampowered.com/app/1517150/Vedelem_The_Golden_Horde/)
+- Your project?
 
 ## LICENSE
 
