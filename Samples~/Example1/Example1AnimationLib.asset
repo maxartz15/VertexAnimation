@@ -13,13 +13,88 @@ MonoBehaviour:
   m_Name: Example1AnimationLib
   m_EditorClassIdentifier: 
   animationBooks:
-  - {fileID: 5308917091715319043, guid: f4349667ca4312e4baf669e11f247ba7, type: 2}
+  - {fileID: 5308917091715319043, guid: d4c4e64530bac5b489576fb4b1237557, type: 2}
   animationData:
-  - frames: 20
+  - name:
+      utf8LengthInBytes: 0
+      bytes:
+        offset0000:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0016:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0032:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        byte0048: 0
+        byte0049: 0
+        byte0050: 0
+        byte0051: 0
+        byte0052: 0
+        byte0053: 0
+        byte0054: 0
+        byte0055: 0
+        byte0056: 0
+        byte0057: 0
+        byte0058: 0
+        byte0059: 0
+        byte0060: 0
+        byte0061: 0
+    frames: 20
     maxFrames: 32
     animationMapIndex: 0
     colorMapIndex: -1
     frameTime: 0.5
     duration: 0.59375
   loadedAnimationsPreview:
-  - {fileID: 838620241788919210, guid: f4349667ca4312e4baf669e11f247ba7, type: 2}
+  - {fileID: 838620241788919210, guid: d4c4e64530bac5b489576fb4b1237557, type: 2}
+  key:
+    Value:
+      x: 0
+      y: 0
+      z: 0
+      w: 0
+  guid: 
