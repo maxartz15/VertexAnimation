@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d1625f26e651894b954faf1934378dc, type: 3}
+  m_Name: AntAnimationLib 1
+  m_EditorClassIdentifier: 
+  animationBooks:
+  - {fileID: 8374370414474048468, guid: 79f0a487c990b1244b5780626ec62328, type: 2}
+  animationData:
+  - name:
+      utf8LengthInBytes: 8
+      bytes:
+        offset0000:
+          byte0000: 65
+          byte0001: 110
+          byte0002: 116
+          byte0003: 95
+          byte0004: 77
+          byte0005: 111
+          byte0006: 118
+          byte0007: 101
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0016:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0032:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        byte0048: 0
+        byte0049: 0
+        byte0050: 0
+        byte0051: 0
+        byte0052: 0
+        byte0053: 0
+        byte0054: 0
+        byte0055: 0
+        byte0056: 0
+        byte0057: 0
+        byte0058: 0
+        byte0059: 0
+        byte0060: 0
+        byte0061: 0
+    frames: 50
+    maxFrames: 64
+    animationMapIndex: 0
+    colorMapIndex: -1
+    frameTime: 0.46875
+    duration: 0.765625
+  loadedAnimationsPreview:
+  - {fileID: 342553783616329053, guid: 79f0a487c990b1244b5780626ec62328, type: 2}
+  key:
+    Value:
+      x: 3016143223
+      y: 817159256
+      z: 2246718377
+      w: 4054960473
+  guid: 771b6c3b85cd4b039a33ae58959c1b1f
