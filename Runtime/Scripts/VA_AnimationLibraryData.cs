@@ -1,5 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Collections;
+using Unity.Assertions;
+using UnityEngine;
 
 namespace TAO.VertexAnimation
 {
@@ -40,7 +42,6 @@ namespace TAO.VertexAnimation
 
 	public static class VA_AnimationLibraryUtils
 	{
-		public const string AnimationLibraryAssetStoreName = "VA_AnimationLibrary";
 
 		public static int GetAnimation(ref VA_AnimationLibraryData animationsRef, FixedString64 animationName)
 		{
@@ -51,6 +52,8 @@ namespace TAO.VertexAnimation
 					return i;
 				}
 			}
+
+			Debug.LogError($"{animationName} animation not found!");
 
 			return -1;
 		}
