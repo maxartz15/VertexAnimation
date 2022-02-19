@@ -18,9 +18,22 @@ namespace TAO.VertexAnimation
 		private List<VA_Animation> loadedAnimationsPreview = null;
 #endif
 
-		public void Init()
+		public Unity.Entities.Hash128 key;
+		public string guid;
+
+        private void Awake()
+        {
+			 
+
+		}
+        public void Init()
 		{
+			// generate guid
+			guid = System.Guid.NewGuid().ToString("N");
+			key = new Unity.Entities.Hash128(guid);
+
 			animationData = new List<VA_AnimationData>();
+			
 
 			foreach (VA_AnimationBook book in animationBooks)
 			{
