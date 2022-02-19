@@ -319,6 +319,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29deecb09ead9e74aa32f9d265f1e7ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lib: {fileID: 11400000, guid: a8fe5d6dd42317047a29666c4228a5d2, type: 2}
 --- !u!114 &3125770627712919068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,5 +346,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   idle: {fileID: 7967843481325789325, guid: 960630e1cbf614e4dad7a9d996f00f10, type: 2}
-  jump: {fileID: 835034688727185029, guid: 960630e1cbf614e4dad7a9d996f00f10, type: 2}
   run: {fileID: 5358926949103709932, guid: 960630e1cbf614e4dad7a9d996f00f10, type: 2}

@@ -90,3 +90,6 @@ There are plenty of improvements to be made, e.g.:
 ## LICENSE
 
 Overall package is licensed under [MIT](/LICENSE.md), unless otherwise noted in the [3rd party licenses](/THIRD%20PARTY%20NOTICES.md) file and/or source code.
+
+## UNITY VERSION
+2020.2.x

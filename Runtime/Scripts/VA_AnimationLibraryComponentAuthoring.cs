@@ -1,5 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Collections;
+using Unity.Assertions;
+using System;
 
 namespace TAO.VertexAnimation
 {
@@ -14,7 +16,7 @@ namespace TAO.VertexAnimation
 	public class VA_AnimationLibraryConversionSystem : GameObjectConversionSystem
 	{
 		// Static because of multi scene setup.
-		public static BlobAssetReference<VA_AnimationLibraryData> animLibAssetRef;
+		//public static BlobAssetReference<VA_AnimationLibraryData> animLibAssetRef;
 
 		protected override void OnUpdate()
 		{
@@ -43,17 +45,23 @@ namespace TAO.VertexAnimation
 					}
 
 					// Construct blob asset reference.
-					//BlobAssetReference<VA_AnimationLibraryData> animLibAssetRef = blobBuilder.CreateBlobAssetReference<VA_AnimationLibraryData>(Allocator.Persistent);
-					// Static because of multi scene setup.
-					animLibAssetRef = blobBuilder.CreateBlobAssetReference<VA_AnimationLibraryData>(Allocator.Persistent);
+					BlobAssetReference<VA_AnimationLibraryData> animLibAssetRef = blobBuilder.CreateBlobAssetReference<VA_AnimationLibraryData>(Allocator.Persistent);
+
 
 					// Add it to the asset store.
-					BlobAssetStore.TryAdd(new Hash128(VA_AnimationLibraryUtils.AnimationLibraryAssetStoreName), animLibAssetRef);
+					var anumLibName = animationLib.animationLibrary.name;
+
+					var hash = animationLib.animationLibrary.key;
+					var result = BlobAssetStore.TryAdd(hash, animLibAssetRef);
 
 					if (animationLib.debugMode)
 					{
-						UnityEngine.Debug.Log("VA_AnimationLibrary has " + animLibAssetRef.Value.animations.Length.ToString() + " animations.");
+						UnityEngine.Debug.Log($"blob asset {anumLibName} key: {hash.Value.x} {hash.Value.y} {hash.Value.z} {hash.Value.w} ");
+						UnityEngine.Debug.Log($"VA_AnimationLibrary {anumLibName} has {animLibAssetRef.Value.animations.Length.ToString()} animations.");
 					}
+
+
+					Assert.IsTrue(result, $"{anumLibName} hasn't been added to the blob asset store");
 				}
 
 				// Remove the entity since we don't need it anymore.

@@ -32,6 +32,11 @@
       "displayName": "Example 3",
       "description": "Mono animation system example",
       "path": "Samples~/Example3"
+    },
+    {
+      "displayName": "Example 4",
+      "description": "Different animated models",
+      "path": "Samples~/Example4"
     }
   ],
   "dependencies": {

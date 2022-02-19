@@ -8,7 +8,7 @@ namespace TAO.VertexAnimation
 	[DisallowMultipleComponent]
 	public class VA_AnimatorComponentAuthoring : MonoBehaviour
 	{
-
+		public VA_AnimationLibrary lib;
 	}
 
 	//[GenerateAuthoringComponent]
@@ -25,12 +25,14 @@ namespace TAO.VertexAnimation
 	{
 		protected override void OnUpdate()
 		{
-			//BlobAssetStore.TryGet(new Unity.Entities.Hash128(VA_AnimationLibraryUtils.AnimationLibraryAssetStoreName), out BlobAssetReference<VA_AnimationLibraryData> animLib);
 			// Static because of multi scene setup.
-			BlobAssetReference<VA_AnimationLibraryData> animLib = VA_AnimationLibraryConversionSystem.animLibAssetRef;
+			//BlobAssetReference<VA_AnimationLibraryData> animLib = VA_AnimationLibraryConversionSystem.animLibAssetRef;
 
 			Entities.ForEach((VA_AnimatorComponentAuthoring animator) =>
 			{
+
+				BlobAssetStore.TryGet(animator.lib.key, out BlobAssetReference<VA_AnimationLibraryData> animLib);
+
 				Entity entity = GetPrimaryEntity(animator);
 
 				// Add animator to 'parent'.
