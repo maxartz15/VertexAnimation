@@ -1,5 +1,9 @@
 # VertexAnimation
 
+###Important
+
+For Unity Versions beyond 2021.1.15f, please add "ENABLE_HYBRID_RENDERER_V2" in scripting define symbols in order for the package to work.
+
 ### Getting Started
 
 Import the sample assets to quickly get an idea on how to integrate vertex animation into your project.
