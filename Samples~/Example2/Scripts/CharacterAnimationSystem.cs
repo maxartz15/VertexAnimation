@@ -2,7 +2,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using TAO.VertexAnimation;
 
-public class CharacterAnimationSystem : SystemBase
+public partial class CharacterAnimationSystem : SystemBase
 {
 	protected override void OnUpdate()
 	{
