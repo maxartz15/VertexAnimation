@@ -2,7 +2,7 @@ using Unity.Entities;
 using Unity.Transforms;
 using Unity.Mathematics;
 
-public class SpawnerSystem : SystemBase
+public partial class SpawnerSystem : SystemBase
 {
 	private EntityCommandBufferSystem enityCommandBufferSystem;
 
