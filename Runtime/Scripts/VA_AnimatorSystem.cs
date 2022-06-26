@@ -5,7 +5,7 @@ using Unity.Mathematics;
 namespace TAO.VertexAnimation
 {
 	// System to update all the animations.
-	public class VA_AnimatorSystem : SystemBase
+	public partial class VA_AnimatorSystem : SystemBase
 	{
 		protected override void OnUpdate()
 		{
