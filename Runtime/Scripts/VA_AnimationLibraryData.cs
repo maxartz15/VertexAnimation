@@ -6,7 +6,7 @@ namespace TAO.VertexAnimation
 	[System.Serializable]
 	public struct VA_AnimationData
 	{
-		public VA_AnimationData(FixedString64 a_name, int a_frames, int a_maxFrames, int a_fps, int a_positionMapIndex, int a_colorMapIndex = -1)
+		public VA_AnimationData(FixedString64Bytes a_name, int a_frames, int a_maxFrames, int a_fps, int a_positionMapIndex, int a_colorMapIndex = -1)
 		{
 			name = a_name;
 			frames = a_frames;
@@ -18,7 +18,7 @@ namespace TAO.VertexAnimation
 		}
 
 		// The name of the animation.
-		public FixedString64 name;
+		public FixedString64Bytes name;
 		// The frames in this animation.
 		public int frames;
 		// The maximum of frames the texture holds.
@@ -42,7 +42,7 @@ namespace TAO.VertexAnimation
 	{
 		public const string AnimationLibraryAssetStoreName = "VA_AnimationLibrary";
 
-		public static int GetAnimation(ref VA_AnimationLibraryData animationsRef, FixedString64 animationName)
+		public static int GetAnimation(ref VA_AnimationLibraryData animationsRef, FixedString64Bytes animationName)
 		{
 			for (int i = 0; i < animationsRef.animations.Length; i++)
 			{

@@ -1,58 +1,52 @@
-﻿using Unity.Entities;
+﻿using System.Collections.Generic;
+using Unity.Entities;
 using Unity.Transforms;
 using Unity.Mathematics;
 
 namespace TAO.VertexAnimation
 {
 	// System to update all the animations.
-	public class VA_AnimatorSystem : SystemBase
+	public partial class VA_AnimatorSystem : SystemBase
 	{
 		protected override void OnUpdate()
 		{
-			var animationData = GetComponentDataFromEntity<VA_AnimationDataComponent>(false);
-
-			Entities.ForEach((ref VA_AnimatorComponent ac, in DynamicBuffer<Child> children) =>
-			{
-				for (int i = 0; i < children.Length; i++)
+			// This is only executed if we have a valid skinning setup
+			Entities
+				.ForEach((VA_AnimatorComponent animator, in DynamicBuffer<SkinnedMeshEntity> bones) =>
 				{
-					// Get child.
-					Entity child = children[i].Value;
-
 					// Get the animation lib data.
-					ref VA_AnimationLibraryData animationsRef = ref ac.animationLibrary.Value;
+					ref VA_AnimationLibraryData animationsRef = ref animator.animationLibrary.Value;
 
 					// Lerp animations.
 					// Set animation for lerp.
-					int animationIndexNext = ac.animationIndexNext;
-					if (ac.animationIndexNext < 0)
+					int animationIndexNext = animator.animationIndexNext;
+					if (animator.animationIndexNext < 0)
 					{
-						animationIndexNext = ac.animationIndex;
+						animationIndexNext = animator.animationIndex;
+						//animator.animationIndexNext = animationIndexNext + 1;
 					}
 
 					// Calculate next frame time for lerp.
-					float animationTimeNext = ac.animationTime + (1.0f / animationsRef.animations[animationIndexNext].maxFrames);
+					float animationTimeNext = animator.animationTime + (1.0f / animationsRef.animations[animationIndexNext].maxFrames);
 					if (animationTimeNext > animationsRef.animations[animationIndexNext].duration)
 					{
 						// Set time. Using the difference to smooth out animations when looping.
-						animationTimeNext -= ac.animationTime;
+						animationTimeNext -= animator.animationTime;
 					}
 
-					// Set material data.
-					animationData[child] = new VA_AnimationDataComponent
+					for ( int i = 0; i < bones.Length; i++ )
 					{
-						Value = new float4
+						VaAnimationDataComponent vaAnimationDataComponent = new VaAnimationDataComponent();
+						vaAnimationDataComponent.Value = new float4
 						{
-							x = ac.animationTime,
-							y = VA_AnimationLibraryUtils.GetAnimationMapIndex(ref animationsRef, ac.animationIndex),
+							x = animator.animationTime,
+							y = VA_AnimationLibraryUtils.GetAnimationMapIndex( ref animationsRef, animator.animationIndex ),
 							z = animationTimeNext,
-							w = VA_AnimationLibraryUtils.GetAnimationMapIndex(ref animationsRef, animationIndexNext)
-						}
-					};
-				}
-			})
-			.WithNativeDisableContainerSafetyRestriction(animationData)
-			.WithName("VA_AnimatorSystem")
-			.ScheduleParallel();
+							w = VA_AnimationLibraryUtils.GetAnimationMapIndex( ref animationsRef, animationIndexNext )
+						};
+						SystemAPI.SetComponent<VaAnimationDataComponent>( bones[i].Value, vaAnimationDataComponent );
+					}
+				}).Run();
 		}
 	}
 }

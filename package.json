@@ -36,9 +36,7 @@
   ],
   "dependencies": {
     "com.unity.entities": "0.16.0-preview.21",
-    "com.unity.render-pipelines.universal": "10.2.2",
-    "com.unity.shadergraph": "10.2.2",
-    "com.unity.rendering.hybrid": "0.10.0-preview.21"
+    "com.unity.shadergraph": "10.2.2"
   },
   "hideInEditor": false
 }

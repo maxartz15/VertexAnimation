@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.Experimental.Rendering;
 
 namespace TAO.VertexAnimation.Editor
 {
@@ -155,6 +156,9 @@ namespace TAO.VertexAnimation.Editor
 			// Get info.
 			NamingConventionUtils.PositionMapInfo info = bakedData.GetPositionMap.name.GetTextureInfo();
 
+			bakedData.mesh.SetTriangles( bakedData.mesh.triangles, 0 );
+			meshes = new[] { bakedData.mesh };
+			
 			// Generate Material
 			if (!AssetDatabaseUtils.HasChildAsset(this, material))
 			{

@@ -14,25 +14,25 @@ namespace TAO.VertexAnimation.Editor
 				parent = PrefabUtility.LoadPrefabContents(path);
 
 				// Check setup.
-				if (!parent.TryGetComponent(out LODGroup _))
-				{
-					parent.AddComponent<LODGroup>();
-				}
+				//if (!parent.TryGetComponent(out LODGroup _))
+				//{
+				//	parent.AddComponent<LODGroup>();
+				//}
 
-				if (!parent.TryGetComponent(out VA_AnimatorComponentAuthoring _))
-				{
-					parent.AddComponent<VA_AnimatorComponentAuthoring>();
-				}
+				//if (!parent.TryGetComponent(out VA_AnimatorComponentAuthoring _))
+				//{
+				//	parent.AddComponent<VA_AnimatorComponentAuthoring>();
+				//}
 
-				if (!parent.TryGetComponent(out Unity.Entities.ConvertToEntity _))
-				{
-					parent.AddComponent<Unity.Entities.ConvertToEntity>();
-				}
+				//if (!parent.TryGetComponent(out Unity.Entities.ConvertToEntity _))
+				//{
+				//	parent.AddComponent<Unity.Entities.ConvertToEntity>();
+				//}
 			}
 			else
 			{
 				// Create parent.
-				parent = new GameObject(name, typeof(LODGroup), typeof(VA_AnimatorComponentAuthoring), typeof(Unity.Entities.ConvertToEntity));
+				parent = new GameObject(name);
 			}
 
 			// Create all LODs.
@@ -66,16 +66,16 @@ namespace TAO.VertexAnimation.Editor
 				}
 
 				child.transform.SetParent(parent.transform);
-				lods[i] = new LOD(lodTransitions[i], new Renderer[1] { mr });
+				//lods[i] = new LOD(lodTransitions[i], new Renderer[1] { mr });
 			}
 
-			var lodGroup = parent.GetComponent<LODGroup>();
-			lodGroup.SetLODs(lods);
-			lodGroup.RecalculateBounds();
+			//var lodGroup = parent.GetComponent<LODGroup>();
+			//lodGroup.SetLODs(lods);
+			//lodGroup.RecalculateBounds();
 
 			// Create prefab.
 			GameObject prefab = PrefabUtility.SaveAsPrefabAssetAndConnect(parent, path, InteractionMode.AutomatedAction);
-			GameObject.DestroyImmediate(parent);
+			//GameObject.DestroyImmediate(parent);
 
 			return prefab;
 		}

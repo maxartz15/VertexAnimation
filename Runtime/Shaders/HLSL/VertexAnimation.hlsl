@@ -2,8 +2,24 @@
 #ifndef VERTEXANIMATIONUTILS_INCLUDED
 #define VERTEX_ANIMATION_INCLUDED
 
-#include "VectorEncodingDecoding.hlsl"
+
 #include "SampleTexture2DArrayLOD.hlsl"
+
+void CALC_VA_UV_float(float2 uv, int maxFrames, float time, out float2 uvPosition)
+{
+	float timeInFrames = frac(time);
+	timeInFrames = ceil(timeInFrames * maxFrames);
+	timeInFrames /= maxFrames;
+	timeInFrames += round(1.0f / maxFrames);
+
+	uvPosition.x = uv.x;
+
+	#ifdef VA_FLIP_UVS_ON
+	uvPosition.y = (1.0f - (timeInFrames)) + (1.0f - (1.0f - uv.y));
+	#else
+	uvPosition.y = (1.0f - (1.0f - uv.y) - (1.0f - (timeInFrames)));
+	#endif
+}
 
 float2 VA_UV_float(float2 uv, int maxFrames, float time)
 {
