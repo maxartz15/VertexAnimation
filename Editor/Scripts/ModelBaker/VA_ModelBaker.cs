@@ -156,8 +156,8 @@ namespace TAO.VertexAnimation.Editor
 			// Get info.
 			NamingConventionUtils.PositionMapInfo info = bakedData.GetPositionMap.name.GetTextureInfo();
 
-			bakedData.mesh.SetTriangles( bakedData.mesh.triangles, 0 );
-			meshes = new[] { bakedData.mesh };
+			//bakedData.mesh.SetTriangles( bakedData.mesh.triangles, 0 );
+			//meshes = new[] { bakedData.mesh };
 			
 			// Generate Material
 			if (!AssetDatabaseUtils.HasChildAsset(this, material))

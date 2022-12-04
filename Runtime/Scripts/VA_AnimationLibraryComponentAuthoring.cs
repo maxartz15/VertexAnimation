@@ -1,7 +1,10 @@
-﻿using Unity.Entities;
+﻿using System;
+using Unity.Entities;
 using Unity.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 using Hash128 = Unity.Entities.Hash128;
+using Random = Unity.Mathematics.Random;
 
 namespace TAO.VertexAnimation
 {
@@ -10,6 +13,7 @@ namespace TAO.VertexAnimation
 	{
 		public VA_AnimationLibrary AnimationLibrary;
 		public bool DebugMode = false;
+		public uint Seed;
 	}
 	
 internal struct SkinnedMeshEntity : IBufferElementData
@@ -65,16 +69,32 @@ public class VA_AnimationLibraryComponentBaker : Baker < VA_AnimationLibraryComp
 		AddComponent( animationLibrary );
 		
 		BlobAssetReference<VA_AnimationLibraryData> animLib = animationLibrary.AnimLibAssetRef;
-
+		// Get the animation lib data.
+		ref VA_AnimationLibraryData animationsRef = ref animLib.Value;
+		Random random = new Random( authoring.Seed );
+		int index = random.NextInt( 20 );
 		// Add animator to 'parent'.
 		VA_AnimatorComponent animatorComponent = new VA_AnimatorComponent
 		{
-			animationIndex = 0,
+			AnimationName = animationsRef.animations[index].name,
+			animationIndex = index,
 			animationIndexNext = -1,
 			animationTime = 0,
 			animationLibrary = animLib
 		};
 		AddComponent(animatorComponent);
+
+		
+		VA_AnimatorStateComponent animatorStateComponent = new VA_AnimatorStateComponent
+		{
+			Enabled = true,
+			CurrentAnimationName = animationsRef.animations[index].name,
+			AnimationIndex = index,
+			AnimationIndexNext = -1,
+		};
+
+		AddComponent( animatorStateComponent );
+		
 		var boneEntityArray = AddBuffer<SkinnedMeshEntity>();
 
 		MeshRenderer[] skinnedMeshRenderers =
@@ -92,9 +112,19 @@ public class VA_AnimationLibraryComponentBaker : Baker < VA_AnimationLibraryComp
 //[GenerateAuthoringComponent]
 public struct VA_AnimatorComponent : IComponentData
 {
+	public FixedString64Bytes AnimationName;
 	public int animationIndex;
 	public int animationIndexNext;
 	public float animationTime;
 	public BlobAssetReference<VA_AnimationLibraryData> animationLibrary;
+}
+
+public struct VA_AnimatorStateComponent : IComponentData
+{
+	public bool Enabled;
+	public FixedString64Bytes CurrentAnimationName;
+	public int AnimationIndex;
+	public int AnimationIndexNext;
+	public Random Rand;
 }
 }
