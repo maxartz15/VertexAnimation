@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace TAO.VertexAnimation
 {
-    public class VA_Animation : ScriptableObject
+    public class Animation : ScriptableObject
     {
 		public VA_AnimationData Data;
 

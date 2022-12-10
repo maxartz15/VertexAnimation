@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Collections;
 using Unity.Mathematics;
@@ -9,9 +10,9 @@ using Random = Unity.Mathematics.Random;
 namespace TAO.VertexAnimation
 {
 [UnityEngine.DisallowMultipleComponent]
-	public class VA_AnimationLibraryComponentAuthoring : UnityEngine.MonoBehaviour
+	public class AnimationLibraryComponentAuthoring : UnityEngine.MonoBehaviour
 	{
-		public VA_AnimationLibrary AnimationLibrary;
+		public AnimationLibrary AnimationLibrary;
 		public bool DebugMode = false;
 		public uint Seed;
 	}
@@ -21,18 +22,18 @@ internal struct SkinnedMeshEntity : IBufferElementData
 	public Entity Value;
 }
 
-public struct VA_AnimationLibraryComponent : IComponentData
+public struct AnimationLibraryComponent : IComponentData
 {
 	public BlobAssetReference<VA_AnimationLibraryData> AnimLibAssetRef;
 	public BlobAssetStore BlobAssetStore;
 }
 
-public class VA_AnimationLibraryComponentBaker : Baker < VA_AnimationLibraryComponentAuthoring >
+public class AnimationLibraryComponentBaker : Baker < AnimationLibraryComponentAuthoring >
 {
-	public override void Bake( VA_AnimationLibraryComponentAuthoring authoring )
+	public override void Bake( AnimationLibraryComponentAuthoring authoring )
 	{
 		authoring.AnimationLibrary.Init();
-		VA_AnimationLibraryComponent animationLibrary = new VA_AnimationLibraryComponent();
+		AnimationLibraryComponent animationLibrary = new AnimationLibraryComponent();
 		using (BlobBuilder blobBuilder = new BlobBuilder(Allocator.Temp))
 		{
 			// Construct the root.
@@ -71,40 +72,39 @@ public class VA_AnimationLibraryComponentBaker : Baker < VA_AnimationLibraryComp
 		BlobAssetReference<VA_AnimationLibraryData> animLib = animationLibrary.AnimLibAssetRef;
 		// Get the animation lib data.
 		ref VA_AnimationLibraryData animationsRef = ref animLib.Value;
-		Random random = new Random( authoring.Seed );
+		Random random = new Random( authoring.Seed != 0 ? authoring.Seed : 42 );
 		int index = random.NextInt( 20 );
 		// Add animator to 'parent'.
 		VA_AnimatorComponent animatorComponent = new VA_AnimatorComponent
 		{
+			Enabled = true,
 			AnimationName = animationsRef.animations[index].name,
-			animationIndex = index,
-			animationIndexNext = -1,
-			animationTime = 0,
-			animationLibrary = animLib
+			AnimationIndex = 2,
+			AnimationIndexNext = -1,
+			AnimationTime = 0,
+			AnimationLibrary = animLib
 		};
 		AddComponent(animatorComponent);
 
 		
-		VA_AnimatorStateComponent animatorStateComponent = new VA_AnimatorStateComponent
+		VA_AnimatorBlendStateComponent animatorStateComponent = new VA_AnimatorBlendStateComponent
 		{
-			Enabled = true,
-			CurrentAnimationName = animationsRef.animations[index].name,
-			AnimationIndex = index,
+			BlendingEnabled = true,
+			AnimationIndex = 1,
 			AnimationIndexNext = -1,
+			AnimationTime = 0
 		};
 
 		AddComponent( animatorStateComponent );
 		
 		var boneEntityArray = AddBuffer<SkinnedMeshEntity>();
-
-		MeshRenderer[] skinnedMeshRenderers =
+		MeshRenderer[] meshRenderers =
 			authoring.transform.GetComponentsInChildren < MeshRenderer >();
-		boneEntityArray.ResizeUninitialized(skinnedMeshRenderers.Length);
-
-		for (int boneIndex = 0; boneIndex < skinnedMeshRenderers.Length; ++boneIndex)
+		boneEntityArray.ResizeUninitialized(meshRenderers.Length);
+		for (int meshIndex = 0; meshIndex < meshRenderers.Length; ++meshIndex)
 		{
-			var boneEntity = GetEntity(skinnedMeshRenderers[boneIndex]);
-			boneEntityArray[boneIndex] = new SkinnedMeshEntity {Value = boneEntity};
+			var meshEntity = GetEntity(meshRenderers[meshIndex]);
+			boneEntityArray[meshIndex] = new SkinnedMeshEntity {Value = meshEntity};
 		}
 	}
 }
@@ -112,19 +112,19 @@ public class VA_AnimationLibraryComponentBaker : Baker < VA_AnimationLibraryComp
 //[GenerateAuthoringComponent]
 public struct VA_AnimatorComponent : IComponentData
 {
-	public FixedString64Bytes AnimationName;
-	public int animationIndex;
-	public int animationIndexNext;
-	public float animationTime;
-	public BlobAssetReference<VA_AnimationLibraryData> animationLibrary;
-}
-
-public struct VA_AnimatorStateComponent : IComponentData
-{
 	public bool Enabled;
-	public FixedString64Bytes CurrentAnimationName;
+	public FixedString64Bytes AnimationName;
 	public int AnimationIndex;
 	public int AnimationIndexNext;
-	public Random Rand;
+	public float AnimationTime;
+	public BlobAssetReference<VA_AnimationLibraryData> AnimationLibrary;
+}
+
+public struct VA_AnimatorBlendStateComponent : IComponentData
+{
+	public bool BlendingEnabled;
+	public int AnimationIndex;
+	public int AnimationIndexNext;
+	public float AnimationTime;
 }
 }

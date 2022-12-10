@@ -33,9 +33,9 @@ public class AnimatedPrefabSpawner : MonoBehaviour
             }
             currentPosition = new Vector3( startPosition.x , currentPosition.y, currentPosition.z + Distance );
         }
-        VA_AnimationLibraryComponentAuthoring[] vaAnimationLibraryComponentAuthorings = Parent.GetComponentsInChildren < VA_AnimationLibraryComponentAuthoring >();
+        AnimationLibraryComponentAuthoring[] vaAnimationLibraryComponentAuthorings = Parent.GetComponentsInChildren < AnimationLibraryComponentAuthoring >();
 
-        foreach ( VA_AnimationLibraryComponentAuthoring authoring in vaAnimationLibraryComponentAuthorings )
+        foreach ( AnimationLibraryComponentAuthoring authoring in vaAnimationLibraryComponentAuthorings )
         {
             var test = Guid.NewGuid().GetHashCode().ToString();
             Debug.Log( test );

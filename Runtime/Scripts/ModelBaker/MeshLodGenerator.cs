@@ -7,11 +7,10 @@ namespace TAO.VertexAnimation
 		public static Mesh[] GenerateLOD(this Mesh mesh, int lods, float[] quality)
 		{
 			Mesh[] lodMeshes = new Mesh[lods];
-
+			
 			for (int lm = 0; lm < lodMeshes.Length; lm++)
 			{
 				lodMeshes[lm] = mesh.Copy();
-
 				// Only simplify when needed.
 				if (quality[lm] < 1.0f)
 				{

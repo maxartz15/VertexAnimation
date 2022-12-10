@@ -24,7 +24,7 @@ namespace TAO.VertexAnimation
 				uv5 = mesh.uv5,
 				uv6 = mesh.uv6,
 				uv7 = mesh.uv7,
-				uv8 = mesh.uv8
+				uv8 = mesh.uv8,
 			};
 
 			return copy;
@@ -35,6 +35,7 @@ namespace TAO.VertexAnimation
 		{
 			mesh.Optimize();
 			mesh.UploadMeshData(true);
+			
 		}
 	}
 }

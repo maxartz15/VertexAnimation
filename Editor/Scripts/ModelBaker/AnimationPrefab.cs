@@ -20,9 +20,9 @@ namespace TAO.VertexAnimation.Editor
 					parent.AddComponent<LODGroup>();
 				}
 
-				if (!parent.TryGetComponent(out VA_AnimationLibraryComponentAuthoring _))
+				if (!parent.TryGetComponent(out AnimationLibraryComponentAuthoring _))
 				{
-					parent.AddComponent<VA_AnimationLibraryComponentAuthoring>();
+					parent.AddComponent<AnimationLibraryComponentAuthoring>();
 				}
 
 				//if (!parent.TryGetComponent(out Unity.Entities.ConvertToEntity _))
@@ -33,7 +33,7 @@ namespace TAO.VertexAnimation.Editor
 			else
 			{
 				// Create parent.
-				parent = new GameObject(name, typeof(LODGroup), typeof(VA_AnimationLibraryComponentAuthoring));
+				parent = new GameObject(name, typeof(LODGroup), typeof(AnimationLibraryComponentAuthoring));
 			}
 
 			// Create all LODs.
@@ -65,13 +65,13 @@ namespace TAO.VertexAnimation.Editor
 					}
 					else
 					{
-						child = new GameObject(childName, typeof(MeshFilter), typeof(MeshRenderer), typeof(VA_AnimationDataComponentAuthoring));
+						child = new GameObject(childName, typeof(MeshFilter), typeof(MeshRenderer), typeof(AnimationDataComponentAuthoring));
 					}
 				}
 
-				if (!child.TryGetComponent(out VA_AnimationDataComponentAuthoring ad))
+				if (!child.TryGetComponent(out AnimationDataComponentAuthoring ad))
 				{
-					child.AddComponent<VA_AnimationDataComponentAuthoring>();
+					child.AddComponent<AnimationDataComponentAuthoring>();
 				}
 				
 				if (child.TryGetComponent(out MeshFilter mf))
