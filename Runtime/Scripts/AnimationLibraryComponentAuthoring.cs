@@ -17,7 +17,7 @@ namespace TAO.VertexAnimation
 		public uint Seed;
 	}
 	
-internal struct SkinnedMeshEntity : IBufferElementData
+public struct SkinnedMeshEntity : IBufferElementData
 {
 	public Entity Value;
 }
@@ -75,7 +75,7 @@ public class AnimationLibraryComponentBaker : Baker < AnimationLibraryComponentA
 		Random random = new Random( authoring.Seed != 0 ? authoring.Seed : 42 );
 		int index = random.NextInt( 20 );
 		// Add animator to 'parent'.
-		VA_AnimatorComponent animatorComponent = new VA_AnimatorComponent
+		AnimatorComponent animatorComponent = new AnimatorComponent
 		{
 			Enabled = true,
 			AnimationName = animationsRef.animations[index].name,
@@ -87,7 +87,7 @@ public class AnimationLibraryComponentBaker : Baker < AnimationLibraryComponentA
 		AddComponent(animatorComponent);
 
 		
-		VA_AnimatorBlendStateComponent animatorStateComponent = new VA_AnimatorBlendStateComponent
+		AnimatorBlendStateComponent animatorStateComponent = new AnimatorBlendStateComponent
 		{
 			BlendingEnabled = true,
 			AnimationIndex = 1,
@@ -110,21 +110,24 @@ public class AnimationLibraryComponentBaker : Baker < AnimationLibraryComponentA
 }
 
 //[GenerateAuthoringComponent]
-public struct VA_AnimatorComponent : IComponentData
+public struct AnimatorComponent : IComponentData
 {
 	public bool Enabled;
 	public FixedString64Bytes AnimationName;
 	public int AnimationIndex;
 	public int AnimationIndexNext;
 	public float AnimationTime;
+	public float AnimationTimeNext;
 	public BlobAssetReference<VA_AnimationLibraryData> AnimationLibrary;
 }
 
-public struct VA_AnimatorBlendStateComponent : IComponentData
+public struct AnimatorBlendStateComponent : IComponentData
 {
 	public bool BlendingEnabled;
 	public int AnimationIndex;
 	public int AnimationIndexNext;
 	public float AnimationTime;
+	public float AnimationTimeNext;
+
 }
 }
