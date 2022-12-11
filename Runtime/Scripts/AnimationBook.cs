@@ -4,14 +4,14 @@ using UnityEngine;
 namespace TAO.VertexAnimation
 {
 	[CreateAssetMenu(fileName = "new AnimationBook", menuName = "TAO/VertexAnimation/AnimationBook", order = 400)]
-	public class VA_AnimationBook : ScriptableObject
+	public class AnimationBook : ScriptableObject
 	{
-		public VA_AnimationBook(Texture2DArray a_positionMap)
+		public AnimationBook(Texture2DArray a_positionMap)
 		{
 			positionMap = a_positionMap;
 		}
 
-		public VA_AnimationBook(Texture2DArray a_positionMap, List<VA_Animation> a_animations)
+		public AnimationBook(Texture2DArray a_positionMap, List<Animation> a_animations)
 		{
 			positionMap = a_positionMap;
 
@@ -24,10 +24,10 @@ namespace TAO.VertexAnimation
 		public int MaxFrames { get; private set; } = 0;
 
 		public Texture2DArray positionMap = null;
-		public List<VA_Animation> animations = new List<VA_Animation>();
+		public List<Animation> animations = new List<Animation>();
 		public List<Material> materials = new List<Material>();
 
-		public bool TryAddAnimation(VA_Animation animation)
+		public bool TryAddAnimation(Animation animation)
 		{
 			if (animations != null && animations.Count != 0)
 			{

@@ -128,7 +128,7 @@ namespace TAO.VertexAnimation
 
 			// Bake mesh for a copy and to apply the new UV's to.
 			SkinnedMeshRenderer skinnedMeshRenderer = model.GetComponent<SkinnedMeshRenderer>();
-			skinnedMeshRenderer.BakeMesh(mesh);
+			mesh = model.GetComponent<SkinnedMeshRenderer>().sharedMesh.Copy();
 			mesh.RecalculateBounds();
 
 			mesh.uv3 = mesh.BakePositionUVs(animationInfo);

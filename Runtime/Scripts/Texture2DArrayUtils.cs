@@ -2,7 +2,7 @@
 
 namespace TAO.VertexAnimation
 {
-	public static class VA_Texture2DArrayUtils
+	public static class Texture2DArrayUtils
 	{
 		public static Texture2DArray CreateTextureArray(Texture2D[] a_textures, bool a_useMipChain, bool a_isLinear,
 			TextureWrapMode a_wrapMode = TextureWrapMode.Repeat, FilterMode a_filterMode = FilterMode.Bilinear, int a_anisoLevel = 1, string a_name = "", bool a_makeNoLongerReadable = true)

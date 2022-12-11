@@ -1,3 +1,19 @@
+# Vertex Animation
+## This works with Entities 1.0
+
+This is a a animation system for skinned meshes in ECS, it includes a baking tool and the shaders to render the data.
+
+It is based on this framework https://github.com/maxartz15/VertexAnimation
+
+
+I forked this framework and fixed it for Entities 1.0
+
+Here you can find a video of it in action:
+https://youtu.be/yOddkGkct8w
+
+
+
+Original Readme:
 # TECH ART OUTSOURCE - Vertex Animation
 
 ![](Documentation~/Images/ProjectCastle_01.gif)

@@ -5,9 +5,103 @@
 
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine.Rendering;
 
 namespace TAO.VertexAnimation
 {
+public static class SkinnedMeshCombiner
+{
+	public static GameObject Combine(this SkinnedMeshRenderer target, List<SkinnedMeshRenderer> skinnedMeshRenderers, string name, Vector3 position, Quaternion rotation, Vector3 scale)
+	{
+
+		List<BoneWeight> boneWeights = new List<BoneWeight>();
+		List<Transform> bones = new List<Transform>();
+		List<CombineInstance> combineInstances = new List<CombineInstance>();
+		Material sharedMaterial = skinnedMeshRenderers[0].sharedMaterial;
+		Bounds newBounds = skinnedMeshRenderers[0].bounds;
+		int num = 0;
+		for( int i = 0; i < skinnedMeshRenderers.Count; ++i )
+		{
+			SkinnedMeshRenderer skinnedMeshRenderer = skinnedMeshRenderers[i];
+			BoneWeight[] bws = skinnedMeshRenderer.sharedMesh.boneWeights;
+			Transform[] bs = skinnedMeshRenderer.bones;
+
+			for( int bwIndex = 0; bwIndex < bws.Length; ++bwIndex )
+			{
+				BoneWeight boneWeight = bws[bwIndex];
+				boneWeight.boneIndex0 += num;
+				boneWeight.boneIndex1 += num;
+				boneWeight.boneIndex2 += num;
+				boneWeight.boneIndex3 += num;
+
+				boneWeights.Add( boneWeight );
+			}
+			num += bs.Length;
+
+			for( int boneIndex = 0; boneIndex < bs.Length; ++boneIndex )
+			{
+				bones.Add( bs[boneIndex] );
+			}
+
+			CombineInstance combineInstance = new CombineInstance()
+			{
+				mesh = skinnedMeshRenderer.sharedMesh,
+				transform = skinnedMeshRenderer.transform.localToWorldMatrix
+			};
+			combineInstances.Add( combineInstance );
+
+			if ( i > 0 )
+			{
+				newBounds.Encapsulate( skinnedMeshRenderers[i].bounds );
+			}
+			//skinnedMeshRenderer.enabled = false;
+		}
+
+		List<Matrix4x4> bindposes = new List<Matrix4x4>();
+		for( int i = 0; i < bones.Count; ++i )
+		{
+			Transform bone = bones[i];
+			bindposes.Add( bone.worldToLocalMatrix * target.transform.worldToLocalMatrix );
+			
+		}
+
+		SkinnedMeshRenderer combinedSkinnedMeshRenderer = target;
+		combinedSkinnedMeshRenderer.updateWhenOffscreen = false;
+
+		combinedSkinnedMeshRenderer.sharedMesh = new Mesh();
+		combinedSkinnedMeshRenderer.sharedMesh.indexFormat = IndexFormat.UInt32;
+
+		if ( combineInstances.Count == 1 )
+		{
+			combinedSkinnedMeshRenderer.sharedMesh = combineInstances[0].mesh;
+		}
+		else
+		{
+			combinedSkinnedMeshRenderer.sharedMesh.CombineMeshes( combineInstances.ToArray(), true, true );
+		}
+
+		foreach ( CombineInstance combineInstance in combineInstances )
+		{
+			combinedSkinnedMeshRenderer.sharedMesh.subMeshCount += combineInstance.mesh.subMeshCount;
+		}
+
+		combinedSkinnedMeshRenderer.sharedMaterials = new Material[combinedSkinnedMeshRenderer.sharedMesh.subMeshCount];
+		for ( int i = 0; i < combinedSkinnedMeshRenderer.sharedMesh.subMeshCount; i++ )
+		{
+			combinedSkinnedMeshRenderer.sharedMaterials[i] = sharedMaterial;
+		}
+		//combinedSkinnedMeshRenderer.sharedMaterial = sharedMaterial;
+		combinedSkinnedMeshRenderer.bones = bones.ToArray();
+		combinedSkinnedMeshRenderer.sharedMesh.boneWeights = boneWeights.ToArray();
+		combinedSkinnedMeshRenderer.sharedMesh.bindposes = bindposes.ToArray();
+		combinedSkinnedMeshRenderer.sharedMesh.RecalculateBounds();
+		//combinedSkinnedMeshRenderer.localBounds = new Bounds( new Vector3( 0.0f, 1.0f, 0.0f ), new Vector3( 0.5f, 1.0f, 0.5f ) );
+		//AssetDatabase.CreateAsset( combinedSkinnedMeshRenderer.sharedMesh, $"Assets/CombinedSkinnedMeshRendererPrefabs/{name}(Mesh{System.DateTime.Now:MM_dd_yyyy-H_mm}).asset" );
+		//AssetDatabase.SaveAssets();
+		return target.gameObject;
+	}
+}
 	public static class MeshCombiner
 	{
 		private struct MaterialMeshGroup
@@ -262,7 +356,7 @@ namespace TAO.VertexAnimation
 
 			// Add target mesh.
 			SkinnedMeshRenderer target = gameObject.AddComponent<SkinnedMeshRenderer>();
-			target.Combine(skinnedMeshes, meshes);
+			target.Combine(skinnedMeshes, gameObject.name, gameObject.transform.position, gameObject.transform.rotation, gameObject.transform.localScale);
 		}
     }
 }

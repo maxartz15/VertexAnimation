@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.Experimental.Rendering;
 
 namespace TAO.VertexAnimation.Editor
 {
 	[CreateAssetMenu(fileName = "new ModelBaker", menuName = "TAO/VertexAnimation/ModelBaker", order = 400)]
-	public class VA_ModelBaker : ScriptableObject
+	public class VertexAnimationModelBaker : ScriptableObject
 	{
 #if UNITY_EDITOR
 		// Input.
@@ -30,8 +31,8 @@ namespace TAO.VertexAnimation.Editor
 		public Texture2DArray positionMap = null;
 		public Material material = null;
 		public Mesh[] meshes = null;
-		public VA_AnimationBook book = null;
-		public List<VA_Animation> animations = new List<VA_Animation>();
+		public AnimationBook book = null;
+		public List<Animation> animations = new List<Animation>();
 
 		[System.Serializable]
 		public class LODSettings
@@ -99,7 +100,7 @@ namespace TAO.VertexAnimation.Editor
 			target.ConbineAndConvertGameObject(includeInactive);
 			AnimationBaker.BakedData bakedData = target.Bake(animationClips, applyRootMotion, fps, textureWidth);
 
-			positionMap = VA_Texture2DArrayUtils.CreateTextureArray(bakedData.positionMaps.ToArray(), false, true, TextureWrapMode.Repeat, FilterMode.Point, 1, string.Format("{0}_PositionMap", name), true);
+			positionMap = Texture2DArrayUtils.CreateTextureArray(bakedData.positionMaps.ToArray(), false, true, TextureWrapMode.Repeat, FilterMode.Point, 1, string.Format("{0}_PositionMap", name), true);
 			meshes = bakedData.mesh.GenerateLOD(lodSettings.LODCount(), lodSettings.GetQualitySettings());
 
 			DestroyImmediate(target);
@@ -125,7 +126,9 @@ namespace TAO.VertexAnimation.Editor
 				}
 
 				meshes[i].Finalize();
-				AssetDatabase.AddObjectToAsset(meshes[i], this);
+				SerializedObject s = new SerializedObject(meshes[i]);
+				s.FindProperty("m_IsReadable").boolValue = true;
+				AssetDatabase.AddObjectToAsset(s.targetObject, this);
 			}
 
 			AssetDatabase.AddObjectToAsset(positionMap, this);
@@ -155,6 +158,9 @@ namespace TAO.VertexAnimation.Editor
 			// Get info.
 			NamingConventionUtils.PositionMapInfo info = bakedData.GetPositionMap.name.GetTextureInfo();
 
+			//bakedData.mesh.SetTriangles( bakedData.mesh.triangles, 0 );
+			//meshes = new[] { bakedData.mesh };
+			
 			// Generate Material
 			if (!AssetDatabaseUtils.HasChildAsset(this, material))
 			{
@@ -175,12 +181,12 @@ namespace TAO.VertexAnimation.Editor
 			// Create book.
 			if (!book)
 			{
-				book = CreateInstance<VA_AnimationBook>();
+				book = CreateInstance<AnimationBook>();
 			}
 
 			book.name = string.Format("{0}_Book", name);
 			book.positionMap = positionMap;
-			book.animations = new List<VA_Animation>();
+			book.animations = new List<Animation>();
 			book.TryAddMaterial(material);
 
 			// Save book.
@@ -203,13 +209,13 @@ namespace TAO.VertexAnimation.Editor
 				VA_AnimationData newData = new VA_AnimationData(animationName, info[i].frames, info[i].maxFrames, info[i].fps, i, -1);
 
 				// Either update existing animation or create a new one.
-				if (TryGetAnimationWithName(animationName, out VA_Animation animation))
+				if (TryGetAnimationWithName(animationName, out Animation animation))
 				{
 					animation.SetData(newData);
 				}
 				else
 				{
-					animation = CreateInstance<VA_Animation>();
+					animation = CreateInstance<Animation>();
 					animation.name = animationName;
 					animation.SetData(newData);
 					animations.Add(animation);
@@ -225,7 +231,7 @@ namespace TAO.VertexAnimation.Editor
 			}
 		}
 
-		private bool TryGetAnimationWithName(string name, out VA_Animation animation)
+		private bool TryGetAnimationWithName(string name, out Animation animation)
 		{
 			foreach (var a in animations)
 			{
@@ -265,7 +271,7 @@ namespace TAO.VertexAnimation.Editor
 			material = null;
 			meshes = null;
 			book = null;
-			animations = new List<VA_Animation>();
+			animations = new List<Animation>();
 
 			AssetDatabase.SaveAssets();
 			AssetDatabase.Refresh();

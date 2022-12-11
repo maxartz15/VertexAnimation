@@ -3,14 +3,14 @@ using UnityEditor;
 
 namespace TAO.VertexAnimation.Editor
 {
-    [CustomEditor(typeof(VA_AnimationBook))]
-    public class VA_AnimationBookEditor : UnityEditor.Editor
+    [CustomEditor(typeof(AnimationBook))]
+    public class AnimationBookEditor : UnityEditor.Editor
     {
-        private VA_AnimationBook animationBook = null;
+        private AnimationBook animationBook = null;
 
         void OnEnable()
         {
-            animationBook = target as VA_AnimationBook;
+            animationBook = target as AnimationBook;
         }
 
         public override void OnInspectorGUI()

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace TAO.VertexAnimation
 {
-    public class VA_Animation : ScriptableObject
+    public class Animation : ScriptableObject
     {
 		public VA_AnimationData Data;
 
@@ -16,13 +16,13 @@ namespace TAO.VertexAnimation
 		public VA_AnimationData GetData()
 		{
 			// TODO: Fix data name, FixedString32 doesn't transfer from editor?
-			Data.name = new FixedString64(name);
+			Data.name = new FixedString64Bytes(name);
 			return Data;
 		}
 
-		public FixedString64 GetName()
+		public FixedString64Bytes GetName()
 		{
-			return new FixedString64(this.name);
+			return new FixedString64Bytes(this.name);
 		}
 	}
 }

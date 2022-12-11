@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEngine;
 using UnityEditor;
 
@@ -19,25 +20,38 @@ namespace TAO.VertexAnimation.Editor
 					parent.AddComponent<LODGroup>();
 				}
 
-				if (!parent.TryGetComponent(out VA_AnimatorComponentAuthoring _))
+				if (!parent.TryGetComponent(out AnimationLibraryComponentAuthoring _))
 				{
-					parent.AddComponent<VA_AnimatorComponentAuthoring>();
+					parent.AddComponent<AnimationLibraryComponentAuthoring>();
 				}
 
-				if (!parent.TryGetComponent(out Unity.Entities.ConvertToEntity _))
-				{
-					parent.AddComponent<Unity.Entities.ConvertToEntity>();
-				}
+				//if (!parent.TryGetComponent(out Unity.Entities.ConvertToEntity _))
+				//{
+				//	parent.AddComponent<Unity.Entities.ConvertToEntity>();
+				//}
 			}
 			else
 			{
 				// Create parent.
-				parent = new GameObject(name, typeof(LODGroup), typeof(VA_AnimatorComponentAuthoring), typeof(Unity.Entities.ConvertToEntity));
+				parent = new GameObject(name, typeof(LODGroup), typeof(AnimationLibraryComponentAuthoring));
 			}
 
 			// Create all LODs.
 			LOD[] lods = new LOD[meshes.Length];
 
+			//string meshPath = "Assets/Mesh" + parent.name;
+			//int index = 0;
+			//foreach ( Mesh mesh in meshes )
+			//{
+			//	if ( !AssetDatabaseUtils.HasAsset( meshPath + index + ".asset", typeof( Mesh ) ) )
+			//	{
+			//		AssetDatabase.CreateAsset( mesh, meshPath + index + ".asset" );
+			//	}
+//
+			//	index++;
+			//}
+			
+			AssetDatabase.SaveAssets();
 			for (int i = 0; i < meshes.Length; i++)
 			{
 				string childName = string.Format("{0}_LOD{1}", name, i);
@@ -51,10 +65,15 @@ namespace TAO.VertexAnimation.Editor
 					}
 					else
 					{
-						child = new GameObject(childName, typeof(MeshFilter), typeof(MeshRenderer));
+						child = new GameObject(childName, typeof(MeshFilter), typeof(MeshRenderer), typeof(AnimationDataComponentAuthoring));
 					}
 				}
 
+				if (!child.TryGetComponent(out AnimationDataComponentAuthoring ad))
+				{
+					child.AddComponent<AnimationDataComponentAuthoring>();
+				}
+				
 				if (child.TryGetComponent(out MeshFilter mf))
 				{
 					mf.sharedMesh = meshes[i];
@@ -75,7 +94,7 @@ namespace TAO.VertexAnimation.Editor
 
 			// Create prefab.
 			GameObject prefab = PrefabUtility.SaveAsPrefabAssetAndConnect(parent, path, InteractionMode.AutomatedAction);
-			GameObject.DestroyImmediate(parent);
+			//GameObject.DestroyImmediate(parent);
 
 			return prefab;
 		}

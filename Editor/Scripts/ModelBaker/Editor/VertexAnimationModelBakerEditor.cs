@@ -3,14 +3,14 @@ using UnityEditor;
 
 namespace TAO.VertexAnimation.Editor
 {
-	[CustomEditor(typeof(VA_ModelBaker))]
-	public class VA_ModelBakerEditor : UnityEditor.Editor
+	[CustomEditor(typeof(VertexAnimationModelBaker))]
+	public class VertexAnimationModelBakerEditor : UnityEditor.Editor
 	{
-		private VA_ModelBaker modelBaker = null;
+		private VertexAnimationModelBaker modelBaker = null;
 
 		void OnEnable()
 		{
-			modelBaker = target as VA_ModelBaker;
+			modelBaker = target as VertexAnimationModelBaker;
 		}
 
 		public override void OnInspectorGUI()
