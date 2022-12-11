@@ -1,5 +1,6 @@
 ﻿using Unity.Burst;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -37,8 +38,17 @@ public partial struct AnimatorSystem : ISystem
         EntityCommandBuffer ecb = SystemAPI.GetSingleton < BeginSimulationEntityCommandBufferSystem.Singleton >().
                                             CreateCommandBuffer( state.WorldUnmanaged );
 
+        RefRW < EntitiesAnimationCurveLibrary > curveLibrary =
+            SystemAPI.GetSingletonRW < EntitiesAnimationCurveLibrary >();
+
         UpdateAnimatorJob job =
-            new UpdateAnimatorJob { DeltaTime = deltaTime, StartIndex = 0, Ecb = ecb.AsParallelWriter() };
+            new UpdateAnimatorJob
+            {
+                DeltaTime = deltaTime,
+                StartIndex = 0,
+                Ecb = ecb.AsParallelWriter(),
+                EntitiesAnimationCurveLibrary = curveLibrary
+            };
 
         job.Run();
 
@@ -67,17 +77,111 @@ public partial struct UpdateAnimatorJob : IJobEntity
     public float DeltaTime;
     public int StartIndex;
     public EntityCommandBuffer.ParallelWriter Ecb;
+    [NativeDisableUnsafePtrRestriction]
+    public RefRW < EntitiesAnimationCurveLibrary > EntitiesAnimationCurveLibrary;
 
     [BurstCompile]
     public void Execute(
         ref AnimatorComponent animator,
-        ref AnimatorBlendStateComponent animatorBlendState,
-        in DynamicBuffer < SkinnedMeshEntity > buffer )
+        ref AnimatorBlendStateComponent animatorBlendState )
     {
         if ( animator.Enabled )
         {
             // Get the animation lib data.
             ref VA_AnimationLibraryData animationsRef = ref animator.AnimationLibrary.Value;
+
+            int animationIndexNextBlend = 0;
+            float animationTimeNextBlend = 0.0f;
+            float blendValue = 0.0f;
+
+            if ( animatorBlendState.BlendingEnabled )
+            {
+                animatorBlendState.BlendingCurrentTime += DeltaTime;
+
+                if ( animatorBlendState.BlendingCurrentTime >
+                     animatorBlendState.BlendingDuration )
+                {
+                    animator.AnimationIndex = animatorBlendState.ToAnimationIndex;
+                    animator.AnimationIndexNext = -1;
+                    animator.AnimationTime = animatorBlendState.AnimationTime;
+
+                    animatorBlendState.BlendingEnabled = false;
+                    animatorBlendState.ToAnimationIndex = -1;
+                    animatorBlendState.AnimationTime = 0;
+                    animatorBlendState.BlendingDuration = 0.0f;
+                    animatorBlendState.BlendingCurrentTime = 0.0f;
+                    animatorBlendState.AnimationBlendingCurveIndex = -1;
+
+                    for ( int i = 0; i < animator.SkinnedMeshes.Length; i++ )
+                    {
+                        BlendingAnimationDataComponent blendingAnimationDataComponent =
+                            new BlendingAnimationDataComponent { Value = 0.0f };
+
+                        Ecb.SetComponent < BlendingAnimationDataComponent >(
+                            StartIndex,
+                            animator.SkinnedMeshes[i],
+                            blendingAnimationDataComponent );
+
+                        StartIndex++;
+                        SecondAnimationDataComponent vaAnimationDataComponent2 = new SecondAnimationDataComponent();
+
+                        vaAnimationDataComponent2.Value = new float4
+                        {
+                            x = 0.0f,
+                            y = animatorBlendState.ToAnimationIndex,
+                            z = 0.0f,
+                            w = animatorBlendState.ToAnimationIndex
+                        };
+
+                        Ecb.SetComponent < SecondAnimationDataComponent >(
+                            StartIndex,
+                            animator.SkinnedMeshes[i],
+                            vaAnimationDataComponent2 );
+
+                        StartIndex++;
+                    }
+                   
+                }
+                else
+                {
+                    float blendTime =
+                        1.0f / animatorBlendState.BlendingDuration * animatorBlendState.BlendingCurrentTime;
+
+                    blendValue = EntitiesAnimationCurveLibrary.ValueRW.
+                                                               CurveReferences[
+                                                                   animatorBlendState.AnimationBlendingCurveIndex].
+                                                               GetValueAtTime( blendTime );
+
+                    animatorBlendState.AnimationTime += DeltaTime *
+                                                        animationsRef.
+                                                            animations[animatorBlendState.ToAnimationIndex].
+                                                            frameTime;
+
+                    if ( animatorBlendState.AnimationTime >
+                         animationsRef.animations[animatorBlendState.ToAnimationIndex].duration )
+                    {
+                        // Set time. Using the difference to smoothen out animations when looping.
+                        animatorBlendState.AnimationTime -=
+                            animationsRef.animations[animatorBlendState.ToAnimationIndex].duration;
+
+                        //animator.animationIndexNext = vaAnimatorStateComponent.Rand.NextInt( 20 );
+                    }
+
+                    // Lerp animations.
+                    // Set animation for lerp.
+                    animationIndexNextBlend = animatorBlendState.ToAnimationIndex;
+
+                    // Calculate next frame time for lerp.
+                    animationTimeNextBlend = animatorBlendState.AnimationTime +
+                                             ( 1.0f / animationsRef.animations[animationIndexNextBlend].maxFrames );
+
+                    if ( animationTimeNextBlend > animationsRef.animations[animationIndexNextBlend].duration )
+                    {
+                        // Set time. Using the difference to smooth out animations when looping.
+                        animationTimeNextBlend -= animatorBlendState.AnimationTime;
+                    }
+                }
+            }
 
             //if ( animator.AnimationName != vaAnimatorStateComponent.CurrentAnimationName )
             //{
@@ -118,50 +222,7 @@ public partial struct UpdateAnimatorJob : IJobEntity
                 animationTimeNext -= animator.AnimationTime;
             }
 
-            int animationIndexNextBlend = 0;
-            float animationTimeNextBlend = 0.0f;
-
-            if ( animatorBlendState.BlendingEnabled )
-            {
-                // 'Play' the actual animation.
-                animatorBlendState.AnimationTime += DeltaTime *
-                                                    animationsRef.
-                                                        animations[animatorBlendState.AnimationIndex].
-                                                        frameTime;
-
-                if ( animatorBlendState.AnimationTime >
-                     animationsRef.animations[animatorBlendState.AnimationIndex].duration )
-                {
-                    // Set time. Using the difference to smoothen out animations when looping.
-                    animatorBlendState.AnimationTime -=
-                        animationsRef.animations[animatorBlendState.AnimationIndex].duration;
-
-                    //animator.animationIndexNext = vaAnimatorStateComponent.Rand.NextInt( 20 );
-                }
-
-                // Lerp animations.
-                // Set animation for lerp.
-                animationIndexNextBlend = animatorBlendState.AnimationIndexNext;
-
-                if ( animationIndexNextBlend < 0 )
-                {
-                    animationIndexNextBlend = animatorBlendState.AnimationIndex;
-
-                    //animator.animationIndexNext = animationIndexNext + 1;
-                }
-
-                // Calculate next frame time for lerp.
-                animationTimeNextBlend = animatorBlendState.AnimationTime +
-                                         ( 1.0f / animationsRef.animations[animationIndexNextBlend].maxFrames );
-
-                if ( animationTimeNextBlend > animationsRef.animations[animationIndexNextBlend].duration )
-                {
-                    // Set time. Using the difference to smooth out animations when looping.
-                    animationTimeNextBlend -= animatorBlendState.AnimationTime;
-                }
-            }
-
-            for ( int i = 0; i < buffer.Length; i++ )
+            for ( int i = 0; i < animator.SkinnedMeshes.Length; i++ )
             {
                 FirstAnimationDataComponent vaAnimationDataComponent = new FirstAnimationDataComponent();
 
@@ -173,10 +234,24 @@ public partial struct UpdateAnimatorJob : IJobEntity
                     w = VA_AnimationLibraryUtils.GetAnimationMapIndex( ref animationsRef, animationIndexNext )
                 };
 
-                SystemAPI.SetComponent < FirstAnimationDataComponent >( buffer[i].Value, vaAnimationDataComponent );
+                Ecb.SetComponent < FirstAnimationDataComponent >(
+                    StartIndex,
+                    animator.SkinnedMeshes[i],
+                    vaAnimationDataComponent );
+
+                StartIndex++;
 
                 if ( animatorBlendState.BlendingEnabled )
                 {
+                    BlendingAnimationDataComponent blendingAnimationDataComponent =
+                        new BlendingAnimationDataComponent { Value = blendValue };
+
+                    Ecb.SetComponent < BlendingAnimationDataComponent >(
+                        StartIndex,
+                        animator.SkinnedMeshes[i],
+                        blendingAnimationDataComponent );
+
+                    StartIndex++;
                     SecondAnimationDataComponent vaAnimationDataComponent2 = new SecondAnimationDataComponent();
 
                     vaAnimationDataComponent2.Value = new float4
@@ -184,16 +259,19 @@ public partial struct UpdateAnimatorJob : IJobEntity
                         x = animatorBlendState.AnimationTime,
                         y = VA_AnimationLibraryUtils.GetAnimationMapIndex(
                             ref animationsRef,
-                            animatorBlendState.AnimationIndex ),
+                            animatorBlendState.ToAnimationIndex ),
                         z = animationTimeNextBlend,
                         w = VA_AnimationLibraryUtils.GetAnimationMapIndex(
                             ref animationsRef,
                             animationIndexNextBlend )
                     };
 
-                    SystemAPI.SetComponent < SecondAnimationDataComponent >(
-                        buffer[i].Value,
+                    Ecb.SetComponent < SecondAnimationDataComponent >(
+                        StartIndex,
+                        animator.SkinnedMeshes[i],
                         vaAnimationDataComponent2 );
+
+                    StartIndex++;
                 }
             }
 

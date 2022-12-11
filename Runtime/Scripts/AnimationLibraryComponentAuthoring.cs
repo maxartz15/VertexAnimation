@@ -16,10 +16,11 @@ namespace TAO.VertexAnimation
 		public bool DebugMode = false;
 		public uint Seed;
 	}
-	
-public struct SkinnedMeshEntity : IBufferElementData
+
+public struct AnimatorWaitingForBaking : IComponentData
 {
-	public Entity Value;
+	public bool IsInitialized;
+	public Entity AnimatorEntity;
 }
 
 public struct AnimationLibraryComponent : IComponentData
@@ -74,40 +75,35 @@ public class AnimationLibraryComponentBaker : Baker < AnimationLibraryComponentA
 		ref VA_AnimationLibraryData animationsRef = ref animLib.Value;
 		Random random = new Random( authoring.Seed != 0 ? authoring.Seed : 42 );
 		int index = random.NextInt( 20 );
+
 		// Add animator to 'parent'.
 		AnimatorComponent animatorComponent = new AnimatorComponent
 		{
 			Enabled = true,
-			AnimationName = animationsRef.animations[index].name,
+			AnimationName = animationsRef.animations[5].name,
 			AnimationIndex = 2,
 			AnimationIndexNext = -1,
 			AnimationTime = 0,
 			AnimationLibrary = animLib
+
 		};
 		AddComponent(animatorComponent);
 
-		
 		AnimatorBlendStateComponent animatorStateComponent = new AnimatorBlendStateComponent
 		{
 			BlendingEnabled = true,
-			AnimationIndex = 1,
-			AnimationIndexNext = -1,
-			AnimationTime = 0
+			ToAnimationIndex = 1,
+			BlendingCurrentTime = 0.0f,
+			AnimationBlendingCurveIndex = 2,
+			BlendingDuration = 2.5f,
+			AnimationTime = 0.0f,
 		};
 
 		AddComponent( animatorStateComponent );
-		
-		var boneEntityArray = AddBuffer<SkinnedMeshEntity>();
-		MeshRenderer[] meshRenderers =
-			authoring.transform.GetComponentsInChildren < MeshRenderer >();
-		boneEntityArray.ResizeUninitialized(meshRenderers.Length);
-		for (int meshIndex = 0; meshIndex < meshRenderers.Length; ++meshIndex)
-		{
-			var meshEntity = GetEntity(meshRenderers[meshIndex]);
-			boneEntityArray[meshIndex] = new SkinnedMeshEntity {Value = meshEntity};
-		}
+		AddComponent<AnimatorWaitingForBaking>(new AnimatorWaitingForBaking{ AnimatorEntity = GetEntity(), IsInitialized = false});
 	}
 }
+
 
 //[GenerateAuthoringComponent]
 public struct AnimatorComponent : IComponentData
@@ -117,17 +113,18 @@ public struct AnimatorComponent : IComponentData
 	public int AnimationIndex;
 	public int AnimationIndexNext;
 	public float AnimationTime;
-	public float AnimationTimeNext;
 	public BlobAssetReference<VA_AnimationLibraryData> AnimationLibrary;
+	public NativeArray < Entity > SkinnedMeshes;
 }
 
 public struct AnimatorBlendStateComponent : IComponentData
 {
 	public bool BlendingEnabled;
-	public int AnimationIndex;
-	public int AnimationIndexNext;
 	public float AnimationTime;
-	public float AnimationTimeNext;
-
+	public int ToAnimationIndex;
+	public float BlendingDuration;
+	public float BlendingCurrentTime;
+	public int AnimationBlendingCurveIndex;
 }
+
 }
